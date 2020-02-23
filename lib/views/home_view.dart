@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/services/auth_service.dart';
+import 'package:flutter_app/views/profile.dart';
 
 class HomeView extends StatefulWidget {
 
@@ -13,8 +15,8 @@ class _HomeView extends State<HomeView>{
 
   final tabs = [
     Center(child: Text('Home')),
-    Center(child: Text('Search')),
-    Center(child: Text('Profile'))
+    Center(child: Text('Profile')),
+    Profile()
   ];
 
   @override
@@ -23,6 +25,26 @@ class _HomeView extends State<HomeView>{
       appBar: AppBar(
         title: Text('Home Page'),
       ),
+
+      drawer: new Drawer(
+
+        child: ListView(
+          children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountName: null,
+              accountEmail: null,
+              currentAccountPicture : new CircleAvatar(
+                backgroundImage: new ExactAssetImage('/Users/jayavardhanpatil/Studies/CS4990/MobileApp/CricScore/lib/assets/images/default_profile_avatar.png'),
+              )
+
+            )
+          ],
+        ),
+
+      ),
+
+
+
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -32,17 +54,14 @@ class _HomeView extends State<HomeView>{
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('home'),
-            backgroundColor: Colors.green
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.search),
               title: Text('search'),
-              backgroundColor: Colors.green
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.person),
               title: Text('Profile'),
-              backgroundColor: Colors.green
           ),
         ],
         onTap: (index){

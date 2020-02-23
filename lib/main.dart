@@ -4,7 +4,6 @@ import 'package:flutter_app/views/first_view.dart';
 import 'package:flutter_app/views/home_view.dart';
 import 'package:flutter_app/views/signUpView.dart';
 import 'package:flutter_app/widgets/loader.dart';
-import 'home_widget.dart';
 import 'widgets/provider_widget.dart';
 
 void main() => runApp(MyApp());
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: "Travel Budget App",
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.green,
         ),
         home: HomeController(),
         routes: <String, WidgetBuilder>{
