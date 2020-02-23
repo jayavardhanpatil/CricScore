@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_app/widgets/loader.dart';
 import 'package:flutter_app/widgets/provider_widget.dart';
 
 
@@ -24,6 +25,7 @@ class _SignUpViewState extends State<SignUpView> {
   _SignUpViewState({this.authFormType});
 
   final formKey = GlobalKey<FormState>();
+  bool loading = false;
   String _email, _password, _name;
 
   void switchFormState(String state) {
@@ -44,16 +46,20 @@ class _SignUpViewState extends State<SignUpView> {
     form.save();
     try {
       final auth = Provider.of(context).auth;
+      setState(() => loading = true);
       if(authFormType == AuthFormType.signIn) {
         String uid = await auth.signInWithEmailAndPassword(_email, _password);
         print("Signed In with ID $uid");
+        setState(() => loading = false);
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
         String uid = await auth.createUserWithEmailAndPassword(_email, _password, _name);
         print("Signed up with New ID $uid");
+        setState(() => loading = false);
         Navigator.of(context).pushReplacementNamed('/home');
       }
     } catch (e) {
+      setState(() => loading = false);
       print (e);
     }
   }
@@ -63,7 +69,7 @@ class _SignUpViewState extends State<SignUpView> {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       body: Container(
         color: primaryColor,
         height: _height,
@@ -117,7 +123,7 @@ class _SignUpViewState extends State<SignUpView> {
         TextFormField(
           style: TextStyle(fontSize: 22.0),
           decoration: buildSignUpInputDecoration("Name"),
-          onSaved: (value) => _name = value,
+          onChanged: (value) => _name = value,
         ),
       );
       textFields.add(SizedBox(height: 20));
@@ -128,7 +134,7 @@ class _SignUpViewState extends State<SignUpView> {
       TextFormField(
         style: TextStyle(fontSize: 22.0),
         decoration: buildSignUpInputDecoration("Email"),
-        onSaved: (value) => _email = value,
+        onChanged: (value) => _email = value,
       ),
     );
     textFields.add(SizedBox(height: 20));
@@ -137,7 +143,7 @@ class _SignUpViewState extends State<SignUpView> {
         style: TextStyle(fontSize: 22.0),
         decoration: buildSignUpInputDecoration("Password"),
         obscureText: true,
-        onSaved: (value) => _password = value,
+        onChanged: (value) => _password = value,
       ),
     );
     textFields.add(SizedBox(height: 20));

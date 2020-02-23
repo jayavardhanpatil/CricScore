@@ -24,6 +24,15 @@ Flutter/flutter_assets/
 Flutter/flutter_export_environment.sh
 ServiceDefinitions.json
 Runner/GeneratedPluginRegistrant.*
+Runner.xcworkspace/xcshareddata/
+Runner.xcodeproj/project.pbxproj
+Runner/AppDelegate.swift
+Runner/Base.lproj/Main.storyboard
+
+
+
+
+
 
 # Exceptions to above rules.
 !default.mode1v3

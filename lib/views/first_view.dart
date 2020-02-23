@@ -12,13 +12,20 @@ class FirstView extends StatelessWidget {
 
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("/Users/jayavardhanpatil/Studies/CS4990/MobileApp/CricScore/lib/assets/images/ground.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         width: _width,
         height: _height,
-        color: primaryColor,
+        //color: primaryColor,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: _height * 0.10),
                 Text(
@@ -44,7 +51,7 @@ class FirstView extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
                     child: Text(
-                      "Get Started",
+                      "Register",
                       style: TextStyle(
                         color: primaryColor,
                         fontSize: 28,
@@ -53,7 +60,8 @@ class FirstView extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    showDialog(
+                    Navigator.of(context).pushReplacementNamed('/signUp');
+                   /*showDialog(
                       context: context,
                       builder: (BuildContext context) => CustomDialog(
                         title: "Would you like to create a free account?",
@@ -64,7 +72,7 @@ class FirstView extends StatelessWidget {
                         secondaryButtonText: "Maybe Later",
                         secondaryButtonRoute: "/home",
                       ),
-                    );
+                    );*/
                   },
                 ),
                 SizedBox(height: _height * 0.05),

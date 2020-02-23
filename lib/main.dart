@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/views/first_view.dart';
+import 'package:flutter_app/views/home_view.dart';
 import 'package:flutter_app/views/signUpView.dart';
+import 'package:flutter_app/widgets/loader.dart';
 import 'home_widget.dart';
 import 'widgets/provider_widget.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Provider(
@@ -15,7 +18,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: "Travel Budget App",
         theme: ThemeData(
-          primarySwatch: Colors.green,
+          primarySwatch: Colors.blue,
         ),
         home: HomeController(),
         routes: <String, WidgetBuilder>{
@@ -28,6 +31,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class HomeController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -37,9 +41,9 @@ class HomeController extends StatelessWidget {
       builder: (context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final bool signedIn = snapshot.hasData;
-          return signedIn ? FirstView() : Home();
+          return signedIn ? HomeView() : FirstView();
         }
-        return CircularProgressIndicator();
+        return Loading();
       },
     );
   }
