@@ -2,7 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/widgets/cupertinoDatePick.dart';
+import 'package:flutter_app/widgets/provider_widget.dart';
 import 'package:intl/intl.dart';
 
 class Profile extends StatelessWidget{
@@ -10,26 +12,26 @@ class Profile extends StatelessWidget{
   DateTime _dateTime = new DateTime.now();
   int _phoneNumber; String _name;
   String _place;
+  dynamic user;
 
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
-
-    return Scaffold(
-        body: new Container(
+    return SingleChildScrollView(
+        child : new Container(
             child: new Column(
               children: <Widget>[
+                
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: CircleAvatar(
-                    backgroundImage: ExactAssetImage("/Users/jayavardhanpatil/Studies/CS4990/MobileApp/CricScore/lib/assets/images/default_profile_avatar.png"),
+                    backgroundImage: ExactAssetImage("lib/assets/images/default_profile_avatar.png"),
                     backgroundColor: Colors.transparent,
                     minRadius: 30,
                     maxRadius: 60,
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Form(
@@ -48,11 +50,12 @@ class Profile extends StatelessWidget{
     List<Widget> textFields = [];
     textFields.add(
       TextFormField(
+
         decoration: InputDecoration(
             labelText: 'Name'
         ),
         style: TextStyle(fontSize: 15.0),
-        onChanged: (value) => _name = value,
+        onChanged: (value) => _name = (user.name == null) ? (value) : user.name,
       ),
     );
     print(_name);
@@ -115,4 +118,20 @@ class Profile extends StatelessWidget{
 
     return textFields;
   }
+
+  getUserDetail(context){
+    FutureBuilder(
+      future: Provider.of(context).auth.getCurrentUID(),
+      builder: (context,snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          user = snapshot.data;
+          print("snap shot : ${snapshot.data}");
+          return snapshot.data;
+        }
+        print("snap shot : ${snapshot.data}");
+        return null;
+      },
+    );
+  }
+
 }

@@ -41,3 +41,7 @@ android/app/google-services.json
 ios/Podfile
 ios/Podfile.lock
 
+
+Runner.xcodeproj/project.pbxproj
+Runner/Runner.entitlements
+Runner/RunnerProfile.entitlements

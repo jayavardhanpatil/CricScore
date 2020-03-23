@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/main.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/views/profile.dart';
+import 'package:flutter_app/views/signUpView.dart';
+import 'package:flutter_app/widgets/provider_widget.dart';
 
 class HomeView extends StatefulWidget {
 
@@ -12,38 +15,48 @@ class HomeView extends StatefulWidget {
 class _HomeView extends State<HomeView>{
 
   int _currentIndex = 0;
-
+  bool loading = false;
   final tabs = [
-    Center(child: Text('Home')),
+    Center(child: Text("sign out")),
     Center(child: Text('Profile')),
     Profile()
   ];
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
       ),
-
       drawer: new Drawer(
-
         child: ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: null,
-              accountEmail: null,
+              accountName: new Text("${HomeController()}"),
+              accountEmail: new Text("Test@gmail.com"),
               currentAccountPicture : new CircleAvatar(
-                backgroundImage: new ExactAssetImage('/Users/jayavardhanpatil/Studies/CS4990/MobileApp/CricScore/lib/assets/images/default_profile_avatar.png'),
+                backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
               )
 
+            ),
+            new ListTile(
+              title: new Text("Sign Out"),
+              onTap: () async{
+                try {
+                  AuthService auth = Provider.of(context).auth;
+                  await auth.signOut();
+                  print("Signed Out!");
+                  Navigator.of(context).pop();
+                  SignUpView(authFormType: AuthFormType.signIn);
+                } catch (e) {
+                  print(e);
+                }
+              },
             )
           ],
         ),
-
       ),
-
-
 
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -72,6 +85,5 @@ class _HomeView extends State<HomeView>{
       ),
 
     );
-
   }
 }
