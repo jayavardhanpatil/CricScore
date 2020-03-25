@@ -1,23 +1,30 @@
-import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/model/user.dart';
-import 'package:flutter_app/widgets/cupertinoDatePick.dart';
 import 'package:flutter_app/widgets/provider_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
-class Profile extends StatelessWidget{
 
-  DateTime _dateTime = new DateTime.now();
-  int _phoneNumber; String _name;
-  String _place;
+class EditProfile extends StatefulWidget {
+  _EditProfile createState() => _EditProfile();
+
+}
+
+class _EditProfile extends State<EditProfile> {
+
+  String _phoneNumber;
+  String _name, _place;
+  final DateFormat format = DateFormat('yyyy-MM-dd');
+  DateTime _dateTime;
   dynamic user;
 
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
+
     return SingleChildScrollView(
         child : new Container(
             child: new Column(
@@ -39,6 +46,15 @@ class Profile extends StatelessWidget{
                       children: buildInputs(context),
                     ),
                   ),
+                ),
+                RaisedButton(
+                  child: Text("Save"),
+                  onPressed: (){
+                    print(_name.toString());
+                    print(_dateTime.toString());
+                    print(_place.toString());
+                    print(_phoneNumber.toString());
+                  },
                 )
               ],
           ),
@@ -49,20 +65,18 @@ class Profile extends StatelessWidget{
   List<Widget> buildInputs(BuildContext context){
     List<Widget> textFields = [];
     textFields.add(
-      TextFormField(
-
+      TextField(
         decoration: InputDecoration(
             labelText: 'Name'
         ),
         style: TextStyle(fontSize: 15.0),
-        onChanged: (value) => _name = (user.name == null) ? (value) : user.name,
+        onChanged: (value) => _name = value,
       ),
     );
-    print(_name);
     textFields.add(SizedBox(height: 10));
 
     textFields.add(
-      TextFormField(
+      TextField(
         decoration: InputDecoration(
             labelText: 'location'
         ),
@@ -70,52 +84,52 @@ class Profile extends StatelessWidget{
         onChanged: (value) => _place = value,
       ),
     );
-    print(_place);
     textFields.add(SizedBox(height: 10));
 
     textFields.add(
-      TextFormField(
-          decoration: InputDecoration(
-            labelText: 'Phone Number'
+      TextField(
+        decoration: InputDecoration(
+            labelText: 'Phone '
         ),
-          keyboardType: TextInputType.number,
+        keyboardType: TextInputType.number,
         style: TextStyle(fontSize: 15.0),
         inputFormatters: <TextInputFormatter>[
           WhitelistingTextInputFormatter.digitsOnly
         ],
-        onChanged: (value) => _phoneNumber = value as int,
+        onChanged: (value) => _phoneNumber = value,
       ),
     );
-    print(_phoneNumber);
     textFields.add(SizedBox(height: 10));
 
     textFields.add(
-      TextFormField(
+      DateTimeField(
+        format: format,
         decoration: InputDecoration(
-            labelText: 'Phone Number'
+          labelText: 'Date',
+
         ),
-        onTap: () {
-          showCupertinoModalPopup<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return BuildBottomDatePicker(
-                CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.date,
-                  initialDateTime: new DateTime(1947, 1, 1),
-                  maximumDate: new DateTime.now(),
-                  onDateTimeChanged: (DateTime newDateTime) {
-                    print("Your Selected Date: ${newDateTime}");
-                    _dateTime = newDateTime;
-                  },
-                ),
-              );
-            },
-          );
+        onShowPicker: (context, currentValue) {
+          return showDatePicker(
+              context: context,
+              firstDate: DateTime(1950),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime.now());
+        },
+        onChanged: (value){
+          setState(() {
+            _dateTime = value;
+          });
         },
       ),
     );
+
+    print("Date : "+_dateTime.toString());
+
     textFields.add(SizedBox(height: 10));
 
+    print(_name.toString());
+    print(_phoneNumber.toString());
+    print(_dateTime.toString());
     return textFields;
   }
 
@@ -133,5 +147,27 @@ class Profile extends StatelessWidget{
       },
     );
   }
+}
 
+class BasicDateField extends StatelessWidget {
+  final format = DateFormat("yyyy-MM-dd");
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: <Widget>[
+      DateTimeField(
+        format: format,
+        decoration: InputDecoration(
+          labelText: 'Date',
+
+        ),
+        onShowPicker: (context, currentValue) {
+          return showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+        },
+      ),
+    ]);
+  }
 }

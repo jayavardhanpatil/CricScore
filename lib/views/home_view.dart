@@ -17,9 +17,9 @@ class _HomeView extends State<HomeView>{
   int _currentIndex = 0;
   bool loading = false;
   final tabs = [
-    Center(child: Text("sign out")),
+    Center(child: Text('Home')),
     Center(child: Text('Profile')),
-    Profile()
+    EditProfile()
   ];
 
   @override
