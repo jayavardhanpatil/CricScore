@@ -4,7 +4,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/main.dart';
+import 'package:flutter_app/model/user.dart';
+import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
+import 'package:flutter_app/widgets/loader.dart';
 import 'package:flutter_app/widgets/provider_widget.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
@@ -18,11 +22,14 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfile extends State<EditProfile> {
 
-  String _phoneNumber;
-  String _name, _place;
+  final _phoneNumber = TextEditingController();
+  final _name = TextEditingController();
+  final _city = TextEditingController();
   final DateFormat format = DateFormat('yyyy-MM-dd');
-  DateTime _dateTime;
+  DateTime _dateTime = new DateTime.now();
+
   dynamic user;
+
   final TextEditingController _typeAheadController = TextEditingController();
 
   @override
@@ -55,7 +62,23 @@ class _EditProfile extends State<EditProfile> {
                 RaisedButton(
                   child: Text("Save"),
                   onPressed: (){
-                    DatabaseService().getCity("");
+
+
+                    print(_phoneNumber.text.toString());
+                    print(_name.text.toString());
+                    print(_city.text.toString());
+                    print(_dateTime);
+
+                    DatabaseService.cities.clear();
+
+                    User user = AuthService.user;
+                    DatabaseService().addUser(new User(uid: user.uid,
+                      name: _name.text.toString(),
+                      city: _city.text.toString(),
+                      phoneNumber: int.parse(_phoneNumber.text),
+                      dob: _dateTime.toIso8601String(),
+                      email: user.email
+                    ));
                   },
                 ),
 
@@ -70,11 +93,12 @@ class _EditProfile extends State<EditProfile> {
     List<Widget> textFields = [];
     textFields.add(
       TextField(
+        controller: _name,
         decoration: InputDecoration(
             labelText: 'Name'
         ),
         style: TextStyle(fontSize: 15.0),
-        onChanged: (value) => _name = value,
+        //onChanged: (value) => _phoneNumber = value,
       ),
     );
     textFields.add(SizedBox(height: 10));
@@ -84,8 +108,8 @@ class _EditProfile extends State<EditProfile> {
         textFieldConfiguration: TextFieldConfiguration(
             controller: this._typeAheadController,
             decoration: InputDecoration(
-                labelText: 'city'
-            )
+                labelText: 'city',
+            ),
         ),
         suggestionsCallback: (pattern) {
           return DatabaseService().getCity(pattern);
@@ -100,13 +124,15 @@ class _EditProfile extends State<EditProfile> {
         },
         onSuggestionSelected: (suggestion) {
           this._typeAheadController.text = suggestion;
+          this._city.text = suggestion;
         },
         validator: (value) {
           if (value.isEmpty) {
             return 'Please select a city';
           }
         },
-        onSaved: (value) => this._place = value,
+
+        //onSaved: (value) => this._city = value,
       ),
     );
 
@@ -114,6 +140,7 @@ class _EditProfile extends State<EditProfile> {
 
     textFields.add(
       TextField(
+        controller: _phoneNumber,
         decoration: InputDecoration(
             labelText: 'Phone '
         ),
@@ -122,7 +149,7 @@ class _EditProfile extends State<EditProfile> {
         inputFormatters: <TextInputFormatter>[
           WhitelistingTextInputFormatter.digitsOnly
         ],
-        onChanged: (value) => _phoneNumber = value,
+        //onChanged: (value) => _phoneNumber,
       ),
     );
     textFields.add(SizedBox(height: 10));
@@ -149,29 +176,12 @@ class _EditProfile extends State<EditProfile> {
       ),
     );
 
-    print("Date : "+_dateTime.toString());
-
     textFields.add(SizedBox(height: 10));
 
-    print(_name.toString());
-    print(_phoneNumber.toString());
-    print(_dateTime.toString());
+//    print(_name.toString());
+//    print(_phoneNumber.toString());
+//    print(_dateTime.toString());
     return textFields;
-  }
-
-  getUserDetail(context){
-    FutureBuilder(
-      future: Provider.of(context).auth.getCurrentUID(),
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          user = snapshot.data;
-          print("snap shot : ${snapshot.data}");
-          return snapshot.data;
-        }
-        print("snap shot : ${snapshot.data}");
-        return null;
-      },
-    );
   }
 }
 

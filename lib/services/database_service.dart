@@ -15,7 +15,7 @@ class DatabaseService {
   
   //Write a data : key value
   void addUser(User user) {
-    _fireBaseRTreference.child("/users/" + uid).set(user.map)
+    _fireBaseRTreference.child("/users/" + user.uid).set(user.map)
         .then((value) {
       print("User Record Added");
     }).catchError((e) {
@@ -81,4 +81,5 @@ class DatabaseService {
     });
     return null;
   }
+
 }

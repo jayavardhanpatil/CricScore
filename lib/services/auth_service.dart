@@ -8,6 +8,8 @@ import 'package:flutter_app/widgets/provider_widget.dart';
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  static User user = null;
+
   Stream<User> get onAuthStateChanged => _firebaseAuth.onAuthStateChanged.map(_userFromFireBaseUser);
 
   Future<String> getCurrentUID() async{
@@ -18,9 +20,9 @@ class AuthService {
     return (await _firebaseAuth.currentUser()).email;
   }
 
-  User _userFromFireBaseUser(FirebaseUser user) {
-    User u = user != null ? User(uid: user.uid, email: user.email) : null;
-    return u;
+  User _userFromFireBaseUser(FirebaseUser u) {
+    user = u != null ? User(uid: u.uid, email: u.email) : null;
+    return user;
 
   }
 

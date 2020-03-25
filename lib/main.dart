@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
 
 class HomeController extends StatelessWidget {
 
-
   @override
   Widget build(BuildContext context) {
     final AuthService auth = Provider.of(context).auth;

@@ -4,21 +4,21 @@ import 'package:flutter/cupertino.dart';
 class User{
 
   final String uid;
-  final String Name;
-  final String location;
+  final String name;
+  final String city;
   final int phoneNumber;
-  final DateTime dob;
+  final String dob;
   final String email;
 
-  User({this.uid, this.Name = null, this.location = null, this.phoneNumber = null, this.dob = null, this.email});
+  User({this.uid, this.name = null, this.city = null, this.phoneNumber = null, this.dob = null, this.email});
 
 
   Map<String,dynamic> get map {
     return {
-      "Name": Name,
-      "Location":location,
-      "PhoneNumber": phoneNumber,
-      "DateOfBirth": dob,
+      "name": name,
+      "city":city,
+      "phoneNumber": phoneNumber,
+      "dateOfBirth": dob,
       "email": email
     };
   }
@@ -28,13 +28,20 @@ class User{
   }
 
   String getName(){
-    return this.Name;
+    return this.name;
   }
 
   int getPhoneNumber(){
     return this.phoneNumber;
   }
 
+  String getDateOfBirth(){
+    return this.dob;
+  }
+
+  String getCity(){
+    return this.city;
+  }
 
 
 }

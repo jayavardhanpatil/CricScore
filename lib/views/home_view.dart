@@ -34,7 +34,7 @@ class _HomeView extends State<HomeView>{
           children: <Widget>[
             new UserAccountsDrawerHeader(
               accountName: new Text("${HomeController()}"),
-              accountEmail: new Text("Test@gmail.com"),
+              accountEmail: new Text(AuthService.user.email),
               currentAccountPicture : new CircleAvatar(
                 backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
               )
