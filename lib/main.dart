@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/views/home_view.dart';
+import 'package:flutter_app/views/profile.dart';
 import 'package:flutter_app/views/signUpView.dart';
 import 'package:flutter_app/widgets/loader.dart';
 import 'model/user.dart';
@@ -41,6 +42,16 @@ class HomeController extends StatelessWidget {
       builder: (context, AsyncSnapshot<User> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final bool signedIn = snapshot.hasData;
+//          if(signedIn){
+//           if(snapshot.data.name == null){
+//              print(snapshot.data.toString());
+//              return EditProfile();
+//            }else {
+//             return HomeView();
+//           }
+//          }else{
+//            return SignUpView(authFormType: AuthFormType.signUp);
+//          }
           return signedIn ? HomeView() : SignUpView(authFormType: AuthFormType.signUp);
         }
         return Loading();

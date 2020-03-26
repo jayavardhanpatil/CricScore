@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/main.dart';
+import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/services/auth_service.dart';
+import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/views/profile.dart';
 import 'package:flutter_app/views/signUpView.dart';
 import 'package:flutter_app/widgets/provider_widget.dart';
+
 
 class HomeView extends StatefulWidget {
 
@@ -12,29 +15,53 @@ class HomeView extends StatefulWidget {
 
 }
 
-class _HomeView extends State<HomeView>{
+class _HomeView extends State<HomeView> with TickerProviderStateMixin{
+
+  final List<MyTabs> _tabs = [new MyTabs(title: "Teal",color: Colors.teal[200]),
+                                new MyTabs(title: "Orange",color: Colors.orange[200]),
+                              new MyTabs(title: AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE,color: Colors.red[200])
+  ];
+
+  MyTabs _myHandler ;
+  TabController _controller ;
+  void initState() {
+
+    super.initState();
+    DatabaseService().reLoadUserRecord(AuthService.user.uid);
+    _controller = new TabController(length: 2, vsync: this);
+    _myHandler = _tabs[0];
+    _controller.addListener(_handleSelected);
+  }
+  void _handleSelected() {
+    setState(() {
+      _myHandler= _tabs[_currentIndex];
+    });
+  }
 
   int _currentIndex = 0;
   bool loading = false;
-  final tabs = [
-    Center(child: Text('Home')),
-    Center(child: Text('Profile')),
-    EditProfile()
-  ];
+  TabController _tabController;
 
   @override
   Widget build(BuildContext context) {
 
+    final tabs = [
+      Center(child: Text('Home')),
+      Center(child: Text('Profile')),
+      EditProfile()
+    ];
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
+      appBar: new AppBar(
+        title: new Text(_myHandler.title),
       ),
+
       drawer: new Drawer(
         child: ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
               accountName: new Text("${HomeController()}"),
-              accountEmail: new Text(AuthService.user.email),
+              accountEmail: new Text(AuthService.user.getEmailId()),
               currentAccountPicture : new CircleAvatar(
                 backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
               )
@@ -57,8 +84,7 @@ class _HomeView extends State<HomeView>{
           ],
         ),
       ),
-
-      body: tabs[_currentIndex],
+      body : tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
 
@@ -79,11 +105,17 @@ class _HomeView extends State<HomeView>{
         ],
         onTap: (index){
           setState(() {
-            _currentIndex = index;
+            _currentIndex = index; _myHandler= _tabs[_currentIndex];
           });
         }
       ),
 
     );
   }
+}
+
+class MyTabs {
+  final String title;
+  final Color color;
+  MyTabs({this.title,this.color});
 }

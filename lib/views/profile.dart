@@ -1,15 +1,11 @@
 
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/main.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/widgets/loader.dart';
-import 'package:flutter_app/widgets/provider_widget.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -17,72 +13,80 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class EditProfile extends StatefulWidget {
   _EditProfile createState() => _EditProfile();
-
 }
 
 class _EditProfile extends State<EditProfile> {
 
-  final _phoneNumber = TextEditingController();
-  final _name = TextEditingController();
-  final _city = TextEditingController();
+  bool loading = true;
+  final _phoneNumber = TextEditingController(text: AuthService.user.getPhoneNumber().toString());
+  final _name = TextEditingController(text: AuthService.user.getName());
+  final _city = TextEditingController(text: AuthService.user.getCity());
   final DateFormat format = DateFormat('yyyy-MM-dd');
-  DateTime _dateTime = new DateTime.now();
+  final _dateTime = TextEditingController(text: AuthService.user.getDateOfBirth());
 
   dynamic user;
 
-  final TextEditingController _typeAheadController = TextEditingController();
+  final TextEditingController _typeAheadController = TextEditingController(text: AuthService.user.getCity());
 
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
+    loading = false;
 
+    return loading ? Loading() : Scaffold(
+//        appBar: new AppBar(
+//          title: Text(AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE),
+//        ),
+        body: EditProfileBody(context),
+    );
+  }
+
+
+  Widget EditProfileBody(BuildContext context){
     return SingleChildScrollView(
         child : new Container(
-            child: new Column(
-              children: <Widget>[
-                
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: CircleAvatar(
-                    backgroundImage: ExactAssetImage("lib/assets/images/default_profile_avatar.png"),
-                    backgroundColor: Colors.transparent,
-                    minRadius: 30,
-                    maxRadius: 60,
+          child: new Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: CircleAvatar(
+                  backgroundImage: ExactAssetImage("lib/assets/images/default_profile_avatar.png"),
+                  backgroundColor: Colors.transparent,
+                  minRadius: 30,
+                  maxRadius: 60,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Form(
+                  child: Column(
+                    children: buildInputs(context),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Form(
-                    child: Column(
-                      children: buildInputs(context),
-                    ),
-                  ),
-                ),
-                RaisedButton(
-                  child: Text("Save"),
-                  onPressed: (){
+              ),
+              RaisedButton(
+                child: Text("Save"),
+                onPressed: (){
+                  print(_phoneNumber.text.toString());
+                  print(_name.text.toString());
+                  print(_city.text.toString());
+                  print(_dateTime.text.toString());
 
-
-                    print(_phoneNumber.text.toString());
-                    print(_name.text.toString());
-                    print(_city.text.toString());
-                    print(_dateTime);
-
-                    DatabaseService.cities.clear();
-
-                    User user = AuthService.user;
-                    DatabaseService().addUser(new User(uid: user.uid,
+                  DatabaseService.cities.clear();
+                  User user = AuthService.user;
+                  DatabaseService().addUser(new User(uid: user.uid,
                       name: _name.text.toString(),
                       city: _city.text.toString(),
                       phoneNumber: int.parse(_phoneNumber.text),
-                      dob: _dateTime.toIso8601String(),
+                      dob: _dateTime.text.toString(),
                       email: user.email
-                    ));
-                  },
-                ),
+                  ));
+                  DatabaseService().reLoadUserRecord(AuthService.user.uid);
+                },
+              ),
 
-              ],
+            ],
 
           ),
         )
@@ -97,6 +101,7 @@ class _EditProfile extends State<EditProfile> {
         decoration: InputDecoration(
             labelText: 'Name'
         ),
+
         style: TextStyle(fontSize: 15.0),
         //onChanged: (value) => _phoneNumber = value,
       ),
@@ -106,10 +111,10 @@ class _EditProfile extends State<EditProfile> {
     textFields.add(
       TypeAheadFormField(
         textFieldConfiguration: TextFieldConfiguration(
-            controller: this._typeAheadController,
-            decoration: InputDecoration(
-                labelText: 'city',
-            ),
+          controller: this._typeAheadController,
+          decoration: InputDecoration(
+            labelText: 'city',
+          ),
         ),
         suggestionsCallback: (pattern) {
           return DatabaseService().getCity(pattern);
@@ -126,11 +131,11 @@ class _EditProfile extends State<EditProfile> {
           this._typeAheadController.text = suggestion;
           this._city.text = suggestion;
         },
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please select a city';
-          }
-        },
+//        validator: (value) {
+//          if (value.isEmpty) {
+//            return 'Please select a city';
+//          }
+//        },
 
         //onSaved: (value) => this._city = value,
       ),
@@ -168,9 +173,10 @@ class _EditProfile extends State<EditProfile> {
               initialDate: currentValue ?? DateTime.now(),
               lastDate: DateTime.now());
         },
+        controller: _dateTime,
         onChanged: (value){
           setState(() {
-            _dateTime = value;
+            _dateTime.text = format.format(value);
           });
         },
       ),
@@ -184,6 +190,7 @@ class _EditProfile extends State<EditProfile> {
     return textFields;
   }
 }
+
 
 //class BasicDateField extends StatelessWidget {
 //  final format = DateFormat("yyyy-MM-dd");

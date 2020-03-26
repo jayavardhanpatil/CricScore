@@ -3,15 +3,14 @@ import 'package:flutter/cupertino.dart';
 
 class User{
 
-  final String uid;
-  final String name;
-  final String city;
-  final int phoneNumber;
-  final String dob;
-  final String email;
+   String uid;
+   String name;
+   String city;
+   int phoneNumber;
+   String dob;
+   String email;
 
   User({this.uid, this.name = null, this.city = null, this.phoneNumber = null, this.dob = null, this.email});
-
 
   Map<String,dynamic> get map {
     return {
@@ -21,6 +20,16 @@ class User{
       "dateOfBirth": dob,
       "email": email
     };
+  }
+
+  User mapJsonToUserObject(String key, dynamic value){
+    print(value);
+    this.name = value['name'];
+    this.city = value['city'];
+    this.phoneNumber = value['phoneNumber'];
+    this.email = value['email'];
+    this.dob = value['dateOfBirth'];
+    this.uid = key;
   }
 
   String getEmailId(){

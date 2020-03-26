@@ -12,18 +12,9 @@ class AuthService {
 
   Stream<User> get onAuthStateChanged => _firebaseAuth.onAuthStateChanged.map(_userFromFireBaseUser);
 
-  Future<String> getCurrentUID() async{
-    return (await _firebaseAuth.currentUser()).uid;
-  }
-
-  Future<String> getCurrentUserEmailId() async{
-    return (await _firebaseAuth.currentUser()).email;
-  }
-
   User _userFromFireBaseUser(FirebaseUser u) {
     user = u != null ? User(uid: u.uid, email: u.email) : null;
     return user;
-
   }
 
   // Email & Password Sign Up
