@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/model/appStaticBarTitles.dart';
@@ -10,18 +11,28 @@ import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/widgets/tost.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 
-enum ProfileForm { viewProfile, editProfile }
+enum ProfileBodyEnum { view, edit }
 
 class EditProfile extends StatefulWidget {
-  _EditProfile createState() => _EditProfile();
+  final ProfileBodyEnum profileBodyType;
+
+  EditProfile({Key key, @required this.profileBodyType}) : super(key: key);
+
+  @override
+  _EditProfile createState() =>
+      _EditProfile(profileBodyType: this.profileBodyType);
 }
 
-
 class _EditProfile extends State<EditProfile> {
+  ProfileBodyEnum profileBodyType;
+
+  _EditProfile({this.profileBodyType});
+
   bool loading = false;
   final _phoneNumber = TextEditingController(
       text: AuthService.user.getPhoneNumber().toString());
@@ -47,15 +58,15 @@ class _EditProfile extends State<EditProfile> {
         .height;
 
     return Scaffold(
-//        appBar: new AppBar(
-//          title: Text(AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE),
-//        ),
-      body: EditProfileBody(context),
+        appBar: new AppBar(
+          title: Text(AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE),
+        ),
+
+        body: (profileBodyType == ProfileBodyEnum.edit) ? ProfileBody(context, true) : ProfileView(context, false),
     );
   }
 
-
-  Widget EditProfileBody(BuildContext context) {
+  Widget ProfileBody(BuildContext context, bool editable) {
     return SingleChildScrollView(
         child: new Container(
           child: new Column(
@@ -74,10 +85,11 @@ class _EditProfile extends State<EditProfile> {
                 padding: const EdgeInsets.all(10.0),
                 child: Form(
                   child: Column(
-                    children: buildInputs(context, true),
+                    children: buildInputs(context, editable),
                   ),
                 ),
               ),
+
               RaisedButton(
                 child: Text("Save"),
                 onPressed: () {
@@ -85,7 +97,6 @@ class _EditProfile extends State<EditProfile> {
                   print(_name.text.toString());
                   print(_city.text.toString());
                   print(_dateTime.text.toString());
-
                   DatabaseService.cities.clear();
                   User user = AuthService.user;
                   DatabaseService().addUser(new User(uid: user.uid,
@@ -94,9 +105,10 @@ class _EditProfile extends State<EditProfile> {
                       phoneNumber: int.parse(_phoneNumber.text),
                       dob: _dateTime.text.toString(),
                       email: user.email
-                  )).then((value) => ToastWidget().showSuccessColoredToast("Done Profile Updated"),
-                  ).catchError((e){
-                    ToastWidget().showFailedColoredToast("Error : Adding the user");
+                  )).then((value) => {
+                    showSuccessColoredToast("Success"),
+                  }).catchError((e){
+                    showFailedColoredToast("failed");
                   });
                 },
               ),
@@ -104,6 +116,62 @@ class _EditProfile extends State<EditProfile> {
 
           ),
         )
+    );
+  }
+
+  Widget ProfileView(BuildContext context, bool editable) {
+    return SingleChildScrollView(
+        child: new Container(
+          child: new Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: CircleAvatar(
+                  backgroundImage: ExactAssetImage(
+                      "lib/assets/images/default_profile_avatar.png"),
+                  backgroundColor: Colors.transparent,
+                  minRadius: 30,
+                  maxRadius: 60,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Form(
+                  child: Column(
+                    children: _EditProfile().buildInputs(context, false),
+                  ),
+                ),
+              ),
+              RaisedButton(
+                  child: Text("Edit profile"),
+                  onPressed: () {
+                    setState(() {
+                      profileBodyType = ProfileBodyEnum.edit;
+                    });
+                  }
+              ),
+            ],
+
+          ),
+        )
+    );
+  }
+
+  void showSuccessColoredToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Color.fromRGBO(44, 213, 83, 0.4),
+      textColor: Colors.black87,
+      gravity: ToastGravity.BOTTOM,
+    );
+  }
+
+  void showFailedColoredToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Color.fromRGBO(252, 26, 10, 0.4),
+      textColor: Colors.black87,
+      gravity: ToastGravity.BOTTOM,
     );
   }
 
@@ -210,67 +278,4 @@ class _EditProfile extends State<EditProfile> {
 
 }
 
-
-class ViewProfile extends StatefulWidget {
-  _ViewProfile createState() => _ViewProfile();
-}
-
-class _ViewProfile extends State<ViewProfile> {
-  dynamic user;
-
-  @override
-  Widget build(BuildContext context) {
-    final _width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final _height = MediaQuery
-        .of(context)
-        .size
-        .height;
-
-    return Scaffold(
-      appBar: new AppBar(
-        title: Text(AppBarsTitles.VIEW_PROFILE_APP_BAR_TITLE),
-      ),
-      body: ProfileView(context),
-    );
-  }
-
-  Widget ProfileView(BuildContext context) {
-    return SingleChildScrollView(
-        child: new Container(
-          child: new Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: CircleAvatar(
-                  backgroundImage: ExactAssetImage(
-                      "lib/assets/images/default_profile_avatar.png"),
-                  backgroundColor: Colors.transparent,
-                  minRadius: 30,
-                  maxRadius: 60,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Form(
-                  child: Column(
-                    children: _EditProfile().buildInputs(context, false),
-                  ),
-                ),
-              ),
-              RaisedButton(
-                child: Text("Edit profile"),
-                onPressed: () {
-                  _EditProfile();
-                },
-              ),
-            ],
-
-          ),
-        )
-    );
-  }
-}
 

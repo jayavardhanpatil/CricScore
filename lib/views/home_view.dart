@@ -57,7 +57,7 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
     final tabs = [
       FirstView(),
       Center(child: Text('Profile')),
-      EditProfile()
+      //EditProfile()
     ];
 
     return (loading) ? Loading() : Scaffold(
@@ -78,12 +78,12 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
             ),
 
             new ListTile(
-              title: new Text("Edit Profile"),
+              title: new Text("Profile"),
               onTap: () async{
                 try {
                   Navigator.of(context).pop();
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ViewProfile()));
+                      MaterialPageRoute(builder: (context) => EditProfile(profileBodyType: ProfileBodyEnum.view)));
                 } catch (e) {
                   print(e);
                 }
@@ -121,10 +121,10 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
               icon: Icon(Icons.search),
               title: Text('search'),
           ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Profile'),
-          ),
+//          BottomNavigationBarItem(
+//              icon: Icon(Icons.person),
+//              title: Text('Profile'),
+//          ),
         ],
         onTap: (index){
           setState(() {
