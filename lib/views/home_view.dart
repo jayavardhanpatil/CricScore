@@ -7,6 +7,7 @@ import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/view/firstView.dart';
 import 'package:flutter_app/views/profile.dart';
 import 'package:flutter_app/views/signUpView.dart';
+import 'package:flutter_app/views/startMatch.dart';
 import 'package:flutter_app/widgets/loader.dart';
 import 'package:flutter_app/widgets/provider_widget.dart';
 
@@ -32,7 +33,6 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
   //bool loading = true;
 
   bool loading = true;
-
   void initState() {
     super.initState();
     DatabaseService().reLoadUserRecord(AuthService.user.uid).then((value) => setState((){
@@ -50,12 +50,11 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
   }
 
   int _currentIndex = 0;
-  TabController _tabController;
 
   @override
   Widget build(BuildContext context) {
     final tabs = [
-      FirstView(),
+      Center(child: Text('Home')),
       Center(child: Text('Profile')),
       //EditProfile()
     ];
@@ -69,12 +68,11 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
           children: <Widget>[
 
             new UserAccountsDrawerHeader(
-              accountName: new Text("${AuthService.user.getName()}"),
+              accountName: (AuthService.user.getName() == null) ? null : new Text("${AuthService.user.getName()}"),
               accountEmail: new Text(AuthService.user.getEmailId()),
               currentAccountPicture : new CircleAvatar(
                 backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
               )
-
             ),
 
             new ListTile(
@@ -84,6 +82,19 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
                   Navigator.of(context).pop();
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => EditProfile(profileBodyType: ProfileBodyEnum.view)));
+                } catch (e) {
+                  print(e);
+                }
+              },
+            ),
+
+            new ListTile(
+              title: new Text("Start match"),
+              onTap: () async{
+                try {
+                  Navigator.of(context).pop();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => StartMatch()));
                 } catch (e) {
                   print(e);
                 }

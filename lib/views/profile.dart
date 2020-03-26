@@ -9,7 +9,6 @@ import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
-import 'package:flutter_app/widgets/tost.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +34,7 @@ class _EditProfile extends State<EditProfile> {
 
   bool loading = false;
   final _phoneNumber = TextEditingController(
-      text: AuthService.user.getPhoneNumber().toString());
+      text: (AuthService.user.getPhoneNumber() == null) ? null : AuthService.user.getPhoneNumber().toString());
   final _name = TextEditingController(text: AuthService.user.getName());
   final _city = TextEditingController(text: AuthService.user.getCity());
   final DateFormat format = DateFormat('yyyy-MM-dd');
@@ -106,10 +105,12 @@ class _EditProfile extends State<EditProfile> {
                       dob: _dateTime.text.toString(),
                       email: user.email
                   )).then((value) => {
+                    print("Added User"),
                     showSuccessColoredToast("Success"),
                   }).catchError((e){
                     showFailedColoredToast("failed");
                   });
+
                 },
               ),
             ],
@@ -162,7 +163,7 @@ class _EditProfile extends State<EditProfile> {
       msg: message,
       backgroundColor: Color.fromRGBO(44, 213, 83, 0.4),
       textColor: Colors.black87,
-      gravity: ToastGravity.BOTTOM,
+      gravity: ToastGravity.CENTER,
     );
   }
 
@@ -171,7 +172,7 @@ class _EditProfile extends State<EditProfile> {
       msg: message,
       backgroundColor: Color.fromRGBO(252, 26, 10, 0.4),
       textColor: Colors.black87,
-      gravity: ToastGravity.BOTTOM,
+      gravity: ToastGravity.CENTER,
     );
   }
 
@@ -201,7 +202,9 @@ class _EditProfile extends State<EditProfile> {
           ),
         ),
         suggestionsCallback: (pattern) {
-          return DatabaseService().getCity(pattern);
+          if(pattern.isNotEmpty) {
+            return DatabaseService().getCity(pattern[0].toUpperCase()+pattern.substring(1));
+          }
         },
         itemBuilder: (context, suggestion) {
           return ListTile(

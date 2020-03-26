@@ -32,12 +32,12 @@ class AuthService {
     await currentUser.user.updateProfile(userUpdateInfo);
     await currentUser.user.reload();
     //FirebaseUser user = currentUser.user;
-    try {
-      DatabaseService(uid: currentUser.user.uid).addUser(
-          _userFromFireBaseUser(currentUser.user));
-    }catch(e){
-      print("Error DatabaseService in db "+e.toString());
-    }
+//    try {
+//      DatabaseService(uid: currentUser.user.uid).addUser(
+//          _userFromFireBaseUser(currentUser.user));
+//    }catch(e){
+//      print("Error DatabaseService in db "+e.toString());
+//    }
     return _userFromFireBaseUser(currentUser.user);
   }
 

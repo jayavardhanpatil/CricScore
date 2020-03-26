@@ -22,6 +22,7 @@ class DatabaseService {
     await _fireBaseRTreference.child("/users/" + user.uid).set(user.map)
         .then((value) {
           print("Added User");
+          reLoadUserRecord(user.uid);
       return user;
     }).catchError((e) {
       print("Error in writing to DB : "+e.toString());
@@ -40,22 +41,23 @@ class DatabaseService {
   }
 
 
-  List<dynamic> getCity(String pattern){
-    if(cities.length == 0) {
-      print("Entered City : "+cities.toString());
-      _fireBaseRTreference.child("countries/all").once().
-      then((value) =>
-      {
-        print(value.value['cities'].toString()),
-        cities = value.value['cities'].toList(),
-        print(cities.where((element) => element.startsWith(pattern)).toList()),
+  List<dynamic> getCity(String pattern) {
+      if (cities.length == 0) {
+        print("Entered City : " + pattern);
+        _fireBaseRTreference.child("countries/all").once().
+        then((value) =>
+        {
+          print(value.value['cities'].toString()),
+          cities = value.value['cities'].toList(),
+          print(
+              cities.where((element) => element.startsWith(pattern)).toList()),
 
-      }).
-      catchError((e) {
-        print("Error in fetching city" + e.toString());
-      });
-    }
-    return cities.where((element) => element.startsWith(pattern)).toList();
+        }).
+        catchError((e) {
+          print("Error in fetching city" + e.toString());
+        });
+      }
+      return cities.where((element) => element.startsWith(pattern)).toList();
   }
 
   void addCityList(){
@@ -88,11 +90,12 @@ class DatabaseService {
   }
 
   Future reLoadUserRecord(uid) async{
-    await getUserRecord(uid);
+    await getUserRecord(uid).then((value) => print("User record reloaded"));
   }
 
   Future<User> getUserRecord(uid) async{
     await _fireBaseRTreference.child("/users/" + uid).once().then((value) {
+      if(value.value == null) return null;
       print("Getting Data from DB");
       User user = new User(uid: uid,
           name: value.value['name'],

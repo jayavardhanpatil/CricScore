@@ -192,7 +192,7 @@ packages:
       name: flutter_spinkit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.2"
+    version: "4.1.2+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -355,6 +355,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slider_button:
+    dependency: "direct main"
+    description:
+      name: slider_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.41"
   source_span:
     dependency: transitive
     description:
