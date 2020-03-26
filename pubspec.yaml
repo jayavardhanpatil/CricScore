@@ -39,6 +39,7 @@ dependencies:
   flutter_spinkit: ^4.1.2
   rxdart: ^0.23.1
   flutter_typeahead: ^1.8.0
+  fluttertoast: ^4.0.1
 
 
 

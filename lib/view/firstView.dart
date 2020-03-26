@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/view/demo.dart';
 
 class FirstView extends StatelessWidget{
 
-  @override
-  Widget build(BuildContext context) {
     @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -11,28 +10,20 @@ class FirstView extends StatelessWidget{
           title: Text('LogIn Page'),
         ),
         body: Container(
-          padding: EdgeInsets.all(10),
-          child: Form(
+          child: Container(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                TextField(
-                  decoration: InputDecoration(labelText: 'Email',),
-                ),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                  ),
-                ),
                 RaisedButton(
-                  child: Text('Login', style: TextStyle(fontSize: 20),),
+                  child: Text("Demo"),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Demo()));
+                  }
                 )
               ],
             ),
           ),
-        ),
+          ),
       );
     }
-  }
 }

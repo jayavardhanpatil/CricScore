@@ -1,5 +1,7 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+import 'dart:io';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
@@ -15,9 +17,11 @@ class DatabaseService {
   final DatabaseReference _fireBaseRTreference = FirebaseDatabase.instance.reference();
   
   //Write a data : key value
-  User addUser(User user) {
-    _fireBaseRTreference.child("/users/" + user.uid).set(user.map)
+  Future addUser(User user) async{
+    print("Adding User");
+    await _fireBaseRTreference.child("/users/" + user.uid).set(user.map)
         .then((value) {
+          print("Added User");
       return user;
     }).catchError((e) {
       print("Error in writing to DB : "+e.toString());
@@ -83,8 +87,8 @@ class DatabaseService {
     return null;
   }
 
-  Future<User> reLoadUserRecord(uid) async{
-      getUserRecord(uid);
+  Future reLoadUserRecord(uid) async{
+    await getUserRecord(uid);
   }
 
   Future<User> getUserRecord(uid) async{

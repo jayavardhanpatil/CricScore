@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_app/main.dart';
 import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
+import 'package:flutter_app/view/firstView.dart';
 import 'package:flutter_app/views/profile.dart';
 import 'package:flutter_app/views/signUpView.dart';
+import 'package:flutter_app/widgets/loader.dart';
 import 'package:flutter_app/widgets/provider_widget.dart';
+
 
 
 class HomeView extends StatefulWidget {
@@ -24,10 +28,17 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
 
   MyTabs _myHandler ;
   TabController _controller ;
-  void initState() {
+  final _textEditingController = new TextEditingController();
+  //bool loading = true;
 
+  bool loading = true;
+
+  void initState() {
     super.initState();
-    DatabaseService().reLoadUserRecord(AuthService.user.uid);
+    DatabaseService().reLoadUserRecord(AuthService.user.uid).then((value) => setState((){
+      loading = false;
+    }));
+    _textEditingController.text = "${AuthService.user.getName()}";
     _controller = new TabController(length: 2, vsync: this);
     _myHandler = _tabs[0];
     _controller.addListener(_handleSelected);
@@ -39,34 +50,46 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
   }
 
   int _currentIndex = 0;
-  bool loading = false;
   TabController _tabController;
 
   @override
   Widget build(BuildContext context) {
-
     final tabs = [
-      Center(child: Text('Home')),
+      FirstView(),
       Center(child: Text('Profile')),
       EditProfile()
     ];
 
-    return Scaffold(
+    return (loading) ? Loading() : Scaffold(
       appBar: new AppBar(
         title: new Text(_myHandler.title),
       ),
-
-      drawer: new Drawer(
+    drawer: new Drawer(
         child: ListView(
           children: <Widget>[
+
             new UserAccountsDrawerHeader(
-              accountName: new Text("${HomeController()}"),
+              accountName: new Text("${AuthService.user.getName()}"),
               accountEmail: new Text(AuthService.user.getEmailId()),
               currentAccountPicture : new CircleAvatar(
                 backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
               )
 
             ),
+
+            new ListTile(
+              title: new Text("Edit Profile"),
+              onTap: () async{
+                try {
+                  Navigator.of(context).pop();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ViewProfile()));
+                } catch (e) {
+                  print(e);
+                }
+              },
+            ),
+
             new ListTile(
               title: new Text("Sign Out"),
               onTap: () async{

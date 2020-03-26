@@ -1,57 +1,70 @@
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
-import 'package:flutter_app/widgets/loader.dart';
+import 'package:flutter_app/widgets/tost.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 
+enum ProfileForm { viewProfile, editProfile }
+
 class EditProfile extends StatefulWidget {
   _EditProfile createState() => _EditProfile();
 }
 
-class _EditProfile extends State<EditProfile> {
 
-  bool loading = true;
-  final _phoneNumber = TextEditingController(text: AuthService.user.getPhoneNumber().toString());
+class _EditProfile extends State<EditProfile> {
+  bool loading = false;
+  final _phoneNumber = TextEditingController(
+      text: AuthService.user.getPhoneNumber().toString());
   final _name = TextEditingController(text: AuthService.user.getName());
   final _city = TextEditingController(text: AuthService.user.getCity());
   final DateFormat format = DateFormat('yyyy-MM-dd');
-  final _dateTime = TextEditingController(text: AuthService.user.getDateOfBirth());
+  final _dateTime = TextEditingController(
+      text: AuthService.user.getDateOfBirth());
+  final _typeAheadController = TextEditingController(
+      text: AuthService.user.getCity());
 
   dynamic user;
 
-  final TextEditingController _typeAheadController = TextEditingController(text: AuthService.user.getCity());
-
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(context).size.width;
-    final _height = MediaQuery.of(context).size.height;
-    loading = false;
+    final _width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final _height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
-    return loading ? Loading() : Scaffold(
+    return Scaffold(
 //        appBar: new AppBar(
 //          title: Text(AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE),
 //        ),
-        body: EditProfileBody(context),
+      body: EditProfileBody(context),
     );
   }
 
 
-  Widget EditProfileBody(BuildContext context){
+  Widget EditProfileBody(BuildContext context) {
     return SingleChildScrollView(
-        child : new Container(
+        child: new Container(
           child: new Column(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: CircleAvatar(
-                  backgroundImage: ExactAssetImage("lib/assets/images/default_profile_avatar.png"),
+                  backgroundImage: ExactAssetImage(
+                      "lib/assets/images/default_profile_avatar.png"),
                   backgroundColor: Colors.transparent,
                   minRadius: 30,
                   maxRadius: 60,
@@ -61,13 +74,13 @@ class _EditProfile extends State<EditProfile> {
                 padding: const EdgeInsets.all(10.0),
                 child: Form(
                   child: Column(
-                    children: buildInputs(context),
+                    children: buildInputs(context, true),
                   ),
                 ),
               ),
               RaisedButton(
                 child: Text("Save"),
-                onPressed: (){
+                onPressed: () {
                   print(_phoneNumber.text.toString());
                   print(_name.text.toString());
                   print(_city.text.toString());
@@ -81,11 +94,12 @@ class _EditProfile extends State<EditProfile> {
                       phoneNumber: int.parse(_phoneNumber.text),
                       dob: _dateTime.text.toString(),
                       email: user.email
-                  ));
-                  DatabaseService().reLoadUserRecord(AuthService.user.uid);
+                  )).then((value) => ToastWidget().showSuccessColoredToast("Done Profile Updated"),
+                  ).catchError((e){
+                    ToastWidget().showFailedColoredToast("Error : Adding the user");
+                  });
                 },
               ),
-
             ],
 
           ),
@@ -93,11 +107,12 @@ class _EditProfile extends State<EditProfile> {
     );
   }
 
-  List<Widget> buildInputs(BuildContext context){
+  List<Widget> buildInputs(BuildContext context, bool enabled) {
     List<Widget> textFields = [];
     textFields.add(
       TextField(
         controller: _name,
+        enabled: enabled,
         decoration: InputDecoration(
             labelText: 'Name'
         ),
@@ -112,6 +127,7 @@ class _EditProfile extends State<EditProfile> {
       TypeAheadFormField(
         textFieldConfiguration: TextFieldConfiguration(
           controller: this._typeAheadController,
+          enabled: enabled,
           decoration: InputDecoration(
             labelText: 'city',
           ),
@@ -146,6 +162,7 @@ class _EditProfile extends State<EditProfile> {
     textFields.add(
       TextField(
         controller: _phoneNumber,
+        enabled: enabled,
         decoration: InputDecoration(
             labelText: 'Phone '
         ),
@@ -161,6 +178,7 @@ class _EditProfile extends State<EditProfile> {
 
     textFields.add(
       DateTimeField(
+        enabled: enabled,
         format: format,
         decoration: InputDecoration(
           labelText: 'Date',
@@ -174,7 +192,7 @@ class _EditProfile extends State<EditProfile> {
               lastDate: DateTime.now());
         },
         controller: _dateTime,
-        onChanged: (value){
+        onChanged: (value) {
           setState(() {
             _dateTime.text = format.format(value);
           });
@@ -189,28 +207,70 @@ class _EditProfile extends State<EditProfile> {
 //    print(_dateTime.toString());
     return textFields;
   }
+
 }
 
 
-//class BasicDateField extends StatelessWidget {
-//  final format = DateFormat("yyyy-MM-dd");
-//  @override
-//  Widget build(BuildContext context) {
-//    return Column(children: <Widget>[
-//      DateTimeField(
-//        format: format,
-//        decoration: InputDecoration(
-//          labelText: 'Date',
-//
-//        ),
-//        onShowPicker: (context, currentValue) {
-//          return showDatePicker(
-//              context: context,
-//              firstDate: DateTime(1900),
-//              initialDate: currentValue ?? DateTime.now(),
-//              lastDate: DateTime(2100));
-//        },
-//      ),
-//    ]);
-//  }
-//}
+class ViewProfile extends StatefulWidget {
+  _ViewProfile createState() => _ViewProfile();
+}
+
+class _ViewProfile extends State<ViewProfile> {
+  dynamic user;
+
+  @override
+  Widget build(BuildContext context) {
+    final _width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final _height = MediaQuery
+        .of(context)
+        .size
+        .height;
+
+    return Scaffold(
+      appBar: new AppBar(
+        title: Text(AppBarsTitles.VIEW_PROFILE_APP_BAR_TITLE),
+      ),
+      body: ProfileView(context),
+    );
+  }
+
+  Widget ProfileView(BuildContext context) {
+    return SingleChildScrollView(
+        child: new Container(
+          child: new Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: CircleAvatar(
+                  backgroundImage: ExactAssetImage(
+                      "lib/assets/images/default_profile_avatar.png"),
+                  backgroundColor: Colors.transparent,
+                  minRadius: 30,
+                  maxRadius: 60,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Form(
+                  child: Column(
+                    children: _EditProfile().buildInputs(context, false),
+                  ),
+                ),
+              ),
+              RaisedButton(
+                child: Text("Edit profile"),
+                onPressed: () {
+                  _EditProfile();
+                },
+              ),
+            ],
+
+          ),
+        )
+    );
+  }
+}
+
