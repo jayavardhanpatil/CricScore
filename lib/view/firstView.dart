@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/view/demo.dart';
+import 'package:flutter_app/views/selectPlayers.dart';
+
 
 class FirstView extends StatelessWidget{
 
@@ -14,7 +15,7 @@ class FirstView extends StatelessWidget{
                   child: Text("Demo"),
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Demo()));
+                        MaterialPageRoute(builder: (context) => PlayersList()));
                   }
                 )
               ],
