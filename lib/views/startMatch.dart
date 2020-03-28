@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/views/selectPlayers.dart';
+import 'package:flutter_app/views/signUpView.dart';
+import 'package:flutter_app/widgets/ToastWidget.dart';
 import 'package:flutter_app/widgets/animatedButtton.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
@@ -47,43 +50,45 @@ class _StartMatch extends State<StartMatch> {
               padding: EdgeInsets.all(10),
               
               child: Column(
-                
+
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
 
                   Text("Chose teams"),
                   SizedBox(height: _height * 0.01),
 
-                  typeAhed(_venueCity, _venuetypeAheadController, _width * 0.5),
+                  typeAhed(_venueCity, _venuetypeAheadController, _width * 0.5, "Match venue"),
 
                   SizedBox(height: _height * 0.05),
 
-                  TextField(
+                  TextFormField(
+                    validator: Validator.validate,
                     controller: _firstTteamName,
                     decoration: inputDecoration("Team A Name"),
                     ),
 
                   SizedBox(height: _height * 0.01),
 
-                  rowWithCityAndPlayer(__typefirstAheadController, _firstTeamCity, _width * 0.5, _firstTteamName),
+                  rowWithCityAndPlayer(__typefirstAheadController, _firstTeamCity, _width * 0.5, _firstTteamName, "Team A City"),
 
 
-                  SizedBox(height: _height * 0.02),
+                  SizedBox(height: _height * 0.05),
 
                   rowWithText("VS"),
 
-                  SizedBox(height: _height * 0.02),
+                  SizedBox(height: _height * 0.05),
 
-                  TextField(
+                  TextFormField(
+                    validator: Validator.validate,
                     controller: _secondTteamName,
                     decoration: inputDecoration("Team B Name"),
                   ),
 
                   SizedBox(height: _height * 0.01),
 
-                  rowWithCityAndPlayer(__typesecondAheadController, _secondTeamCity, _width * 0.5, _secondTteamName),
+                  rowWithCityAndPlayer(__typesecondAheadController, _secondTeamCity, _width * 0.5, _secondTteamName, "Team B City"),
 
-                  SizedBox(height: _height * 0.05),
+                  SizedBox(height: _height * 0.08),
 
                   SilderButton("Slide to Start a match", _height * 0.09, _width * 0.8, context),
                 ],
@@ -99,16 +104,16 @@ class _StartMatch extends State<StartMatch> {
       labelText: lable,
       fillColor: Colors.white,
       border: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.0),
+        borderRadius: new BorderRadius.circular(10.0),
       ),
     );
   }
 
 
-  rowWithCityAndPlayer(TextEditingController typedValue,  TextEditingController valueController, double cityFiledWidth, TextEditingController teamName){
+  rowWithCityAndPlayer(TextEditingController typedValue,  TextEditingController valueController, double cityFiledWidth, TextEditingController teamName, String lable){
     return Row(children: <Widget>[
       Container(
-        child: typeAhed(typedValue, valueController, cityFiledWidth),
+        child: typeAhed(typedValue, valueController, cityFiledWidth, lable),
       ),
 
       Container(
@@ -117,14 +122,19 @@ class _StartMatch extends State<StartMatch> {
           children: <Widget>[
             Container(
                 child: RaisedButton.icon(
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(10),
                     shape :RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(18.0),
                     ),
                     color: Colors.blue,
                     onPressed: (){
-                    StartMatch.currentTeamName = teamName.text;
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => PlayersList()));
+                      if(teamName.text.length < 3){
+                        showFailedColoredToast("Team Name length should be greater then 3 letter");
+                      }else {
+                        StartMatch.currentTeamName = teamName.text;
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => PlayersList()));
+                      }
 
                     },
                     icon: Icon(Icons.add, color: Colors.white,),
@@ -135,49 +145,21 @@ class _StartMatch extends State<StartMatch> {
             ),
           ],
         ),
-
-
-
-
-
-//        padding: EdgeInsets.only(left: 10),
-//        child: SizedBox.fromSize(
-//          size: Size(60, 60), // button width and height
-//          child: ClipOval(
-//            child: Material(
-//              color: Colors.orange, // button color
-//              child: InkWell(
-//                splashColor: Colors.green, // splash color
-//                onTap: () {
-//
-//
-//                }, // button pressed
-//                child: Column(
-//                  mainAxisAlignment: MainAxisAlignment.center,
-//                  children: <Widget>[
-//                    Icon(Icons.add), // icon
-//                    Text("players"), // text
-//                  ],
-//                ),
-//              ),
-//            ),
-//          ),
-//        ),
       )
     ]);
   }
 
-  typeAhed(TextEditingController typedValue,  TextEditingController valueController, double width){
+  typeAhed(TextEditingController typedValue,  TextEditingController valueController, double width, String lable){
     return Container(
       width: width,
       child: TypeAheadFormField(
         textFieldConfiguration: TextFieldConfiguration(
           controller: typedValue,
-          decoration: inputDecoration("City"),
+          decoration: inputDecoration(lable),
         ),
         suggestionsCallback: (pattern) {
           // ignore: missing_return
-          if(pattern.isNotEmpty) {
+          if(pattern.length > 2) {
             return DatabaseService().getCity(pattern[0].toUpperCase()+pattern.substring(1));
           }
         },

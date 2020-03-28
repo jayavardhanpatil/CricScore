@@ -21,13 +21,13 @@ class User{
   }
 
   User mapJsonToUserObject(String key, dynamic value){
-    print(value);
     this.name = value['name'];
     this.city = value['city'];
     this.phoneNumber = value['phoneNumber'];
     this.email = value['email'];
     this.dob = value['dateOfBirth'];
     this.uid = key;
+    return this;
   }
 
   String getEmailId(){

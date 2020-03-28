@@ -202,7 +202,7 @@ class _EditProfile extends State<EditProfile> {
           ),
         ),
         suggestionsCallback: (pattern) {
-          if(pattern.isNotEmpty) {
+          if(pattern.length > 2) {
             return DatabaseService().getCity(pattern[0].toUpperCase()+pattern.substring(1));
           }
         },
