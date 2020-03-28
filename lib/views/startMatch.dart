@@ -54,7 +54,7 @@ class _StartMatch extends State<StartMatch> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
 
-                  Text("Chose teams"),
+                  Text("Choose teams"),
                   SizedBox(height: _height * 0.01),
 
                   typeAhed(_venueCity, _venuetypeAheadController, _width * 0.5, "Match venue"),
