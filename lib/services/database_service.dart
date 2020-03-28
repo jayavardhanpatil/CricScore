@@ -118,11 +118,12 @@ class DatabaseService {
   Future<List<User>> getUsersList() async {
     List<User> list = new List();
      return await _fireBaseRTreference.child("/users").once().then((value) {
+       print("Getting user data from DB");
       value.value.forEach((k, v){
         User user = User().mapJsonToUserObject(k, v);
-        //if(user.name != null){
+        if(user.name != null){
           list.add(user);
-        //}
+        }
       });
       return list;
     }).catchError((e){
