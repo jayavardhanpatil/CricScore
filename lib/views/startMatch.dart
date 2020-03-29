@@ -15,14 +15,16 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class StartMatch extends StatefulWidget{
 
-  static String currentTeamName;
   _StartMatch createState() => _StartMatch();
 
 }
 
 class _StartMatch extends State<StartMatch> {
 
-  final _firstTteamName = TextEditingController();
+  String previousvalueFirstTeam = "";
+  String previousvalueSecondteam = "";
+
+  TextEditingController _firstTteamName = TextEditingController();
   final _secondTteamName = TextEditingController();
   final _firstTeamCity = TextEditingController();
   final _secondTeamCity = TextEditingController();
@@ -30,6 +32,8 @@ class _StartMatch extends State<StartMatch> {
   final __typesecondAheadController = TextEditingController();
   final _venueCity = TextEditingController();
   final _venuetypeAheadController = TextEditingController();
+  TextEditingController _controller = new TextEditingController();
+
 
   Match match;
 
@@ -72,15 +76,28 @@ class _StartMatch extends State<StartMatch> {
 
                   SizedBox(height: _height * 0.05),
 
-                  TextFormField(
-                    validator: Validator.validate,
+                  TextField(
+                    //validator: Validator.validate,
                     controller: _firstTteamName,
                     decoration: inputDecoration("Team A Name"),
+                      onTap: (){
+                        previousvalueFirstTeam = _firstTteamName.text;
+                      },
                     ),
 
                   SizedBox(height: _height * 0.01),
 
-                  rowWithCityAndPlayer(__typefirstAheadController, _firstTeamCity, _width * 0.5, _firstTteamName, "Team A City"),
+                    Row(children: <Widget>[
+                      Container(
+                        child: typeAhed(__typefirstAheadController, _firstTeamCity, _width * 0.5, "Team A City"),
+                      ),
+
+                      Container(
+                        child: addPlayersButton(_firstTteamName.text, previousvalueFirstTeam, _firstTeamCity.text),
+                      ),
+                    ]),
+
+                  //rowWithCityAndPlayer(__typefirstAheadController, _firstTeamCity, _width * 0.5, _firstTteamName, "Team A City"),
 
 
                   SizedBox(height: _height * 0.05),
@@ -93,11 +110,23 @@ class _StartMatch extends State<StartMatch> {
                     validator: Validator.validate,
                     controller: _secondTteamName,
                     decoration: inputDecoration("Team B Name"),
+                    onTap: (){
+                      previousvalueSecondteam = _secondTteamName.text;
+                    },
+
                   ),
 
                   SizedBox(height: _height * 0.01),
 
-                  rowWithCityAndPlayer(__typesecondAheadController, _secondTeamCity, _width * 0.5, _secondTteamName, "Team B City"),
+                  Row(children: <Widget>[
+                    Container(
+                      child: typeAhed(__typesecondAheadController, _secondTeamCity, _width * 0.5, "Team B City"),
+                    ),
+
+                    Container(
+                      child: addPlayersButton(_secondTteamName.text, previousvalueSecondteam, _secondTeamCity.text),
+                    ),
+                  ]),
 
                   SizedBox(height: _height * 0.08),
 
@@ -105,14 +134,14 @@ class _StartMatch extends State<StartMatch> {
 
                   RaisedButton(
                     onPressed: (){
+                      print("after changin the value : "+ _firstTteamName.text);
                         match.teams.forEach((key, value) {
-
-                          print("Team Name : "+key);
-                          print("Players : "+value.getTeamPlayers().toString());
+                          DatabaseService().addMatchDetails(match);
+                          print("Team Name : "+value.getTeamName());
+                          print("Team City : "+value.getTeamCity());
                           for(int i=0;i<value.getTeamPlayers().length;i++){
                             print("Team Player : "+value.getTeamPlayers()[i].getName());
                           }
-
                         });
                     },
                   ),
@@ -128,67 +157,85 @@ class _StartMatch extends State<StartMatch> {
     return new InputDecoration(
       labelText: lable,
       fillColor: Colors.white,
-      border: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(10.0),
-      ),
+//      border: new OutlineInputBorder(
+//        borderRadius: new BorderRadius.circular(5.0),
+//      ),
     );
   }
 
 
-  rowWithCityAndPlayer(TextEditingController typedValue,  TextEditingController valueController, double cityFiledWidth, TextEditingController teamName, String lable){
-    return Row(children: <Widget>[
-      Container(
-        child: typeAhed(typedValue, valueController, cityFiledWidth, lable),
-      ),
 
-      Container(
-        padding: EdgeInsets.only(left: 20, right: 10),
-        child: Column(
-          children: <Widget>[
-            Container(
-                child: RaisedButton.icon(
-                  padding: EdgeInsets.all(10),
-                    shape :RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(18.0),
-                    ),
-                    color: Colors.blue,
-                    onPressed: () async {
-                      List<User> selectedTeamPlayers;
-                      if(teamName.text.length < 3){
-                        showFailedColoredToast("Team Name length should be greater then 3 letter");
-                      }else {
-                        Team team = new Team();
-                        team.setTeamCity(valueController.text);
-                        team.setTeamName(teamName.text);
-                        team.setTeamPlayers(new List<User>());
+  addPlayersButton(String currentTeamName,  String previousTeamName, String teamCity){
 
-                        match.setMatchVenue(_venueCity.text);
-                        match.teams.putIfAbsent(teamName.text, () => team);
-                        //print(match.getTeams()[teamName.text].getTeamName());
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: RaisedButton.icon(
+              padding: EdgeInsets.all(10),
+              shape :RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(18.0),
+              ),
+              color: Colors.blue,
+              onPressed: (){
+                print("current Team Name : "+currentTeamName);
+                print("Previous Team name : "+previousTeamName);
 
-                        StartMatch.currentTeamName = teamName.text;
-                        selectedTeamPlayers = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => PlayersList(match: match)));
-
-                        team.setTeamPlayers(selectedTeamPlayers);
-                        match.teams.update(teamName.text, (value) => team);
-                      }
-
-                      match.teams.forEach((key, value) {print("teams : "+key);});
-
-                      print(match.teams[teamName.text].getTeamPlayers().toString());
-
-                    },
-                    icon: Icon(Icons.add, color: Colors.white,),
-                    label: Text("Players", style: TextStyle(
-                           color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
-                     ),
+                selectPlayers(currentTeamName, previousTeamName, teamCity);
+              },
+              icon: Icon(Icons.add, color: Colors.white,),
+              label: Text("Players", style: TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
               ),
             ),
-          ],
-        ),
-      )
-    ]);
+          ),
+        ],
+      ),
+    );
+  }
+
+  selectPlayers(String currentTeamName, String previousTypedTeamName, String cityName) async{
+    {
+      Team team = new Team();
+      List<User> selectedTeamPlayers;
+
+      if(currentTeamName.length < 3){
+        showFailedColoredToast("Team Name length should be greater then 3 letter");
+      }else {
+        team.setTeamName(currentTeamName);
+        team.setTeamCity(cityName);
+
+        print("Seelcted City Name : "+ cityName + " for tema Name : "+currentTeamName);
+
+        print("Previously typed : "+previousTypedTeamName);
+        print("Current typed : "+ currentTeamName);
+        print("Contains team Name : "+match.teams.containsKey(previousTypedTeamName).toString());
+
+        match.teams.forEach((key, value) {
+          print(key);
+        });
+
+        if(previousTypedTeamName.isNotEmpty && (previousTypedTeamName != currentTeamName) && match.teams.containsKey(previousTypedTeamName)){
+          print("copy old players : ");
+          team.setTeamPlayers(match.teams[previousTypedTeamName].getTeamPlayers());
+          print(team.getTeamPlayers());
+          match.teams.remove(previousTypedTeamName);
+          print(team.getTeamPlayers());
+        }else{
+          team.setTeamPlayers(new List<User>());
+        }
+
+        match.teams.update(currentTeamName, (value) => team, ifAbsent: () => team);
+        //print(match.getTeams()[teamName.text].getTeamName());
+
+        selectedTeamPlayers = await Navigator.push(context, MaterialPageRoute(
+            builder: (context) => PlayersList(match: match, team: team,)));
+
+        team.setTeamPlayers(selectedTeamPlayers);
+        match.teams.update(team.getTeamName(), (value) => team);
+      }
+    }
   }
 
   typeAhed(TextEditingController typedValue,  TextEditingController valueController, double width, String lable){

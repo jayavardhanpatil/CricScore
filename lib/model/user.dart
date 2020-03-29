@@ -12,6 +12,7 @@ class User{
 
   Map<String,dynamic> get map {
     return {
+      "uid" : uid,
       "name": name,
       "city":city,
       "phoneNumber": phoneNumber,
