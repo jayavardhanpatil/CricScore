@@ -1,14 +1,24 @@
 
-
 import 'package:flutter_app/model/user.dart';
 
 class Team {
 
-  final String _teamName;
-  final List<User> _players;
-  final String teamCity;
+  String _teamName;
+  List<User> _players;
+  String _teamCity;
 
-  Team(this._teamName, this._players, this.teamCity);
+
+  void setTeamName(String teamName){
+    this._teamName = teamName;
+  }
+
+  void setTeamCity(String teamCity){
+    this._teamCity = teamCity;
+  }
+
+  void setTeamPlayers(List<User> players){
+    this._players = players;
+  }
 
   String getTeamName(){
     return this._teamName;
@@ -19,7 +29,7 @@ class Team {
   }
 
   String getTeamCity(){
-    return this.teamCity;
+    return this._teamCity;
   }
 
 }

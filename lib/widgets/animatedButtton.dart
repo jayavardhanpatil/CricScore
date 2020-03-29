@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/views/profile.dart';
+import 'package:flutter_app/views/startMatch.dart';
 import 'package:flutter_app/widgets/loader.dart';
 import 'package:slider_button/slider_button.dart';
 

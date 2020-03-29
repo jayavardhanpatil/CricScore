@@ -121,7 +121,7 @@ class DatabaseService {
        print("Getting user data from DB");
       value.value.forEach((k, v){
         User user = User().mapJsonToUserObject(k, v);
-        if(user.name != null && user.name == 'Jay'){
+        if(user.name != null){
           list.add(user);
         }
       });

@@ -1,11 +1,17 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/match.dart';
+import 'package:flutter_app/model/team.dart';
+import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/views/selectPlayers.dart';
-import 'package:flutter_app/views/signUpView.dart';
 import 'package:flutter_app/widgets/ToastWidget.dart';
 import 'package:flutter_app/widgets/animatedButtton.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+
+
 
 class StartMatch extends StatefulWidget{
 
@@ -25,8 +31,13 @@ class _StartMatch extends State<StartMatch> {
   final _venueCity = TextEditingController();
   final _venuetypeAheadController = TextEditingController();
 
-  double _scale;
-  AnimationController _controller;
+  Match match;
+
+  initState(){
+    super.initState();
+    match = new Match();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +102,20 @@ class _StartMatch extends State<StartMatch> {
                   SizedBox(height: _height * 0.08),
 
                   SilderButton("Slide to Start a match", _height * 0.09, _width * 0.8, context),
+
+                  RaisedButton(
+                    onPressed: (){
+                        match.teams.forEach((key, value) {
+
+                          print("Team Name : "+key);
+                          print("Players : "+value.getTeamPlayers().toString());
+                          for(int i=0;i<value.getTeamPlayers().length;i++){
+                            print("Team Player : "+value.getTeamPlayers()[i].getName());
+                          }
+
+                        });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -127,14 +152,31 @@ class _StartMatch extends State<StartMatch> {
                         borderRadius: new BorderRadius.circular(18.0),
                     ),
                     color: Colors.blue,
-                    onPressed: (){
+                    onPressed: () async {
+                      List<User> selectedTeamPlayers;
                       if(teamName.text.length < 3){
                         showFailedColoredToast("Team Name length should be greater then 3 letter");
                       }else {
+                        Team team = new Team();
+                        team.setTeamCity(valueController.text);
+                        team.setTeamName(teamName.text);
+                        team.setTeamPlayers(new List<User>());
+
+                        match.setMatchVenue(_venueCity.text);
+                        match.teams.putIfAbsent(teamName.text, () => team);
+                        //print(match.getTeams()[teamName.text].getTeamName());
+
                         StartMatch.currentTeamName = teamName.text;
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => PlayersList()));
+                        selectedTeamPlayers = await Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => PlayersList(match: match)));
+
+                        team.setTeamPlayers(selectedTeamPlayers);
+                        match.teams.update(teamName.text, (value) => team);
                       }
+
+                      match.teams.forEach((key, value) {print("teams : "+key);});
+
+                      print(match.teams[teamName.text].getTeamPlayers().toString());
 
                     },
                     icon: Icon(Icons.add, color: Colors.white,),
