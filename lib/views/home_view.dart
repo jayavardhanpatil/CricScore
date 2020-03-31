@@ -8,6 +8,7 @@ import 'package:flutter_app/view/firstView.dart';
 import 'package:flutter_app/views/profile.dart';
 import 'package:flutter_app/views/signUpView.dart';
 import 'package:flutter_app/views/selectTeam.dart';
+import 'package:flutter_app/widgets/gradient.dart';
 import 'package:flutter_app/widgets/loader.dart';
 import 'package:flutter_app/widgets/provider_widget.dart';
 
@@ -62,6 +63,7 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
     return (loading) ? Loading() : Scaffold(
       appBar: new AppBar(
         title: new Text(_myHandler.title),
+        flexibleSpace: getAppBarGradient(),
       ),
     drawer: new Drawer(
         child: ListView(
@@ -72,7 +74,8 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
               accountEmail: new Text(AuthService.user.getEmailId()),
               currentAccountPicture : new CircleAvatar(
                 backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
-              )
+                backgroundColor: Color(0xFF090979),
+              ),
             ),
 
             new ListTile(

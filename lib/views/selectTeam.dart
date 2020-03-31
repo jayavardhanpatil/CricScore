@@ -11,6 +11,7 @@ import 'package:flutter_app/views/selectPlayers.dart';
 import 'package:flutter_app/views/startMatch.dart';
 import 'package:flutter_app/widgets/ToastWidget.dart';
 import 'package:flutter_app/widgets/animatedButtton.dart';
+import 'package:flutter_app/widgets/gradient.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:slider_button/slider_button.dart';
 
@@ -60,6 +61,7 @@ class _SelectTeam extends State<SelectTeam> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Select Team"),
+        flexibleSpace: getAppBarGradient(),
       ),
       body: Center(
             child: SingleChildScrollView(

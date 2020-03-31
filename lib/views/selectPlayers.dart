@@ -6,6 +6,7 @@ import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/views/selectTeam.dart';
+import 'package:flutter_app/widgets/gradient.dart';
 
 class PlayersList extends StatefulWidget {
 
@@ -58,6 +59,7 @@ class PlayersList extends StatefulWidget {
             ),
           )
         ],
+        flexibleSpace: getAppBarGradient(),
       ),
       body: Center(
         child: Container(

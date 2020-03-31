@@ -9,6 +9,7 @@ import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
+import 'package:flutter_app/widgets/gradient.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -45,13 +46,18 @@ class _EditProfile extends State<EditProfile> {
 
   dynamic user;
 
+  var _width;
+  var _height;
+
+
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery
+
+    _width = MediaQuery
         .of(context)
         .size
         .width;
-    final _height = MediaQuery
+    _height = MediaQuery
         .of(context)
         .size
         .height;
@@ -59,6 +65,7 @@ class _EditProfile extends State<EditProfile> {
     return Scaffold(
         appBar: new AppBar(
           title: Text(AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE),
+          flexibleSpace: getAppBarGradient(),
         ),
 
         body: (profileBodyType == ProfileBodyEnum.edit) ? ProfileBody(context, true) : ProfileView(context, false),
@@ -75,7 +82,7 @@ class _EditProfile extends State<EditProfile> {
                 child: CircleAvatar(
                   backgroundImage: ExactAssetImage(
                       "lib/assets/images/default_profile_avatar.png"),
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: Color(0xFF090979),
                   minRadius: 30,
                   maxRadius: 60,
                 ),
@@ -143,13 +150,26 @@ class _EditProfile extends State<EditProfile> {
                   ),
                 ),
               ),
+
+              SizedBox(height: _height * 0.04),
+
               RaisedButton(
-                  child: Text("Edit profile"),
                   onPressed: () {
                     setState(() {
                       profileBodyType = ProfileBodyEnum.edit;
                     });
-                  }
+                  },
+                  textColor: Colors.white,
+                  padding: const EdgeInsets.all(0.0),
+                  child: Container(
+                    decoration: getButtonGradientColor(BoxShape.rectangle),
+                    padding: const EdgeInsets.all(10.0),
+                    child: const Text(
+                        'Toss Coin',
+                        style: TextStyle(fontSize: 20)
+                    ),
+                  ),
+
               ),
             ],
 

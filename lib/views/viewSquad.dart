@@ -1,28 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/team.dart';
+import 'package:flutter_app/widgets/gradient.dart';
 
-class ViewSqual extends StatefulWidget{
+class ViewSquad extends StatefulWidget{
 
   Team team;
 
-  ViewSqual({Key key, @required this.team}) : super (key : key);
+  ViewSquad({Key key, @required this.team}) : super (key : key);
 
-  _ViewSqual createState() => _ViewSqual(team: team);
+  _ViewSquad createState() => _ViewSquad(team: team);
 
 }
 
-class _ViewSqual extends State<ViewSqual> {
+class _ViewSquad extends State<ViewSquad> {
   Team team;
 
-  _ViewSqual({this.team});
+  _ViewSquad({this.team});
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(team.getTeamName()),
+        title: Text(team.getTeamName() + "(" + team.players.length.toString() + ")"),
+        flexibleSpace: getAppBarGradient(),
       ),
       body: ListView.builder(
           itemCount: team.players.length,

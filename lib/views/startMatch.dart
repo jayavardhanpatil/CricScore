@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/team.dart';
+import 'package:flutter_app/views/viewSquad.dart';
 import 'package:flutter_app/widgets/Search.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 
@@ -55,18 +56,7 @@ class _StartMatch extends State<StartMatch>{
     return Scaffold(
       appBar: AppBar(
         title: Text("Start Match"),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[
-                    Color(0xFF0D47A1),
-                    Color(0xFF42A5F5),
-                    Color(0xFF0D47A1),
-                  ]),
-          ),
-        ),
+        flexibleSpace: getAppBarGradient(),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -94,7 +84,11 @@ class _StartMatch extends State<StartMatch>{
                         SizedBox(height: _height * 0.03),
 
                         RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ViewSquad(team: team1)));
+
+                          },
                           textColor: Colors.white,
                           padding: const EdgeInsets.all(0.0),
                           child: Container(
