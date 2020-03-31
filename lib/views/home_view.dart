@@ -74,7 +74,7 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
               accountEmail: new Text(AuthService.user.getEmailId()),
               currentAccountPicture : new CircleAvatar(
                 backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
-                backgroundColor: Color(0xFF090979),
+                backgroundColor: Colors.white,
               ),
             ),
 

@@ -23,7 +23,7 @@ class _ViewSquad extends State<ViewSquad> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(team.getTeamName() + "(" + team.players.length.toString() + ")"),
+        title: Text(team.getTeamName() + " Squad (" + team.players.length.toString() + ")"),
         flexibleSpace: getAppBarGradient(),
       ),
       body: ListView.builder(

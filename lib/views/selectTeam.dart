@@ -138,7 +138,6 @@ class _SelectTeam extends State<SelectTeam> {
 
                   RaisedButton(
                     onPressed: (){
-
                       print("after changin the value : "+ _firstTteamName.text);
                       String matchBetween = "";
                       match.teams.forEach((key, value) {
@@ -146,8 +145,6 @@ class _SelectTeam extends State<SelectTeam> {
                       });
                       match.setMatchTitle(matchBetween.substring(0, matchBetween.length-3));
                       print("Match Between "+ match.getMatchTitle());
-
-
                       match.teams.forEach((key, value) {
                           print("Team Name : "+value.getTeamName());
                           print("Team City : "+value.getTeamCity());
@@ -169,6 +166,16 @@ class _SelectTeam extends State<SelectTeam> {
 //                          }
 //                        });
                     },
+                    textColor: Colors.white,
+                    padding: const EdgeInsets.all(0.0),
+                    child: Container(
+                      decoration: getButtonGradientColor(BoxShape.rectangle),
+                      padding: const EdgeInsets.all(10.0),
+                      child: const Text(
+                          'Start Match',
+                          style: TextStyle(fontSize: 20)
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -197,12 +204,13 @@ class _SelectTeam extends State<SelectTeam> {
       child: Column(
         children: <Widget>[
           Container(
+            decoration: getButtonGradientColor(BoxShape.rectangle),
             child: RaisedButton.icon(
-              padding: EdgeInsets.all(10),
-              shape :RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(18.0),
-              ),
-              color: Colors.blue,
+              padding: EdgeInsets.all(12),
+//              shape :RoundedRectangleBorder(
+//                borderRadius: new BorderRadius.circular(18.0),
+//              ),
+              color: Colors.transparent,
               onPressed: (){
                 print("current Team Name : "+currentTeamName);
                 print("Previous Team name : "+previousTeamName);
@@ -301,10 +309,7 @@ class _SelectTeam extends State<SelectTeam> {
             )),
       ),
       Container(
-            decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blue,
-            ),
+            decoration: getButtonGradientColor(BoxShape.circle),
           child: Text(text,style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
              ),

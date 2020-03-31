@@ -133,7 +133,11 @@ class _StartMatch extends State<StartMatch>{
                         SizedBox(height: _height * 0.03),
 
                         RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ViewSquad(team: team2)));
+
+                          },
                           textColor: Colors.white,
                           padding: const EdgeInsets.all(0.0),
                           child: Container(
