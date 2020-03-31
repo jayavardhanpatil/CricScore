@@ -5,7 +5,7 @@ import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/database_service.dart';
-import 'package:flutter_app/views/startMatch.dart';
+import 'package:flutter_app/views/selectTeam.dart';
 
 class PlayersList extends StatefulWidget {
 

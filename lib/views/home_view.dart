@@ -7,7 +7,7 @@ import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/view/firstView.dart';
 import 'package:flutter_app/views/profile.dart';
 import 'package:flutter_app/views/signUpView.dart';
-import 'package:flutter_app/views/startMatch.dart';
+import 'package:flutter_app/views/selectTeam.dart';
 import 'package:flutter_app/widgets/loader.dart';
 import 'package:flutter_app/widgets/provider_widget.dart';
 
@@ -94,7 +94,7 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
                 try {
                   Navigator.of(context).pop();
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => StartMatch()));
+                      MaterialPageRoute(builder: (context) => SelectTeam()));
                 } catch (e) {
                   print(e);
                 }

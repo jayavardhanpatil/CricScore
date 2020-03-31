@@ -22,7 +22,7 @@ class DatabaseService {
   //Write a data : key value
   Future addUser(User user) async {
     print("Adding User");
-    await _fireBaseRTreference.child("/users/" + user.uid).set(user.map)
+    await _fireBaseRTreference.child("/users/" + user.uid).set(user.toJson())
         .then((value) {
       print("Added User");
       reLoadUserRecord(user.uid);
@@ -97,14 +97,9 @@ class DatabaseService {
   Future<User> getUserRecord(uid) async {
     await _fireBaseRTreference.child("/users/" + uid).once().then((value) {
       if (value.value == null) return null;
-      print("Getting Data from DB");
-      User user = new User(uid: uid,
-          name: value.value['name'],
-          city: value.value['city'],
-          phoneNumber: value.value['phoneNumber'],
-          email: value.value['email'],
-          dob: value.value['dateOfBirth']
-      );
+//      print("Getting Data from DB : "+value.value);
+      print(value.value['name']);
+      User user = User.fromJson(value.value);
       if (AuthService.user.uid == uid) {
         AuthService.user = user;
       }
@@ -120,7 +115,8 @@ class DatabaseService {
       return await _fireBaseRTreference.child("/users").once().then((value) {
         print("Getting user data from DB");
         value.value.forEach((k, v) {
-          User user = User().mapJsonToUserObject(k, v);
+          User user = User.fromJson(v);
+          user.uid = k;
           if (user.name != null) {
             users.add(user);
           }
@@ -136,10 +132,11 @@ class DatabaseService {
 
 
   addMatchDetails(Match match) async{
-//    return await _fireBaseRTreference.child("matches/"+match.getMatchVenue()+"/").child("${match.getTeams()[0]}_${match.getTeams()[1]}")
-//        .set({"key" : "value"}).then((value) => print("Match details added")).catchError((e){
-//          print("error : "+e.toString());
-//    });
+    print(match.toJson());
+    return await _fireBaseRTreference.child("matches/"+match.getMatchVenue()+"/").child(match.getMatchTitle())
+        .set(match.toJson()).then((value) => print("Match details added")).catchError((e){
+          print("error : "+e.toString());
+    });
   }
 
 }

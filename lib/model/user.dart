@@ -1,34 +1,43 @@
 
+
+
 class User{
 
-   String uid;
-   String name;
-   String city;
-   int phoneNumber;
-   String dob;
-   String email;
+  String uid;
+  String name;
+  String city;
+  int phoneNumber;
+  String dateOfBirth;
+  String email;
 
-  User({this.uid, this.name = null, this.city = null, this.phoneNumber = null, this.dob = null, this.email});
+  User(
+      {this.uid,
+        this.name,
+        this.city,
+        this.phoneNumber,
+        this.dateOfBirth,
+        this.email});
 
-  Map<String,dynamic> get map {
-    return {
-      "uid" : uid,
-      "name": name,
-      "city":city,
-      "phoneNumber": phoneNumber,
-      "dateOfBirth": dob,
-      "email": email
-    };
+  factory User.fromJson(Map<dynamic, dynamic> json) {
+    return User(
+      city: json['city'],
+      dateOfBirth: json['dateOfBirth'],
+      email: json['email'],
+      name: json['name'],
+      phoneNumber: json['phoneNumber'],
+      uid: json['uid'],
+    );
   }
 
-  User mapJsonToUserObject(String key, dynamic value){
-    this.name = value['name'];
-    this.city = value['city'];
-    this.phoneNumber = value['phoneNumber'];
-    this.email = value['email'];
-    this.dob = value['dateOfBirth'];
-    this.uid = key;
-    return this;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['city'] = this.city;
+    data['dateOfBirth'] = this.dateOfBirth;
+    data['email'] = this.email;
+    data['name'] = this.name;
+    data['phoneNumber'] = this.phoneNumber;
+    data['uid'] = this.uid;
+    return data;
   }
 
   String getEmailId(){
@@ -44,12 +53,11 @@ class User{
   }
 
   String getDateOfBirth(){
-    return this.dob;
+    return this.dateOfBirth;
   }
 
   String getCity(){
     return this.city;
   }
-
 
 }

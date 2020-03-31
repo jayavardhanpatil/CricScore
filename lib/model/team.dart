@@ -1,35 +1,56 @@
 
+import 'dart:convert';
+
 import 'package:flutter_app/model/user.dart';
 
 class Team {
 
-  String _teamName;
-  List<User> _players;
-  String _teamCity;
+  String teamName;
+  String teamCity;
+  List<User> players;
 
+  Team({this.teamName, this.teamCity, this.players});
+
+  factory Team.fromJson(Map<String, dynamic> json) {
+    return Team(
+      teamCity: json['teamCity'],
+      teamName: json['teamName'],
+      players: json['players'] != null ? (json['players'] as List).map((i) => User.fromJson(i)).toList() : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['teamCity'] = this.teamCity;
+    data['teamName'] = this.teamName;
+    if (this.players != null) {
+      data['players'] = this.players.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 
   void setTeamName(String teamName){
-    this._teamName = teamName;
+    this.teamName = teamName;
   }
 
   void setTeamCity(String teamCity){
-    this._teamCity = teamCity;
+    this.teamCity = teamCity;
   }
 
   void setTeamPlayers(List<User> players){
-    this._players = players;
+    this.players = players;
   }
 
   String getTeamName(){
-    return this._teamName;
+    return this.teamName;
   }
 
   List<User> getTeamPlayers(){
-    return this._players;
+    return this.players;
   }
 
   String getTeamCity(){
-    return this._teamCity;
+    return this.teamCity;
   }
 
 }

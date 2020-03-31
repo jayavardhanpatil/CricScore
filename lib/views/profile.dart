@@ -102,7 +102,7 @@ class _EditProfile extends State<EditProfile> {
                       name: _name.text.toString(),
                       city: _city.text.toString(),
                       phoneNumber: int.parse(_phoneNumber.text),
-                      dob: _dateTime.text.toString(),
+                      dateOfBirth: _dateTime.text.toString(),
                       email: user.email
                   )).then((value) => {
                     print("Added User"),
