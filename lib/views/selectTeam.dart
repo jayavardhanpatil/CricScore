@@ -327,32 +327,4 @@ class _SelectTeam extends State<SelectTeam> {
     ]);
   }
 
-
-  Widget SilderButton(String text, double height, double width, BuildContext context, ){
-    return SliderButton(
-      height: height,
-      width: width,
-      action: () {
-
-        Navigator.push(context, MaterialPageRoute(builder: (context) => StartMatch(match: match)));
-      },
-      label: Text(
-        text,
-        style: TextStyle(
-            color: Color(0xff4a4a4a), fontWeight: FontWeight.w600, fontSize: 20),
-      ),
-      icon: Center(
-          child:Icon(   Icons.power_settings_new,
-            color: Colors.white,
-            size: 40.0,
-            semanticLabel: 'Text to announce in accessibility modes',
-          )),
-      buttonColor: Colors.blue,
-      backgroundColor: Colors.green,
-      highlightedColor: Colors.red,
-      baseColor: Colors.amber,
-    );
-
-  }
-
 }

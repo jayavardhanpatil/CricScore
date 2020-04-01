@@ -23,8 +23,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeView extends State<HomeView> with TickerProviderStateMixin{
 
-  final List<MyTabs> _tabs = [new MyTabs(title: "Teal",color: Colors.teal[200]),
-                                new MyTabs(title: "Orange",color: Colors.orange[200]),
+  final List<MyTabs> _tabs = [new MyTabs(title: "Home",color: Colors.teal[200]),
+                                new MyTabs(title: "Search",color: Colors.orange[200]),
                               new MyTabs(title: AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE,color: Colors.red[200])
   ];
 
@@ -69,12 +69,15 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
         child: ListView(
           children: <Widget>[
 
-            new UserAccountsDrawerHeader(
-              accountName: (AuthService.user.getName() == null) ? null : new Text("${AuthService.user.getName()}"),
-              accountEmail: new Text(AuthService.user.getEmailId()),
-              currentAccountPicture : new CircleAvatar(
-                backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
-                backgroundColor: Colors.white,
+            Container(
+              color: Color(0xFF6190E8),
+              child: new UserAccountsDrawerHeader(
+                accountName: (AuthService.user.getName() == null) ? null : new Text("${AuthService.user.getName()}"),
+                accountEmail: new Text(AuthService.user.getEmailId()),
+                currentAccountPicture : new CircleAvatar(
+                  backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
+                  backgroundColor: Colors.white,
+                ),
               ),
             ),
 

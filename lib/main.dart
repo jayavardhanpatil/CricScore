@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: "Travel Budget App",
         theme: ThemeData(
-          primaryColor: Color(0xFF090979),
+          primaryColor: Color(0xFF6190E8),
         ),
         home: HomeController(),
         routes: <String, WidgetBuilder>{

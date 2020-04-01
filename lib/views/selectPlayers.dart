@@ -116,20 +116,23 @@ class PlayersList extends StatefulWidget {
 
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 4),
-
-                color: _selected[index] ? Colors.black12 : null,
+                color: _selected[index] ? Color(0xFF6190E8) : null,
                 child: ListTile(
                     contentPadding: EdgeInsets.only(left: 20),
                     leading: CircleAvatar(
                       backgroundImage: ExactAssetImage(
                           "lib/assets/images/default_profile_avatar.png"),
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.black,
                     ),
                     title: Text(
-                      _listofUsers[index].name,
+                      _listofUsers[index].name, style: _selected[index] ? TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold
+                    ) : null,
                     ),
                     subtitle: Text(
-                      _listofUsers[index].phoneNumber.toString(),
+                      _listofUsers[index].phoneNumber.toString(), style: _selected[index] ? TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold
+                ) : null,
                     ),
                       onTap: (){
                         setState(() {

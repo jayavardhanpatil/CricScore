@@ -9,6 +9,9 @@ class Match {
   String matchVenue;
   String matchBetween;
   Map<String, Team> teams = new Map();
+  int totalOvers;
+  String tossWonTeam;
+  String selectedInning;
 
   Match({this.matchVenue, this.matchBetween, this.teams});
 
@@ -64,4 +67,37 @@ class Match {
     }
     teams.update(teamName, (value) => team, ifAbsent: () => team);
   }
+
+  List<Team> getTeams(){
+    List<Team> teams = List();
+    this.teams.forEach((key, value) {
+      teams.add(value);
+    });
+    return teams;
+  }
+
+  void setTotalOvers(int totalOvers){
+    this.totalOvers = totalOvers;
+  }
+
+  int getTTotalOvers(){
+    return this.totalOvers;
+  }
+
+  void setWonTossTeam(String teamName){
+    this.tossWonTeam = teamName;
+  }
+
+  Team getTossWonTeam() {
+    return this.teams[this.tossWonTeam];
+  }
+
+  void setSelectedInnings(String inning){
+    this.selectedInning = inning;
+  }
+
+  String getTeamSelectedInnings(){
+    return this.selectedInning;
+  }
+
 }

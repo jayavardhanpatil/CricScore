@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/team.dart';
+import 'package:flutter_app/views/tossPage.dart';
 import 'package:flutter_app/views/viewSquad.dart';
 import 'package:flutter_app/widgets/Search.dart';
 import 'package:flutter_app/widgets/gradient.dart';
@@ -24,6 +25,7 @@ class _StartMatch extends State<StartMatch>{
 
   final _matchVenue = TextEditingController();
   final _typedValue = TextEditingController();
+  final _oversController = TextEditingController();
   Team team1;
   Team team2;
 
@@ -175,11 +177,25 @@ class _StartMatch extends State<StartMatch>{
 
                       typeAhed(_typedValue, _matchVenue, _width * 0.9, "Match City"),
 
+                      SizedBox(height: _height * 0.01),
+
+                      TextField(
+                        //validator: Validator.validate,
+                        controller: _oversController,
+                        decoration: InputDecoration(
+                          labelText: "Total Overs",
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
 
                       SizedBox(height: _height * 0.04),
 
                       RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TossPage(match: match)));
+
+                        },
                         textColor: Colors.white,
                         padding: const EdgeInsets.all(0.0),
                         child: Container(
