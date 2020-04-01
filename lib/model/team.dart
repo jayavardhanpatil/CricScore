@@ -1,13 +1,15 @@
 
 import 'dart:convert';
 
+import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/model/user.dart';
 
 class Team {
 
   String teamName;
   String teamCity;
-  List<User> players;
+  //List<User> players;
+  Map<String, Player> players;
 
   Team({this.teamName, this.teamCity, this.players});
 
@@ -15,7 +17,13 @@ class Team {
     return Team(
       teamCity: json['teamCity'],
       teamName: json['teamName'],
-      players: json['players'] != null ? (json['players'] as List).map((i) => User.fromJson(i)).toList() : null,
+
+      players: (json['players'] as Map<String, dynamic>)?.map(
+            (k, e) => MapEntry(
+            k, e == null ? null : Player.fromJson(e as Map<String, dynamic>)),
+      ),
+
+      //players: json['players'] != null ? (json['players'] as List).map((i) => Player.fromJson(i)).toList() : null,
     );
   }
 
@@ -23,9 +31,17 @@ class Team {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['teamCity'] = this.teamCity;
     data['teamName'] = this.teamName;
+
     if (this.players != null) {
-      data['players'] = this.players.map((v) => v.toJson()).toList();
+      data['players'] = toMapJson();
     }
+
+    return data;
+  }
+
+  Map<String, dynamic> toMapJson(){
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    this.players.forEach((k, v) => data[k] = this.players[k].toJson());
     return data;
   }
 
@@ -37,7 +53,7 @@ class Team {
     this.teamCity = teamCity;
   }
 
-  void setTeamPlayers(List<User> players){
+  void setTeamPlayers(Map<String, Player> players){
     this.players = players;
   }
 
@@ -45,7 +61,7 @@ class Team {
     return this.teamName;
   }
 
-  List<User> getTeamPlayers(){
+  Map<String, Player> getTeamPlayers(){
     return this.players;
   }
 

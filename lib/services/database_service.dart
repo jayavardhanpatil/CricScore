@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_app/model/match.dart';
+import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
 
@@ -14,17 +15,18 @@ class DatabaseService {
   DatabaseService({this.uid});
 
   static List<dynamic> cities = new List();
-  static List<User> users = new List();
+  Map<String, User> users = new Map();
 
   final DatabaseReference _fireBaseRTreference = FirebaseDatabase.instance
       .reference();
 
   //Write a data : key value
   Future addUser(User user) async {
-    print("Adding User");
+    print(user.uid);
+    print("Adding User" + user.toJson().toString());
     await _fireBaseRTreference.child("/users/" + user.uid).set(user.toJson())
         .then((value) {
-      print("Added User");
+      print("Added User" + user.toJson().toString());
       reLoadUserRecord(user.uid);
       return user;
     }).catchError((e) {
@@ -99,6 +101,9 @@ class DatabaseService {
       if (value.value == null) return null;
 //      print("Getting Data from DB : "+value.value);
       print(value.value['name']);
+      if(value.value == null) {
+        value.value['uid'] = uid;
+      }
       User user = User.fromJson(value.value);
       if (AuthService.user.uid == uid) {
         AuthService.user = user;
@@ -109,8 +114,15 @@ class DatabaseService {
     });
   }
 
+  Future addTeams(Team team) async{
+    return await _fireBaseRTreference.child("teams").child(team.getTeamName() +" - "+ team.getTeamCity()).set(team.toJson()).then((value) => print("Added teams")).catchError((e){
+      print(e.toString());
+    });
 
-  Future<List<User>> getUsersList() async {
+  }
+
+
+  Future<Map<String, User>> getUsersList() async {
     if(users.length == 0) {
       return await _fireBaseRTreference.child("/users").once().then((value) {
         print("Getting user data from DB");
@@ -118,7 +130,7 @@ class DatabaseService {
           User user = User.fromJson(v);
           user.uid = k;
           if (user.name != null) {
-            users.add(user);
+            users.update(k, (value) => user, ifAbsent: () => user);
           }
         });
         return users;

@@ -2,18 +2,15 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/match.dart';
+import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/model/team.dart';
-import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
-import 'package:flutter_app/views/profile.dart';
 import 'package:flutter_app/views/selectPlayers.dart';
 import 'package:flutter_app/views/startMatch.dart';
 import 'package:flutter_app/widgets/ToastWidget.dart';
-import 'package:flutter_app/widgets/animatedButtton.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:slider_button/slider_button.dart';
 
 
 
@@ -146,12 +143,17 @@ class _SelectTeam extends State<SelectTeam> {
                       match.setMatchTitle(matchBetween.substring(0, matchBetween.length-3));
                       print("Match Between "+ match.getMatchTitle());
                       match.teams.forEach((key, value) {
-                          print("Team Name : "+value.getTeamName());
-                          print("Team City : "+value.getTeamCity());
-                          for(int i=0;i<value.getTeamPlayers().length;i++){
-                            print("Team Player : "+value.getTeamPlayers()[i].getName());
-                          }
+                          print("Team Name : "+key);
+                          //print("Team City : "+value.getTeamCity());
+//                          for(int i=0;i<value.getTeamPlayers().length;i++){
+//                            print("Team Player : "+value.players[i].playerName);
+//                          }playerName
                         });
+
+                      match.teams.forEach((key, value) {
+                        DatabaseService().addTeams(value);
+                      });
+
 
                       Navigator.push(context, MaterialPageRoute(builder: (context) => StartMatch(match: match)));
 
@@ -231,7 +233,7 @@ class _SelectTeam extends State<SelectTeam> {
   selectPlayers(String currentTeamName, String previousTypedTeamName, String cityName) async{
     {
       Team team = new Team();
-      List<User> selectedTeamPlayers;
+      Map<String, Player> selectedTeamPlayers = new Map();
 
       if(currentTeamName.length < 3){
         showFailedColoredToast("Team Name length should be greater then 3 letter");
@@ -245,16 +247,27 @@ class _SelectTeam extends State<SelectTeam> {
         print("Current typed : "+ currentTeamName);
 
         //print("Contains team Name : "+match.teams.containsKey(previousTypedTeamName).toString());
-
-        if(match.teams != null && previousTypedTeamName.isNotEmpty && (previousTypedTeamName != currentTeamName) && match.teams.containsKey(previousTypedTeamName)){
-          print("copy old players : ");
-          team.setTeamPlayers(match.teams[previousTypedTeamName].getTeamPlayers());
-          print(team.getTeamPlayers());
-          match.teams.remove(previousTypedTeamName);
-          print(team.getTeamPlayers());
-        }else{
-          team.setTeamPlayers(new List<User>());
+        if(match.teams != null && match.teams.containsKey(currentTeamName)){
+          if(match.teams[currentTeamName].players != null) {
+            selectedTeamPlayers = match.teams[currentTeamName].players;
+          }
         }
+
+        team.setTeamPlayers(selectedTeamPlayers);
+
+        if(previousTypedTeamName.isNotEmpty && (previousTypedTeamName != currentTeamName)){
+          match.teams.remove(previousTypedTeamName);
+        }
+
+//        if(match.teams != null && previousTypedTeamName.isNotEmpty && (previousTypedTeamName != currentTeamName) && match.teams.containsKey(previousTypedTeamName)){
+//          print("copy old players : ");
+//          team.setTeamPlayers(match.teams[previousTypedTeamName].getTeamPlayers());
+//          print(team.getTeamPlayers());
+//          match.teams.remove(previousTypedTeamName);
+//          print(team.getTeamPlayers());
+//        }else{
+//          team.setTeamPlayers(new List<Player>());
+//        }
         match.addTeam(currentTeamName, team);
         //match.teams.update(currentTeamName, (value) => team, ifAbsent: () => team);
         //print(match.getTeams()[teamName.text].getTeamName());

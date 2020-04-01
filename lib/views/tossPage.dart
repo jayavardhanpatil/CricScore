@@ -23,26 +23,14 @@ class _TossPage extends State<TossPage> {
 
   _TossPage({this.match});
 
-  var _inningsOptions = ['Selcect innings opttion','Batting', 'Bowling'];
-  var _optionSelected = 'Selcect innings opttion';
-
-  List<Team> _teams = new List();
-  List<DropdownMenuItem<Team>> _dropdownteams = new List();
-
   Team _tossWonteam;
   int currentSelectedIndex = -1;
   String currentSelectedLabel = "";
-
   List<String> listOfTeams = new List();
-
-
 
   void initState(){
     listOfTeams = buildTeaNamemList();
-    _teams = match.getTeams();
     super.initState();
-    _dropdownteams = buildDropDownMenuItems(_teams);
-    _tossWonteam = _dropdownteams[0].value;
   }
 
   List<String> buildTeaNamemList(){
@@ -51,23 +39,6 @@ class _TossPage extends State<TossPage> {
       listOfTeams.add(key);
     });
     return listOfTeams;
-  }
-
-  List<DropdownMenuItem<Team>> buildDropDownMenuItems(List<Team> teams) {
-
-    List<DropdownMenuItem<Team>> items = List();
-    Team team = new Team(teamName: "Select Team");
-    items.add(DropdownMenuItem(value: team, child: Text("Select team"),));
-    for(Team team in teams){
-      items.add(DropdownMenuItem(value: team, child: Text(team.getTeamName()),),);
-    }
-    return items;
-  }
-
-  onChangedDropDownItem(Team selectedteam){
-    setState(() {
-      _tossWonteam = selectedteam;
-    });
   }
 
 
@@ -146,6 +117,7 @@ class _TossPage extends State<TossPage> {
                     buttonValues: listOfTeams,
                     radioButtonValue: (value) {
                       _tossWonteam = match.teams[value];
+                      match.setWonTossTeam(value);
                       print(_tossWonteam.getTeamName());
                     },
                     selectedColor: Color(0xFF6190E8),
@@ -175,6 +147,7 @@ class _TossPage extends State<TossPage> {
                     buttonLables: ["Batting", "Bowling"],
                     buttonValues: ["batting", "bowling"],
                     radioButtonValue: (value) {
+                      match.setSelectedInnings(value);
                       print(value);
                     },
                     selectedColor: Color(0xFF6190E8),

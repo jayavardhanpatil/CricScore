@@ -12,6 +12,7 @@ class Match {
   int totalOvers;
   String tossWonTeam;
   String selectedInning;
+  bool isFirstInningsOver = false;
 
   Match({this.matchVenue, this.matchBetween, this.teams});
 
@@ -100,4 +101,11 @@ class Match {
     return this.selectedInning;
   }
 
+  void setIsFirstInningsOver(bool isFirstInnignsOver){
+    this.isFirstInningsOver = isFirstInnignsOver;
+  }
+
+  bool getisFirstInningsOver(){
+    return isFirstInningsOver;
+  }
 }

@@ -40,10 +40,7 @@ class _ViewSquad extends State<ViewSquad> {
                   backgroundColor: Colors.blue,
                 ),
                 title: Text(
-                  team.players[index].name,
-                ),
-                subtitle: Text(
-                  team.players[index].phoneNumber.toString(),
+                  team.players[index].playerName,
                 ),
               ),
             );

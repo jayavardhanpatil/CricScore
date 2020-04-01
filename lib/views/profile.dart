@@ -44,8 +44,6 @@ class _EditProfile extends State<EditProfile> {
   final _typeAheadController = TextEditingController(
       text: AuthService.user.getCity());
 
-  dynamic user;
-
   var _width;
   var _height;
 
@@ -63,12 +61,12 @@ class _EditProfile extends State<EditProfile> {
         .height;
 
     return Scaffold(
-        appBar: new AppBar(
-          title: Text(AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE),
-          flexibleSpace: getAppBarGradient(),
-        ),
+      appBar: new AppBar(
+        title: Text(AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE),
+        flexibleSpace: getAppBarGradient(),
+      ),
 
-        body: (profileBodyType == ProfileBodyEnum.edit) ? ProfileBody(context, true) : ProfileView(context, false),
+      body: (profileBodyType == ProfileBodyEnum.edit) ? ProfileBody(context, true) : ProfileView(context, false),
     );
   }
 
@@ -82,7 +80,7 @@ class _EditProfile extends State<EditProfile> {
                 child: CircleAvatar(
                   backgroundImage: ExactAssetImage(
                       "lib/assets/images/default_profile_avatar.png"),
-                  backgroundColor: Color(0xFF090979),
+                  backgroundColor: Colors.transparent,
                   minRadius: 30,
                   maxRadius: 60,
                 ),
@@ -96,15 +94,19 @@ class _EditProfile extends State<EditProfile> {
                 ),
               ),
 
+
+              SizedBox(height: _height * 0.05,),
+
               RaisedButton(
-                child: Text("Save"),
                 onPressed: () {
+
                   print(_phoneNumber.text.toString());
                   print(_name.text.toString());
                   print(_city.text.toString());
                   print(_dateTime.text.toString());
                   DatabaseService.cities.clear();
                   User user = AuthService.user;
+                  print(user.uid);
                   DatabaseService().addUser(new User(uid: user.uid,
                       name: _name.text.toString(),
                       city: _city.text.toString(),
@@ -119,7 +121,18 @@ class _EditProfile extends State<EditProfile> {
                   });
 
                 },
+                textColor: Colors.white,
+                padding: const EdgeInsets.all(0.0),
+                child: Container(
+                  decoration: getButtonGradientColor(BoxShape.rectangle),
+                  padding: const EdgeInsets.all(10.0),
+                  child: const Text(
+                      'Save profile',
+                      style: TextStyle(fontSize: 20)
+                  ),
+                ),
               ),
+
             ],
 
           ),
@@ -154,21 +167,21 @@ class _EditProfile extends State<EditProfile> {
               SizedBox(height: _height * 0.04),
 
               RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      profileBodyType = ProfileBodyEnum.edit;
-                    });
-                  },
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.all(0.0),
-                  child: Container(
-                    decoration: getButtonGradientColor(BoxShape.rectangle),
-                    padding: const EdgeInsets.all(10.0),
-                    child: const Text(
-                        'Toss Coin',
-                        style: TextStyle(fontSize: 20)
-                    ),
+                onPressed: () {
+                  setState(() {
+                    profileBodyType = ProfileBodyEnum.edit;
+                  });
+                },
+                textColor: Colors.white,
+                padding: const EdgeInsets.all(0.0),
+                child: Container(
+                  decoration: getButtonGradientColor(BoxShape.rectangle),
+                  padding: const EdgeInsets.all(10.0),
+                  child: const Text(
+                      'Edit Profile',
+                      style: TextStyle(fontSize: 20)
                   ),
+                ),
 
               ),
             ],
