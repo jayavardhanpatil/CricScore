@@ -70,7 +70,8 @@ class _SelectTeam extends State<SelectTeam> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
 
-                  Text("Choose teams"),
+                  Text("Select teams" , style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, fontSize: 25)),
 //                  SizedBox(height: _height * 0.01),
 //
 //                  typeAhed(_venueCity, _venuetypeAheadController, _width * 0.5, "Match venue"),

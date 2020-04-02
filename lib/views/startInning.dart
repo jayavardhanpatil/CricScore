@@ -152,7 +152,6 @@ class _StartInnings extends State<StartInnings> {
                                 child: Padding(
                                     child: DirectSelectList<Player>(
                                         values: battingPlayers,
-                                        defaultItemIndex: 0,
                                         itemBuilder: (Player value) => getDropDownMenuItem(value),
                                         focusedItemDecoration: _getDslDecoration(),
                                         onItemSelectedListener: (item, index, context) {
@@ -191,7 +190,6 @@ class _StartInnings extends State<StartInnings> {
                                 child: Padding(
                                     child: DirectSelectList<Player>(
                                         values: battingPlayers,
-                                        defaultItemIndex: 0,
                                         itemBuilder: (Player value) => getDropDownMenuItem(value),
                                         focusedItemDecoration: _getDslDecoration(),
                                         onItemSelectedListener: (item, index, context) {
@@ -230,7 +228,6 @@ class _StartInnings extends State<StartInnings> {
                                 child: Padding(
                                     child: DirectSelectList<Player>(
                                         values: bowlingPlayers,
-                                        defaultItemIndex: 0,
                                         itemBuilder: (Player value) => getDropDownMenuItem(value),
                                         focusedItemDecoration: _getDslDecoration(),
                                         onItemSelectedListener: (item, index, context) {
