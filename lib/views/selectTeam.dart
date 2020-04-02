@@ -35,11 +35,11 @@ class _SelectTeam extends State<SelectTeam> {
   final _venuetypeAheadController = TextEditingController();
 
 
-  Match match;
+  MatchGame match;
 
   initState(){
     super.initState();
-    match = new Match();
+    match = new MatchGame();
   }
 
 

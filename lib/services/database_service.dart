@@ -122,6 +122,15 @@ class DatabaseService {
   }
 
 
+  Future addMatch(MatchGame match) async{
+    return await _fireBaseRTreference.child("matches").child(match.getMatchVenue()).child(match.getMatchTitle()).set(match.toJson())
+        .then((value) => print("Added match Detail"))
+        .catchError((e){
+      print("Error : in adding match details"+e.toString());
+    });
+
+  }
+
   Future<Map<String, User>> getUsersList() async {
     if(users.length == 0) {
       return await _fireBaseRTreference.child("/users").once().then((value) {
@@ -143,7 +152,7 @@ class DatabaseService {
   }
 
 
-  addMatchDetails(Match match) async{
+  addMatchDetails(MatchGame match) async{
     print(match.toJson());
     return await _fireBaseRTreference.child("matches/"+match.getMatchVenue()+"/").child(match.getMatchTitle())
         .set(match.toJson()).then((value) => print("Match details added")).catchError((e){

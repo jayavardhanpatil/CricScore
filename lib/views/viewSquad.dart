@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 
@@ -17,6 +18,15 @@ class _ViewSquad extends State<ViewSquad> {
   Team team;
 
   _ViewSquad({this.team});
+
+  List<Player> _players = new List();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _players.addAll(team.players.values);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +50,11 @@ class _ViewSquad extends State<ViewSquad> {
                   backgroundColor: Colors.blue,
                 ),
                 title: Text(
-                  team.players[index].playerName,
+                  _players[index].playerName,
                 ),
+//                subtitle: Text(
+//                  team.players[index].playerUID,
+//                ),
               ),
             );
           }

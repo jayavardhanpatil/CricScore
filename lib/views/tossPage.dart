@@ -1,15 +1,17 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/services/CustomRadioButton.dart';
+import 'package:flutter_app/views/startInning.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 import 'package:slider_button/slider_button.dart';
 
 class TossPage extends StatefulWidget{
 
-  Match match;
+  MatchGame match;
   final Function(dynamic) radioButtonValue;
 
   TossPage({Key key, @required this.match, this.radioButtonValue}) : super (key : key);
@@ -19,7 +21,7 @@ class TossPage extends StatefulWidget{
 }
 
 class _TossPage extends State<TossPage> {
-  Match match;
+  MatchGame match;
 
   _TossPage({this.match});
 
@@ -41,6 +43,7 @@ class _TossPage extends State<TossPage> {
     return listOfTeams;
   }
 
+  bool showSlideBar = true;
 
   @override
   Widget build(BuildContext context) {
@@ -67,36 +70,37 @@ class _TossPage extends State<TossPage> {
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: <Widget>[
-              Text("Who won the Toss? "),
+              Text("Who won the Toss? ", style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
               SizedBox(height: _height * 0.02),
 
 //              DropdownButton(
-//                value: _tossWonteam,
-//                items: _dropdownteams,
-//                onChanged: onChangedDropDownItem,
-//              ),
-//              SizedBox(height: _height * 0.05),
-//              Text("Selected team : "+_tossWonteam.getTeamName()),
-//
-//              SizedBox(height: _height * 0.05),
-//
-//              Text("Selected to Option for innings"),
-//              SizedBox(height: _height * 0.05),
-//              DropdownButton<String>(
-//                items: _inningsOptions.map((String dropDownSelectedIttem) {
-//                  return DropdownMenuItem<String>(
-//                    value: dropDownSelectedIttem,
-//                    child: Text(dropDownSelectedIttem),
-//                  );
-//                }).toList(),
-//
-//                onChanged: (String newValueSelected){
-//                  setState(() {
-//                    this._optionSelected = newValueSelected;
-//                  });
-//                },
-//                value: _optionSelected,
-//              ),
+////                value: _tossWonteam,
+////                items: _dropdownteams,
+////                onChanged: onChangedDropDownItem,
+////              ),
+////              SizedBox(height: _height * 0.05),
+////              Text("Selected team : "+_tossWonteam.getTeamName()),
+////
+////              SizedBox(height: _height * 0.05),
+////
+////              Text("Selected to Option for innings"),
+////              SizedBox(height: _height * 0.05),
+////              DropdownButton<String>(
+////                items: _inningsOptions.map((String dropDownSelectedIttem) {
+////                  return DropdownMenuItem<String>(
+////                    value: dropDownSelectedIttem,
+////                    child: Text(dropDownSelectedIttem),
+////                  );
+////                }).toList(),
+////
+////                onChanged: (String newValueSelected){
+////                  setState(() {
+////                    this._optionSelected = newValueSelected;
+////                  });
+////                },
+////                value: _optionSelected,
+////              ),
 
 
 
@@ -128,7 +132,8 @@ class _TossPage extends State<TossPage> {
               SizedBox(height: _height * 0.05),
 
 
-              Text("Who won the Toss? "),
+              Text("Select the Innings! ", style: TextStyle(
+                  color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
               SizedBox(height: _height * 0.02),
 
 
@@ -144,8 +149,8 @@ class _TossPage extends State<TossPage> {
                         )
                     ),
                     buttonColor: Theme.of(context).canvasColor,
-                    buttonLables: ["Batting", "Bowling"],
-                    buttonValues: ["batting", "bowling"],
+                    buttonLables: [StaticString.BATTING_INNING, StaticString.BOWLING_INNING],
+                    buttonValues: [StaticString.BATTING_INNING, StaticString.BOWLING_INNING],
                     radioButtonValue: (value) {
                       match.setSelectedInnings(value);
                       print(value);
@@ -173,7 +178,7 @@ class _TossPage extends State<TossPage> {
   }
 
 
-  Widget SilderButton(String text, double height, double width, BuildContext context, ){
+  Widget SilderButton(String text, double height, double width, BuildContext context, ) {
     return Container(
       width: width,
       decoration: BoxDecoration(
@@ -193,11 +198,19 @@ class _TossPage extends State<TossPage> {
       alignment: Alignment.centerLeft,
 
       child: SliderButton(
+        dismissible: false,
+        vibrationFlag: false,
         height: height,
         width: width,
-        action: () {
+        action: (){
+          print("Overs : "+match.totalOvers.toString());
+          print("Toss Won Team : "+match.tossWonTeam);
+          print("Selected Innings "+match.selectedInning);
 
-          //Navigator.push(context, MaterialPageRoute(builder: (context) => StartMatch(match: match)));
+          match.setIsFirstInningsOver(false);
+          match.setInning();
+          print(match.firstInning.toJson());
+          Navigator.push(context, MaterialPageRoute(builder: (context) => StartInnings(match: match)));
         },
         label: Text(
           text,
@@ -208,7 +221,7 @@ class _TossPage extends State<TossPage> {
             child:Icon(   Icons.arrow_forward_ios,
               color: Colors.white,
               size: 40.0,
-              semanticLabel: 'Text to announce in accessibility modes',
+              //semanticLabel: 'Text to announce in accessibility modes',
             )),
         baseColor: Colors.white,
         highlightedColor: Colors.black,

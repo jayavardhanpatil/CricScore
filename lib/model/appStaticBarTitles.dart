@@ -7,3 +7,11 @@ class AppBarsTitles {
   static String SELECT_TEAM = "Select Team Name";
 
 }
+
+class StaticString {
+
+  static String BATTING_INNING = "BATTING";
+  static String BOWLING_INNING = "BOWLING";
+
+
+}

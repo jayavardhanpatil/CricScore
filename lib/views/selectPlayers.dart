@@ -10,7 +10,7 @@ import 'package:flutter_app/widgets/gradient.dart';
 
 class PlayersList extends StatefulWidget {
 
-  Match match;
+  MatchGame match;
   Team team;
 
   PlayersList({Key key, @required this.match, this.team}) : super(key: key);
@@ -22,7 +22,7 @@ class PlayersList extends StatefulWidget {
 
   class _PlayersList extends State<PlayersList> {
 
-    Match match;
+    MatchGame match;
     Team team;
     bool loadedData = false;
 

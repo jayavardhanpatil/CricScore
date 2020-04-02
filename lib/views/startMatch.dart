@@ -1,16 +1,20 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/views/tossPage.dart';
 import 'package:flutter_app/views/viewSquad.dart';
 import 'package:flutter_app/widgets/Search.dart';
+import 'package:flutter_app/widgets/ToastWidget.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 
 class StartMatch extends StatefulWidget{
 
-  Match match;
+  MatchGame match;
 
   StartMatch({Key key, @required this.match}) : super (key : key);
 
@@ -19,7 +23,7 @@ class StartMatch extends StatefulWidget{
 }
 
 class _StartMatch extends State<StartMatch>{
-  Match match;
+  MatchGame match;
 
   _StartMatch({this.match});
 
@@ -192,8 +196,16 @@ class _StartMatch extends State<StartMatch>{
 
                       RaisedButton(
                         onPressed: () {
-
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => TossPage(match: match)));
+                          if(_oversController.text.isEmpty || int.parse(_oversController.text) == 0) {
+                            showFailedColoredToast("Overs is mandatory field and should be greater than 0");
+                          }else if(_matchVenue.text.isEmpty){
+                            showFailedColoredToast("Match Venue is mandatory field please select city");
+                          }else{
+                            match.totalOvers = int.parse(_oversController.text);
+                            match.matchVenue = _matchVenue.text;
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => TossPage(match: match)));
+                          }
 
                         },
                         textColor: Colors.white,

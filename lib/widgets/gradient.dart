@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 getButtonGradientColor(BoxShape shape){
    return BoxDecoration(
      shape: shape,
+
      gradient: LinearGradient(
        colors: <Color>[
          Color(0xFF6190E8),

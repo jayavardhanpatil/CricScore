@@ -1,41 +1,98 @@
 
-import 'dart:convert';
 import 'dart:core';
 
+import 'package:flutter_app/model/innings.dart';
 import 'package:flutter_app/model/team.dart';
 
-class Match {
+import 'appStaticBarTitles.dart';
 
+class MatchGame {
+
+  Map<String, Team> teams = new Map();
   String matchVenue;
   String matchBetween;
-  Map<String, Team> teams = new Map();
   int totalOvers;
   String tossWonTeam;
   String selectedInning;
-  bool isFirstInningsOver = false;
+  bool isFirstInningsOver;
+  int totalScore;
+  Inning firstInning;
+  Inning secondInning;
+  Inning currentPlayers;
 
-  Match({this.matchVenue, this.matchBetween, this.teams});
+  MatchGame({this.matchVenue, this.matchBetween, this.teams, this.totalOvers, this.tossWonTeam, this.selectedInning, this.isFirstInningsOver
+    ,this.totalScore, this.firstInning, this.secondInning, this.currentPlayers});
 
-  factory Match.fromJson(Map<String, dynamic> json) {
-    return Match(
+  factory MatchGame.fromJson(Map<String, dynamic> json) {
+    return MatchGame(
       matchBetween: json['matchBetween'],
       matchVenue: json['match_Venue'],
       teams: (json['teams'] as Map<String, dynamic>)?.map(
             (k, e) => MapEntry(
             k, e == null ? null : Team.fromJson(e as Map<String, dynamic>)),
       ),
+      totalOvers: json['totalOvers'],
+      tossWonTeam: json['tossWonTeam'],
+      selectedInning : json['selectedInning'],
+      isFirstInningsOver : json['isFirstInningsOver'],
+      totalScore : json['totalScore'],
+      firstInning : (json['firstInning'] != null) ? Inning.fromJson(json['firstInning']) : null,
+      secondInning: (json['secondInning'] != null) ? Inning.fromJson(json['secondInning']) : null,
+      currentPlayers: (json['currentPlayers'] != null) ? Inning.fromJson(json['currentPlayers']) : null,
     );
   }
 
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['matchVenue'] = this.matchVenue;
     data['matchBetween'] = this.matchBetween;
-    data['match_Venue'] = this.matchVenue;
+    data['totalOvers'] = this.totalOvers;
+    data['tossWonTeam'] = this.tossWonTeam;
+    data['selectedInning'] = this.selectedInning;
+    data['isFirstInningsOver'] = this.isFirstInningsOver;
+    data['totalScore'] = this.totalScore;
     if (this.teams != null) {
       data['teams'] = toMapJson();
     }
+    if (this.firstInning != null) {
+      data['firstInnings'] = this.firstInning.toJson();
+    }
+    if (this.secondInning != null) {
+      data['secondInnings'] = this.secondInning.toJson();
+    }
+    if(this.currentPlayers != null){
+      data['currentPlayers'] = this.currentPlayers.toJson();
+    }
     return data;
+  }
+
+
+  void setInning(){
+    Inning inning1 = new Inning();
+    Inning inning2 = new Inning();
+
+    teams.forEach((key, value) {
+      if(key == tossWonTeam){
+        if(selectedInning == StaticString.BATTING_INNING) {
+          inning1.setBattingInning(value.players);
+          inning2.setBowlingInning(value.players);
+        }else{
+          inning1.setBowlingInning(value.players);
+          inning2.setBattingInning(value.players);
+        }
+      }else{
+        if(selectedInning == StaticString.BATTING_INNING) {
+          inning2.setBattingInning(value.players);
+          inning1.setBowlingInning(value.players);
+        }else{
+          inning2.setBowlingInning(value.players);
+          inning1.setBattingInning(value.players);
+        }
+      }
+    });
+    firstInning = inning1;
+    secondInning = inning2;
+
   }
 
   Map<String, dynamic> toMapJson(){
