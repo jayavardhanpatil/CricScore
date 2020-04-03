@@ -168,7 +168,7 @@ class DatabaseService {
 
 
   addInningsPlayers(MatchGame match, Map<String, Player> player, String inningType, String playingType) async{
-    print(match.toJson());
+    //print(match.toJson());
     player.forEach((key, value) async {
       return await _fireBaseRTreference.child("matches/"+match.getMatchVenue()+"/").child(match.getMatchTitle()).child(inningType).child(playingType).child(key).set(value.toJson())
           .then((value) => print("Player details added to "+inningType + " inning")).catchError((e){

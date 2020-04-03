@@ -15,10 +15,10 @@ class Inning{
   Map<String, Player> bowlingTeamPlayer;
 
   Inning(
-      {this.run,
-        this.wickets,
-        this.overs,
-        this.extra,
+      {this.run = 0,
+        this.wickets = 0,
+        this.overs = 0,
+        this.extra = 0,
         this.battingteam,
         this.bowlingteam,
       this.battingTeamPlayer,
@@ -29,8 +29,8 @@ class Inning{
     wickets = json['wickets'];
     overs = json['overs'];
     extra = json['extra'];
-   // battingteam = (json['battingteam'] != null) ? Team.fromJson(json['battingteam']) : null;
-   // bowlingteam = (json['bowlingteam'] != null) ? Team.fromJson(json['bowlingteam']) : null;
+//    battingteam = (json['batting_team'] != null) ? Team.fromJson(json['batting_team']) : null;
+//    bowlingteam = (json['bowling_team'] != null) ? Team.fromJson(json['bowling_team']) : null;
     battingTeamPlayer = (json['batting'] as Map<String, dynamic>)?.map(
           (k, e) => MapEntry(
           k, e == null ? null : Player.fromJson(e as Map<String, dynamic>)),
@@ -49,19 +49,20 @@ class Inning{
     data['wickets'] = this.wickets;
     data['overs'] = this.overs;
     data['extra'] = this.extra;
-  //  if (this.battingteam != null) {
-  //    data['battingteam'] = this.battingteam.toJson();
-  //  }
-  //  if (this.bowlingteam != null) {
-  //    data['bowlingteam'] = this.bowlingteam.toJson();
-  //  }
+//    if (this.battingteam != null) {
+//      data['batting_team'] = this.battingteam.toJson();
+//    }
+//    if (this.bowlingteam != null) {
+//      data['bowling_team'] = this.bowlingteam.toJson();
+//    }
 
     if (this.battingTeamPlayer != null) {
-      data['batting'] = toMapBattingJson();
+    data['batting'] = toMapBattingJson();
     }
     if (this.bowlingTeamPlayer != null) {
-      data['bowling'] = toMapBowlingJson();
+    data['bowling'] = toMapBowlingJson();
     }
+
     return data;
   }
 
@@ -80,7 +81,7 @@ class Inning{
   void setBattingInning(Team battingteam){
     this.battingteam = battingteam;
   }
-//
+
   void setBowlingInning(Team bowlingTeam){
     this.bowlingteam = bowlingTeam;
   }
@@ -88,9 +89,10 @@ class Inning{
   void setBattingInningPlayers(Map<String, Player> battingteam){
     this.battingTeamPlayer = battingteam;
   }
-//
+
   void setBowlingInningPlayers(Map<String, Player> bowlingTeam){
     this.bowlingTeamPlayer = bowlingTeam;
   }
+
 
 }

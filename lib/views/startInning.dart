@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/model/innings.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
-import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/views/scoreUpdateView.dart';
 import 'package:flutter_app/widgets/ToastWidget.dart';
@@ -32,8 +31,6 @@ class _StartInnings extends State<StartInnings> {
 
   List<Player> battingPlayers = List();
   List<Player> bowlingPlayers = List();
-  List<DropdownMenuItem<Player>> _dropdownMenuItemsForBatting;
-  List<DropdownMenuItem<Player>> _dropdownMenuItemsForBowling;
   Map<String, Player> batmans;
   Map<String, Player> bowlers;
 
@@ -47,7 +44,6 @@ class _StartInnings extends State<StartInnings> {
 
   List<DropdownMenuItem<Player>> buildDropdownMenuItemsForBatting(){
     List<DropdownMenuItem<Player>> items = List();
-
     if(!match.getisFirstInningsOver()){
       match.firstInning.battingteam.players.forEach((key, value) {
         battingPlayers.add(value);
@@ -263,13 +259,19 @@ class _StartInnings extends State<StartInnings> {
                           batmans.forEach((key, value) {
                             value.run = 0;
                             value.ballsFaced = 0;
+                            value.centuries = 0;
+                            value.fifties = 0;
+                            value.numberOfFours = 0;
+                            value.numberOfsixes = 0;
                             if(key == "striker") {
+                              value.playedPosition = 1;
                               value.isOnStrike = true;
                             }else{
+                              value.playedPosition = 2;
                               value.isOnStrike = false;
                             }
                             batsmans.putIfAbsent(
-                                  value.playerUID, () => value);
+                                value.playerUID, () => value);
                           });
 
                           Map<String, Player> bowler = new Map();
@@ -278,10 +280,6 @@ class _StartInnings extends State<StartInnings> {
                             value.extra = 0;
                             value.runsGiven = 0;
                             value.wicket = 0;
-                            value.centuries = 0;
-                            value.fifties = 0;
-                            value.numberOfFours = 0;
-                            value.numberOfsixes = 0;
                             bowler.putIfAbsent(value.playerUID, () => value);
                           });
 
@@ -312,26 +310,29 @@ class _StartInnings extends State<StartInnings> {
 //                          DatabaseService().addInningsPlayers(match, batsmans, playingType, "batting");
 //
 //                          DatabaseService().addInningsPlayers(match, bowler, playingType, "bowling");
-                        );
-
-                          String playingType = (match.getisFirstInningsOver()) ? "second_inning" : "first_inning";
-                          FutureBuilder(
-                            future: addPlayersToTheInnings(batsmans, bowler, playingType),
-                            builder: (context, snapshot){
-                              if(snapshot.data == null){
-                                Loading();
-                              }else if(snapshot.connectionState == ConnectionState.done){
-                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
-                              }
-                            },
-
-//                              DatabaseService().addMatch(match);
-//
-//
-//
-//
-//                          DatabaseService().addInningsPlayers(match, bowler, playingType, "bowling");
                           );
+
+//                          FutureBuilder(
+//                            future: addPlayersToTheInnings(match.firstInning.battingteam.players, match.firstInning.bowlingteam.players, "first_inning"),
+//                            builder: (context, snapshot){
+//                              if(snapshot.data == null){
+//                                Loading();
+//                              }else if(snapshot.connectionState == ConnectionState.done){
+//                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
+//                              }
+//                            },
+//                          );
+//
+//                          FutureBuilder(
+//                            future: addPlayersToTheInnings(match.secondInning.battingteam.players, match.secondInning.bowlingteam.players, "second_inning"),
+//                            builder: (context, snapshot){
+//                              if(snapshot.data == null){
+//                                Loading();
+//                              }else if(snapshot.connectionState == ConnectionState.done){
+//                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
+//                              }
+//                            },
+//                          );
 
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ScoreUpdateView(match: match,)));
                         }
@@ -343,8 +344,8 @@ class _StartInnings extends State<StartInnings> {
                         decoration: getButtonGradientColor(BoxShape.rectangle),
                         padding: const EdgeInsets.all(10.0),
                         child: const Text(
-                            'Start Match',
-                            style: TextStyle(fontSize: 20),
+                          'Start Match',
+                          style: TextStyle(fontSize: 20),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -353,48 +354,7 @@ class _StartInnings extends State<StartInnings> {
                   ],
                 ),
               ),
-              
 
-//              Padding(
-//                padding: const EdgeInsets.all(8.0),
-//                child: Column(
-//                  children: <Widget>[
-//                    Container(
-//                      alignment: AlignmentDirectional.centerStart,
-//                      margin: EdgeInsets.only(left: 4),
-//                      child: Text("City"),
-//                    ),
-//                    Padding(
-//                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-//                      child: Card(
-//                        child: Row(
-//                          mainAxisSize: MainAxisSize.max,
-//                          children: <Widget>[
-//                            Expanded(
-//                                child: Padding(
-//                                    child: DirectSelectList<Player>(
-//                                        values: battingPlayers,
-//                                        defaultItemIndex: -1,
-//                                        itemBuilder: (Player value) => getDropDownMenuItem(value),
-//                                        focusedItemDecoration: _getDslDecoration(),
-//                                        onItemSelectedListener: (item, index, context) {
-//                                          Scaffold.of(context).showSnackBar(SnackBar(content: Text(item.playerName)));
-//                                        }),
-//                                    padding: EdgeInsets.only(left: 12))),
-//                            Padding(
-//                              padding: EdgeInsets.only(right: 8),
-//                              child: Icon(
-//                                Icons.unfold_more,
-//                                color: Colors.black38,
-//                              ),
-//                            )
-//                          ],
-//                        ),
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ),
             ],
           ),
         ),
@@ -403,21 +363,21 @@ class _StartInnings extends State<StartInnings> {
   }
 
   addPlayersToTheInnings(Map<String, Player> battingplayer, Map<String, Player> bowlingPlayer, String inningType,) async{
-     await DatabaseService().addInningsPlayers(match, battingplayer, inningType, "batting");
+    await DatabaseService().addInningsPlayers(match, battingplayer, inningType, "batting");
     return await DatabaseService().addInningsPlayers(match, bowlingPlayer, inningType, "bowling");
   }
 
   Widget addMatchDetails(BuildContext context){
     return FutureBuilder(
-      future: DatabaseService().addMatch(match),
-      builder: (context,  snapshot){
-        if(snapshot.data == null){
-          Loading();
-        }else if(snapshot.connectionState == ConnectionState.done){
-          // ignore: missing_return
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to server")));
+        future: DatabaseService().addMatch(match),
+        builder: (context,  snapshot){
+          if(snapshot.data == null){
+            Loading();
+          }else if(snapshot.connectionState == ConnectionState.done){
+            // ignore: missing_return
+            Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to server")));
+          }
         }
-      }
     );
   }
 }

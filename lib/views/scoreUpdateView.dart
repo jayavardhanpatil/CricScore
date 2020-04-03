@@ -6,6 +6,7 @@ import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/widgets/ToastWidget.dart';
+import 'package:flutter_app/widgets/custom_dialog.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 
 class ScoreUpdateView extends StatefulWidget{
@@ -412,12 +413,14 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
       case "NB" :{
         color = Colors.grey;
         _currentBowlingPlayer[0].runsGiven ++;
+        match.currentPlayers.extra ++;
         _currentBowlingPlayer[0].extra ++;
       }
       break;
       case "WD" :{
         color = Colors.black12;
         _currentBowlingPlayer[0].runsGiven ++;
+        match.currentPlayers.extra ++;
         _currentBowlingPlayer[0].extra ++;
       }
       break;
@@ -454,15 +457,12 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
         match.currentPlayers.overs += 0.4;
         swapStrikers();
         _currentBowlingPlayer[0].overs += 0.4;
+
+//         showDialog(
+//            context: context,
+//            builder: (BuildContext context) => CustomDialog());
       });
     }
-
-
-    DatabaseService().updateScoreOnBall(match).then((value) => (){
-      showSuccessColoredToast("Data Synced");
-    }).catchError((e){
-      print("failed to sync data" + e.toString());
-    });
     return balls;
   }
 
