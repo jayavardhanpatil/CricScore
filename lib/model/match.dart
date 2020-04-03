@@ -27,10 +27,10 @@ class MatchGame {
     return MatchGame(
       matchBetween: json['matchBetween'],
       matchVenue: json['match_Venue'],
-      teams: (json['teams'] as Map<String, dynamic>)?.map(
-            (k, e) => MapEntry(
-            k, e == null ? null : Team.fromJson(e as Map<String, dynamic>)),
-      ),
+//      teams: (json['teams'] as Map<String, dynamic>)?.map(
+//            (k, e) => MapEntry(
+//            k, e == null ? null : Team.fromJson(e as Map<String, dynamic>)),
+//      ),
       totalOvers: json['totalOvers'],
       tossWonTeam: json['tossWonTeam'],
       selectedInning : json['selectedInning'],
@@ -51,9 +51,9 @@ class MatchGame {
     data['selectedInning'] = this.selectedInning;
     data['isFirstInningsOver'] = this.isFirstInningsOver;
     data['totalScore'] = this.totalScore;
-    if (this.teams != null) {
-      data['teams'] = toMapJson();
-    }
+//    if (this.teams != null) {
+//      data['teams'] = toMapJson();
+//    }
     if (this.firstInning != null) {
       data['firstInnings'] = this.firstInning.toJson();
     }
@@ -74,19 +74,19 @@ class MatchGame {
     teams.forEach((key, value) {
       if(key == tossWonTeam){
         if(selectedInning == StaticString.BATTING_INNING) {
-          inning1.setBattingInning(value.players);
-          inning2.setBowlingInning(value.players);
+          inning1.setBattingInning(value);
+          inning2.setBowlingInning(value);
         }else{
-          inning1.setBowlingInning(value.players);
-          inning2.setBattingInning(value.players);
+          inning1.setBowlingInning(value);
+          inning2.setBattingInning(value);
         }
       }else{
         if(selectedInning == StaticString.BATTING_INNING) {
-          inning2.setBattingInning(value.players);
-          inning1.setBowlingInning(value.players);
+          inning2.setBattingInning(value);
+          inning1.setBowlingInning(value);
         }else{
-          inning2.setBowlingInning(value.players);
-          inning1.setBattingInning(value.players);
+          inning2.setBowlingInning(value);
+          inning1.setBattingInning(value);
         }
       }
     });

@@ -1,36 +1,42 @@
 
 
 import 'package:flutter_app/model/player.dart';
+import 'package:flutter_app/model/team.dart';
 
 class Inning{
 
   int run;
   int wickets;
-  int overs;
+  double overs;
   int extra;
-  Map<String, Player> battingTeam;
-  Map<String, Player> bowlingTeam;
+  Team battingteam;
+  Team bowlingteam;
+  Map<String, Player> battingTeamPlayer;
+  Map<String, Player> bowlingTeamPlayer;
 
   Inning(
       {this.run,
         this.wickets,
         this.overs,
         this.extra,
-        this.battingTeam,
-        this.bowlingTeam});
+        this.battingteam,
+        this.bowlingteam,
+      this.battingTeamPlayer,
+      this.bowlingTeamPlayer});
 
   Inning.fromJson(Map<String, dynamic> json) {
     run = json['run'];
     wickets = json['wickets'];
     overs = json['overs'];
     extra = json['extra'];
-
-    battingTeam = (json['batting'] as Map<String, dynamic>)?.map(
+   // battingteam = (json['battingteam'] != null) ? Team.fromJson(json['battingteam']) : null;
+   // bowlingteam = (json['bowlingteam'] != null) ? Team.fromJson(json['bowlingteam']) : null;
+    battingTeamPlayer = (json['batting'] as Map<String, dynamic>)?.map(
           (k, e) => MapEntry(
           k, e == null ? null : Player.fromJson(e as Map<String, dynamic>)),
     );
 
-    bowlingTeam = (json['bowling'] as Map<String, dynamic>)?.map(
+    bowlingTeamPlayer = (json['bowling'] as Map<String, dynamic>)?.map(
           (k, e) => MapEntry(
           k, e == null ? null : Player.fromJson(e as Map<String, dynamic>)),
     );
@@ -43,10 +49,17 @@ class Inning{
     data['wickets'] = this.wickets;
     data['overs'] = this.overs;
     data['extra'] = this.extra;
-    if (this.battingTeam != null) {
+  //  if (this.battingteam != null) {
+  //    data['battingteam'] = this.battingteam.toJson();
+  //  }
+  //  if (this.bowlingteam != null) {
+  //    data['bowlingteam'] = this.bowlingteam.toJson();
+  //  }
+
+    if (this.battingTeamPlayer != null) {
       data['batting'] = toMapBattingJson();
     }
-    if (this.bowlingTeam != null) {
+    if (this.bowlingTeamPlayer != null) {
       data['bowling'] = toMapBowlingJson();
     }
     return data;
@@ -54,22 +67,30 @@ class Inning{
 
   Map<String, dynamic> toMapBattingJson(){
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    this.battingTeam.forEach((k, v) => data[k] = this.battingTeam[k].toJson());
+    this.battingTeamPlayer.forEach((k, v) => data[k] = this.battingTeamPlayer[k].toJson());
     return data;
   }
 
   Map<String, dynamic> toMapBowlingJson(){
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    this.bowlingTeam.forEach((k, v) => data[k] = this.bowlingTeam[k].toJson());
+    this.bowlingTeamPlayer.forEach((k, v) => data[k] = this.bowlingTeamPlayer[k].toJson());
     return data;
   }
 
-  void setBattingInning(Map<String, Player> battingteam){
-    this.battingTeam = battingteam;
+  void setBattingInning(Team battingteam){
+    this.battingteam = battingteam;
+  }
+//
+  void setBowlingInning(Team bowlingTeam){
+    this.bowlingteam = bowlingTeam;
   }
 
-  void setBowlingInning(Map<String, Player>bowlingTeam){
-    this.bowlingTeam = bowlingTeam;
+  void setBattingInningPlayers(Map<String, Player> battingteam){
+    this.battingTeamPlayer = battingteam;
+  }
+//
+  void setBowlingInningPlayers(Map<String, Player> bowlingTeam){
+    this.bowlingTeamPlayer = bowlingTeam;
   }
 
 }

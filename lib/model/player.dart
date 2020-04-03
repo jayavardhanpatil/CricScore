@@ -6,6 +6,13 @@ class Player {
   int wicket;
   int extra;
   double overs;
+  int ballsFaced;
+  int runsGiven;
+  int numberOfFours;
+  int numberOfsixes;
+  int centuries;
+  int fifties;
+
 
   Player(
       {this.playerUID,
@@ -14,7 +21,12 @@ class Player {
         this.run,
         this.wicket,
         this.extra,
-        this.overs});
+        this.overs,this.ballsFaced,
+      this.runsGiven,
+      this.centuries,
+      this.fifties,
+      this.numberOfFours,
+      this.numberOfsixes});
 
   Player.fromJson(Map<String, dynamic> json) {
     playerUID = json['playerUID'];
@@ -24,6 +36,12 @@ class Player {
     wicket = json['wicket'];
     extra = json['extra'];
     overs = json['overs'];
+    ballsFaced = json['ballsFaced'];
+    runsGiven = json['runsGiven'];
+    centuries = json['centuries'];
+    fifties = json['fifties'];
+    numberOfFours = json['numberOfFours'];
+    numberOfsixes = json['numberOfsixes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +53,13 @@ class Player {
     data['wicket'] = this.wicket;
     data['extra'] = this.extra;
     data['overs'] = this.overs;
+    data['ballsFaced'] = this.ballsFaced;
+    data['runsGiven'] = this.runsGiven;
+    data['centuries'] = this.centuries;
+    data['fifties'] = this.fifties;
+    data['numberOfFours'] = this.numberOfFours;
+    data['numberOfsixes'] = this.numberOfsixes;
+
     return data;
   }
 }

@@ -11,6 +11,7 @@ import 'package:flutter_app/views/startMatch.dart';
 import 'package:flutter_app/widgets/ToastWidget.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -24,6 +25,8 @@ class _SelectTeam extends State<SelectTeam> {
 
   String previousvalueFirstTeam = "";
   String previousvalueSecondteam = "";
+
+  String todaysDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   TextEditingController _firstTteamName = TextEditingController();
   final _secondTteamName = TextEditingController();
@@ -141,7 +144,7 @@ class _SelectTeam extends State<SelectTeam> {
                       match.teams.forEach((key, value) {
                         matchBetween = matchBetween + key + " - ";
                       });
-                      match.setMatchTitle(matchBetween.substring(0, matchBetween.length-3));
+                      match.setMatchTitle(matchBetween.substring(0, matchBetween.length-3) + " - " + todaysDate);
                       print("Match Between "+ match.getMatchTitle());
                       match.teams.forEach((key, value) {
                           print("Team Name : "+key);

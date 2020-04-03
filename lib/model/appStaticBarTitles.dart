@@ -10,8 +10,8 @@ class AppBarsTitles {
 
 class StaticString {
 
-  static String BATTING_INNING = "BATTING";
-  static String BOWLING_INNING = "BOWLING";
+  static String BATTING_INNING = "BAT";
+  static String BOWLING_INNING = "BOWL";
 
 
 }

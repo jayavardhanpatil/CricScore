@@ -9,8 +9,10 @@ import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/services/database_service.dart';
+import 'package:flutter_app/views/scoreUpdateView.dart';
 import 'package:flutter_app/widgets/ToastWidget.dart';
 import 'package:flutter_app/widgets/gradient.dart';
+import 'package:flutter_app/widgets/loader.dart';
 
 class StartInnings extends StatefulWidget{
 
@@ -47,7 +49,7 @@ class _StartInnings extends State<StartInnings> {
     List<DropdownMenuItem<Player>> items = List();
 
     if(!match.getisFirstInningsOver()){
-      match.firstInning.battingTeam.forEach((key, value) {
+      match.firstInning.battingteam.players.forEach((key, value) {
         battingPlayers.add(value);
         items.add(DropdownMenuItem(
           value: value,
@@ -55,7 +57,7 @@ class _StartInnings extends State<StartInnings> {
         ));
       });
     }else{
-      match.secondInning.battingTeam.forEach((key, value) {
+      match.secondInning.battingteam.players.forEach((key, value) {
         items.add(DropdownMenuItem(
           value: value,
           child: Text(value.playerName),
@@ -69,7 +71,7 @@ class _StartInnings extends State<StartInnings> {
     List<DropdownMenuItem<Player>> items = List();
 
     if(!match.getisFirstInningsOver()){
-      match.firstInning.bowlingTeam.forEach((key, value) {
+      match.firstInning.bowlingteam.players.forEach((key, value) {
         bowlingPlayers.add(value);
         items.add(DropdownMenuItem(
           value: value,
@@ -77,7 +79,7 @@ class _StartInnings extends State<StartInnings> {
         ));
       });
     }else{
-      match.secondInning.bowlingTeam.forEach((key, value) {
+      match.secondInning.bowlingteam.players.forEach((key, value) {
         items.add(DropdownMenuItem(
           value: value,
           child: Text(value.playerName),
@@ -155,8 +157,7 @@ class _StartInnings extends State<StartInnings> {
                                         itemBuilder: (Player value) => getDropDownMenuItem(value),
                                         focusedItemDecoration: _getDslDecoration(),
                                         onItemSelectedListener: (item, index, context) {
-                                          item.isOnStrike = true;
-                                          batmans.update("strker", (value) => item, ifAbsent: () => item);
+                                          batmans.update("striker", (value) => item, ifAbsent: () => item);
                                           //Scaffold.of(context).showSnackBar(SnackBar(content: Text(item.playerName)));
                                         }),
                                     padding: EdgeInsets.only(left: 12))),
@@ -193,7 +194,7 @@ class _StartInnings extends State<StartInnings> {
                                         itemBuilder: (Player value) => getDropDownMenuItem(value),
                                         focusedItemDecoration: _getDslDecoration(),
                                         onItemSelectedListener: (item, index, context) {
-                                          batmans.update("nonstrker", (value) => item, ifAbsent: () => item);
+                                          batmans.update("nonstriker", (value) => item, ifAbsent: () => item);
                                           //Scaffold.of(context).showSnackBar(SnackBar(content: Text(item.playerName)));
                                         }),
                                     padding: EdgeInsets.only(left: 12))),
@@ -231,7 +232,7 @@ class _StartInnings extends State<StartInnings> {
                                         itemBuilder: (Player value) => getDropDownMenuItem(value),
                                         focusedItemDecoration: _getDslDecoration(),
                                         onItemSelectedListener: (item, index, context) {
-                                          bowlers.update("opene_bowler", (value) => item, ifAbsent: () => item);
+                                          bowlers.update("open_bowler", (value) => item, ifAbsent: () => item);
                                           //Scaffold.of(context).showSnackBar(SnackBar(content: Text(item.playerName)));
                                         }),
                                     padding: EdgeInsets.only(left: 12))),
@@ -260,23 +261,79 @@ class _StartInnings extends State<StartInnings> {
                         }else {
                           Map<String, Player> batsmans = new Map();
                           batmans.forEach((key, value) {
-                            batsmans.putIfAbsent(value.playerUID, () => value);
+                            value.run = 0;
+                            value.ballsFaced = 0;
+                            if(key == "striker") {
+                              value.isOnStrike = true;
+                            }else{
+                              value.isOnStrike = false;
+                            }
+                            batsmans.putIfAbsent(
+                                  value.playerUID, () => value);
                           });
 
                           Map<String, Player> bowler = new Map();
-                          bowler.putIfAbsent(bowlers["opene_bowler"]
-                              .playerUID, () => bowlers["opene_bowler"]);
+                          bowlers.forEach((key, value) {
+                            value.overs = 0;
+                            value.extra = 0;
+                            value.runsGiven = 0;
+                            value.wicket = 0;
+                            value.centuries = 0;
+                            value.fifties = 0;
+                            value.numberOfFours = 0;
+                            value.numberOfsixes = 0;
+                            bowler.putIfAbsent(value.playerUID, () => value);
+                          });
+
 
                           Inning currentInning = new Inning(
-                              battingTeam: batsmans, bowlingTeam: bowler);
+                              battingTeamPlayer : batsmans, bowlingTeamPlayer: bowler, battingteam: (match.getisFirstInningsOver()) ? match.secondInning.battingteam : match.firstInning.battingteam);
                           currentInning.run = 0;
                           currentInning.wickets = 0;
                           currentInning.extra = 0;
                           currentInning.overs = 0;
                           match.currentPlayers = currentInning;
+                          //addMatchDetails(context);
 
-                          DatabaseService().addMatch(match);
 
+                          FutureBuilder(
+                            future: DatabaseService().addMatch(match),
+                            builder: (context, snapshot){
+                              if(snapshot.data == null){
+                                Loading();
+                              }else if(snapshot.connectionState == ConnectionState.done){
+                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
+                              }
+                            },
+
+//                              DatabaseService().addMatch(match);
+//
+//                          String playingType = (match.getisFirstInningsOver()) ? "second_inning" : "first_inning";
+//                          DatabaseService().addInningsPlayers(match, batsmans, playingType, "batting");
+//
+//                          DatabaseService().addInningsPlayers(match, bowler, playingType, "bowling");
+                        );
+
+                          String playingType = (match.getisFirstInningsOver()) ? "second_inning" : "first_inning";
+                          FutureBuilder(
+                            future: addPlayersToTheInnings(batsmans, bowler, playingType),
+                            builder: (context, snapshot){
+                              if(snapshot.data == null){
+                                Loading();
+                              }else if(snapshot.connectionState == ConnectionState.done){
+                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
+                              }
+                            },
+
+//                              DatabaseService().addMatch(match);
+//
+//
+//
+//
+//                          DatabaseService().addInningsPlayers(match, bowler, playingType, "bowling");
+                          );
+
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ScoreUpdateView(match: match,)));
                         }
                       },
                       textColor: Colors.white,
@@ -341,83 +398,26 @@ class _StartInnings extends State<StartInnings> {
             ],
           ),
         ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        child: Center(
-//          child: Column(
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            children: <Widget>[
-//              Text("Striker"),
-//              DropdownButton(
-//                value: _selectedStrikerPlayer,
-//                items: _dropdownMenuItemsForBatting,
-//                onChanged: onChangedStrikerBattingDropDownItem,
-//              ),
-//              SizedBox(height: _height * 0.05),
-//              Text(_selectedStrikerPlayer.playerName),
-//
-//              SizedBox(height: _height * 0.05),
-//
-//              SizedBox(height: _height * 0.05),
-//
-//              Text("Non Striker : "),
-//              DropdownButton(
-//                value: _selectedNonStrikerPlayer,
-//                items: _dropdownMenuItemsForBatting,
-//                onChanged: onChangedNonBattingDropDownItem,
-//              ),
-//              SizedBox(height: _height * 0.05),
-//              Text(_selectedNonStrikerPlayer.playerName),
-//
-//              SizedBox(height: _height * 0.05),
-//
-//              SizedBox(height: _height * 0.05),
-//
-//
-//              Text("Bowler"),
-//              DropdownButton(
-//                value: _selectedBowlerPlayer,
-//                items: _dropdownMenuItemsForBowling,
-//                onChanged: onChangedBowlingDropDownItem,
-//              ),
-//              SizedBox(height: _height * 0.05),
-//              Text(_selectedBowlerPlayer.playerName),
-//
-//              SizedBox(height: _height * 0.05),
-//
-//
-////              DropdownButton<String>(
-////                items: _inningsOptions.map((String dropDownSelectedIttem) {
-////                  return DropdownMenuItem<String>(
-////                    value: dropDownSelectedIttem,
-////                    child: Text(dropDownSelectedIttem),
-////                  );
-////                }).toList(),
-////
-////                onChanged: (String newValueSelected){
-////                  setState(() {
-////                    this._optionSelected = newValueSelected;
-////                  });
-////                },
-////                value: _optionSelected,
-////              ),
-//            ],
-//          ),
-//        ),
-
       ),
     );
+  }
 
+  addPlayersToTheInnings(Map<String, Player> battingplayer, Map<String, Player> bowlingPlayer, String inningType,) async{
+     await DatabaseService().addInningsPlayers(match, battingplayer, inningType, "batting");
+    return await DatabaseService().addInningsPlayers(match, bowlingPlayer, inningType, "bowling");
+  }
+
+  Widget addMatchDetails(BuildContext context){
+    return FutureBuilder(
+      future: DatabaseService().addMatch(match),
+      builder: (context,  snapshot){
+        if(snapshot.data == null){
+          Loading();
+        }else if(snapshot.connectionState == ConnectionState.done){
+          // ignore: missing_return
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to server")));
+        }
+      }
+    );
   }
 }

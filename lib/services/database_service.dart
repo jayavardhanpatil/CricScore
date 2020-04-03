@@ -3,10 +3,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_app/model/innings.dart';
 import 'package:flutter_app/model/match.dart';
+import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
+import 'package:intl/intl.dart';
 
 class DatabaseService {
 
@@ -19,6 +22,7 @@ class DatabaseService {
 
   final DatabaseReference _fireBaseRTreference = FirebaseDatabase.instance
       .reference();
+
 
   //Write a data : key value
   Future addUser(User user) async {
@@ -43,6 +47,16 @@ class DatabaseService {
     }).catchError((e) {
       print("Error in writing to DB : " + e.toString());
     });
+  }
+
+  reloadCitiesList() async{
+    if(cities.length == 0) {
+      await _fireBaseRTreference.child("countries/all").once().
+      then((value) =>
+      {
+        cities = value.value['cities'].toList(),
+      });
+    }
   }
 
   getCity(String pattern) {
@@ -123,6 +137,7 @@ class DatabaseService {
 
 
   Future addMatch(MatchGame match) async{
+    print("Match Title : "+match.getMatchTitle());
     return await _fireBaseRTreference.child("matches").child(match.getMatchVenue()).child(match.getMatchTitle()).set(match.toJson())
         .then((value) => print("Added match Detail"))
         .catchError((e){
@@ -152,12 +167,31 @@ class DatabaseService {
   }
 
 
-  addMatchDetails(MatchGame match) async{
+  addInningsPlayers(MatchGame match, Map<String, Player> player, String inningType, String playingType) async{
     print(match.toJson());
-    return await _fireBaseRTreference.child("matches/"+match.getMatchVenue()+"/").child(match.getMatchTitle())
-        .set(match.toJson()).then((value) => print("Match details added")).catchError((e){
-          print("error : "+e.toString());
+    player.forEach((key, value) async {
+      return await _fireBaseRTreference.child("matches/"+match.getMatchVenue()+"/").child(match.getMatchTitle()).child(inningType).child(playingType).child(key).set(value.toJson())
+          .then((value) => print("Player details added to "+inningType + " inning")).catchError((e){
+        print("error : "+e.toString());
+      });
     });
   }
+  
+  Future updateScoreOnBall(MatchGame matchGame) async{
+    return await _fireBaseRTreference.child("matches/"+matchGame.getMatchVenue()+"/").child(matchGame.getMatchTitle()).child("currentPlayers").set(matchGame.currentPlayers.toJson()).then((value) => (){
+    print("Currentt userd detail Updated");
+    }).catchError((e) {
+      print("error : failed to update current players"+e.toString());
+    });
+        
+  }
+
+//  addMatchDetail(MatchGame match) async{
+//    print(match.toJson());
+//    return await _fireBaseRTreference.child("matches/"+match.getMatchVenue()+"/").child(match.getMatchTitle())
+//        .set(match.toJson()).then((value) => print("Match details added")).catchError((e){
+//      print("error : "+e.toString());
+//    });
+//  }
 
 }

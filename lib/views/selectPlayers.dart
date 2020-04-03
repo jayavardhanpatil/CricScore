@@ -7,6 +7,7 @@ import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/widgets/gradient.dart';
+import 'package:flutter_app/widgets/loader.dart';
 
 class PlayersList extends StatefulWidget {
 
@@ -94,7 +95,7 @@ class PlayersList extends StatefulWidget {
       future: users,
       builder: (context,  snapshot){
         if(snapshot.data == null){
-          return Text("Loading....");
+          return Loading();
         } else if (snapshot.hasData) {
 
           //Get other Team players

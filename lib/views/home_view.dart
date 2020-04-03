@@ -31,14 +31,11 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
   MyTabs _myHandler ;
   TabController _controller ;
   final _textEditingController = new TextEditingController();
-  //bool loading = true;
-
   bool loading = true;
+
   void initState() {
     super.initState();
-    DatabaseService().reLoadUserRecord(AuthService.user.uid).then((value) => setState((){
-      loading = false;
-    }));
+    reloadInitialData();
     _textEditingController.text = "${AuthService.user.getName()}";
     _controller = new TabController(length: 2, vsync: this);
     _myHandler = _tabs[0];
@@ -51,6 +48,14 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
   }
 
   int _currentIndex = 0;
+
+  reloadInitialData() async{
+    await DatabaseService().reLoadUserRecord(AuthService.user.uid).then((value) => setState((){
+      loading = false;
+    }));
+
+    return await DatabaseService().reloadCitiesList();
+  }
 
   @override
   Widget build(BuildContext context) {
