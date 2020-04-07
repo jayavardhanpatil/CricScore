@@ -115,7 +115,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                                 ),
                                 child : Text(_currentBatttingPlayer[0].playerName, textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontWeight: (_currentBatttingPlayer[0].isOnStrike) ? FontWeight.bold : null , fontStyle: FontStyle.italic, fontSize: 20,
+                                    fontWeight: (_currentBatttingPlayer[0].isOnStrike) ? FontWeight.bold : null , fontStyle: FontStyle.italic, fontSize: 15,
                                   ),),),
 
                             ],
@@ -125,7 +125,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                           Container(
                             child: Text(_currentBatttingPlayer[0].run.toString() + " ("+_currentBatttingPlayer[0].ballsFaced.toString()+")",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 15
                                 )),
 
                           ),
@@ -159,7 +159,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                                 ),
                                 child : Text(_currentBatttingPlayer[1].playerName, textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontWeight: (_currentBatttingPlayer[1].isOnStrike) ? FontWeight.bold : null , fontStyle: FontStyle.italic, fontSize: 20,
+                                    fontWeight: (_currentBatttingPlayer[1].isOnStrike) ? FontWeight.bold : null , fontStyle: FontStyle.italic, fontSize: 15,
                                   ),),),
 
                             ],
@@ -182,7 +182,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
             ),
 
             Container(
-                height: _height * 0.18,
+                height: _height * 0.15,
                 decoration: BoxDecoration(
                     border: Border(
                         top: BorderSide(width: 1.0, color: Colors.black),
@@ -201,7 +201,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                             minRadius: 20,
                             maxRadius: 20,
                           ),
-                          margin: EdgeInsets.all(15),
+                          margin: EdgeInsets.all(10),
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -209,14 +209,14 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                           ),
                           child : Text(_currentBowlingPlayer[0].playerName,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 18,
+                              fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 15,
                             ),),),
 
                         Container(
                           width: _width * 0.6,
                           child: Text(_currentBowlingPlayer[0].overs.toStringAsFixed(1) + "-" + _currentBowlingPlayer[0].wicket.toString() + "-" + _currentBowlingPlayer[0].runsGiven.toString() + "-" + _currentBowlingPlayer[0].extra.toString(),
                             textAlign: TextAlign.end,  style: TextStyle(
-                              fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 18,
+                              fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 15,
                             ), // has impact
                           ),
                         )

@@ -1,0 +1,11 @@
+
+import 'package:flutter/material.dart';
+import 'package:flutter_app/model/player.dart';
+
+import 'SelectPlayerCustom_dialog.dart';
+
+class DialogHelper{
+
+  static exit(context) => showDialog(context: context, builder: (context) => selectPlayerDialog());
+
+}

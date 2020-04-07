@@ -1,10 +1,11 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 getButtonGradientColor(BoxShape shape){
    return BoxDecoration(
      shape: shape,
-
+     borderRadius: (shape != BoxShape.circle) ? BorderRadius.circular(50) : null,
      gradient: LinearGradient(
        colors: <Color>[
          Color(0xFF6190E8),

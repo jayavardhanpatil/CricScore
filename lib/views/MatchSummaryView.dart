@@ -9,6 +9,7 @@ import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/widgets/gradient.dart';
+import 'package:flutter_app/widgets/loader.dart';
 
 class MatchSummaryList extends StatefulWidget{
   _MatchSummaryList createState() => _MatchSummaryList();
@@ -64,7 +65,7 @@ class _MatchSummaryList extends State<MatchSummaryList> {
         // ignore: missing_return
         builder: (context,  snapshot){
           if(snapshot.data == null){
-            return CircularProgressIndicator();
+            return Loading();
           } else if (snapshot.hasData) {
             _matches = snapshot.data;
             _matches.forEach((element) {
@@ -99,7 +100,7 @@ class _MatchSummaryList extends State<MatchSummaryList> {
           elevation: 10,
           margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
           color : (_matches[index].isLive) ? null : Color.fromRGBO(255, 255, 255, 0.2),
-          child: updateGameData(_matches[index]),
+          child: (_matches[index] != null ) ? updateGameData(_matches[index]) : Container(),
       ),
     );
   }
@@ -223,7 +224,7 @@ class _MatchSummaryList extends State<MatchSummaryList> {
             ],
           );
         }else if(snapshot.data == null){
-          return CircularProgressIndicator();
+          return Loading();
         }else{
           return Text("No Data");
         }

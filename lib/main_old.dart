@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/views/directSelect.dart';
+import 'package:flutter_app/widgets/dialoghelper.dart';
 
 void main() => runApp(MyApp());
 
@@ -102,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             RaisedButton(
               onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage_select()));
+                DialogHelper.exit(context);
               },
               child: Text("Press me"),
             )

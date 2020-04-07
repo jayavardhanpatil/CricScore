@@ -185,13 +185,15 @@ class DatabaseService {
 
   Future<List<MatchGame>> getListOfMatches(String city) async{
     List<MatchGame> listOfMatches = new List();
-    return await _fireBaseRTreference.child("matches").child(city).limitToFirst(4).once().then((value) {
+    return await _fireBaseRTreference.child("matches").child(city).once().then((value) {
       value.value.forEach((k, v) {
         MatchGame matchGame = MatchGame.fromJson(v);
-        if(matchGame.isLive)
-        listOfMatches.insert(0, matchGame);
-        else
-          listOfMatches.add(matchGame);
+        if(matchGame.currentPlayers != null) {
+          if (matchGame.isLive)
+            listOfMatches.insert(0, matchGame);
+          else
+            listOfMatches.add(matchGame);
+        }
       });
       return listOfMatches;
     }).catchError((e){

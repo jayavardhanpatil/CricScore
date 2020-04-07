@@ -99,15 +99,15 @@ class _MyHomePage_selectState extends State<MyHomePage_select> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Select data"),
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+      child: Container(
+      child: Stack(
+        children: <Widget>[
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Padding(
@@ -140,7 +140,7 @@ class _MyHomePage_selectState extends State<MyHomePage_select> {
                   ),
                 ),
               ]),
-        ),
+        ],),
       ),
     );
   }
