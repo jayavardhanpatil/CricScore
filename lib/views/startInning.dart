@@ -4,7 +4,7 @@ import 'package:direct_select_flutter/direct_select_item.dart';
 import 'package:direct_select_flutter/direct_select_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/innings.dart';
+import 'package:flutter_app/model/currentPlayer.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/services/database_service.dart';
@@ -189,6 +189,7 @@ class _StartInnings extends State<StartInnings> {
                                         values: battingPlayers,
                                         itemBuilder: (Player value) => getDropDownMenuItem(value),
                                         focusedItemDecoration: _getDslDecoration(),
+
                                         onItemSelectedListener: (item, index, context) {
                                           batmans.update("nonstriker", (value) => item, ifAbsent: () => item);
                                           //Scaffold.of(context).showSnackBar(SnackBar(content: Text(item.playerName)));
@@ -284,25 +285,21 @@ class _StartInnings extends State<StartInnings> {
                           });
 
 
-                          Inning currentInning = new Inning(
-                              battingTeamPlayer : batsmans, bowlingTeamPlayer: bowler, battingteam: (match.getisFirstInningsOver()) ? match.secondInning.battingteam : match.firstInning.battingteam);
+                          CurrentPlayIng currentInning = new CurrentPlayIng(
+                              battingTeamPlayer : batsmans, bowlingTeamPlayer: bowler);
                           currentInning.run = 0;
                           currentInning.wickets = 0;
                           currentInning.extra = 0;
                           currentInning.overs = 0;
+                          (match.isFirstInningsOver) ? currentInning.teamName = match.secondInning.battingteam.getTeamName() : currentInning.teamName = match.firstInning.battingteam.getTeamName();
                           match.currentPlayers = currentInning;
+
+
+                          print(match.currentPlayers.toJson());
+
+                          addCurrentPlayer(context);
+
                           //addMatchDetails(context);
-
-
-                          FutureBuilder(
-                            future: DatabaseService().addMatch(match),
-                            builder: (context, snapshot){
-                              if(snapshot.data == null){
-                                Loading();
-                              }else if(snapshot.connectionState == ConnectionState.done){
-                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
-                              }
-                            },
 
 //                              DatabaseService().addMatch(match);
 //
@@ -310,7 +307,7 @@ class _StartInnings extends State<StartInnings> {
 //                          DatabaseService().addInningsPlayers(match, batsmans, playingType, "batting");
 //
 //                          DatabaseService().addInningsPlayers(match, bowler, playingType, "bowling");
-                          );
+
 
 //                          FutureBuilder(
 //                            future: addPlayersToTheInnings(match.firstInning.battingteam.players, match.firstInning.bowlingteam.players, "first_inning"),
@@ -367,15 +364,16 @@ class _StartInnings extends State<StartInnings> {
     return await DatabaseService().addInningsPlayers(match, bowlingPlayer, inningType, "bowling");
   }
 
-  Widget addMatchDetails(BuildContext context){
+  Widget addCurrentPlayer(BuildContext context){
     return FutureBuilder(
-        future: DatabaseService().addMatch(match),
+        future: DatabaseService().updateCurrentPlayer(match),
+        // ignore: missing_return
         builder: (context,  snapshot){
           if(snapshot.data == null){
             Loading();
           }else if(snapshot.connectionState == ConnectionState.done){
             // ignore: missing_return
-            Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to server")));
+           showSuccessColoredToast("Current player Added to server");
           }
         }
     );

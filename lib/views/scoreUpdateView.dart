@@ -58,13 +58,12 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(match.currentPlayers.battingteam.getTeamName() + " Batting Inning"),
+        title: Text(match.currentPlayers.teamName + " Batting Inning"),
         flexibleSpace: getAppBarGradient(),
       ),
       body: Container(
         child: Column(
           children: <Widget>[
-
             Container(
               height: _height * 0.35,
               width: _width,
@@ -233,12 +232,12 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                 )
             ),
 
-
             Container(
                 width: _width,
                 height:  _height * 0.3,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
                       height: _height * 0.09,
@@ -482,7 +481,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
           setState(() {
             //ballCouts++;
             balls = buildBall(context, value);
-            DatabaseService().updateScoreOnBall(match).then((value) => (){
+            DatabaseService().updateCurrentPlayer(match).then((value) => (){
               showSuccessColoredToast("Data Synced");
             });
           });

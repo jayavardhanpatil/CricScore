@@ -5,6 +5,7 @@ import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/view/firstView.dart';
+import 'package:flutter_app/views/MatchSummaryView.dart';
 import 'package:flutter_app/views/profile.dart';
 import 'package:flutter_app/views/signUpView.dart';
 import 'package:flutter_app/views/selectTeam.dart';
@@ -60,7 +61,12 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     final tabs = [
-      Center(child: Text('Home')),
+      Center(child: FlatButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSummaryList()));
+        },
+        child: Text("Press"),
+      )),
       Center(child: Text('Profile')),
       //EditProfile()
     ];

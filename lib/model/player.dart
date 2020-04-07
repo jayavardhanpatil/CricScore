@@ -5,7 +5,7 @@ class Player {
   int run;
   int wicket;
   int extra;
-  double overs;
+  var overs;
   int ballsFaced;
   int runsGiven;
   int numberOfFours;
@@ -23,7 +23,7 @@ class Player {
         this.run = 0,
         this.wicket = 0,
         this.extra = 0,
-        this.overs = 0,
+        this.overs = 0.0,
         this.ballsFaced = 0,
       this.runsGiven = 0,
       this.centuries,
@@ -33,7 +33,7 @@ class Player {
       this.playedPosition,
       this.isOut = false});
 
-  Player.fromJson(Map<String, dynamic> json) {
+  Player.fromJson(Map<dynamic, dynamic> json) {
     playerUID = json['playerUID'];
     playerName = json['playerName'];
     isOnStrike = json['isOnStrike'];

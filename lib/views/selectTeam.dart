@@ -158,7 +158,7 @@ class _SelectTeam extends State<SelectTeam> {
                         DatabaseService().addTeams(value);
                       });
 
-
+                      Navigator.pop(context);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => StartMatch(match: match)));
 
                       //DatabaseService().addMatchDetails(match);

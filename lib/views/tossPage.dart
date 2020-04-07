@@ -5,9 +5,13 @@ import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/services/CustomRadioButton.dart';
+import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/views/startInning.dart';
 import 'package:flutter_app/widgets/gradient.dart';
+import 'package:flutter_app/widgets/loader.dart';
 import 'package:slider_button/slider_button.dart';
+
+import 'directSelect.dart';
 
 class TossPage extends StatefulWidget{
 
@@ -71,38 +75,8 @@ class _TossPage extends State<TossPage> {
 
             children: <Widget>[
               Text("Who won the Toss? ", style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
+                  color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
               SizedBox(height: _height * 0.02),
-
-//              DropdownButton(
-////                value: _tossWonteam,
-////                items: _dropdownteams,
-////                onChanged: onChangedDropDownItem,
-////              ),
-////              SizedBox(height: _height * 0.05),
-////              Text("Selected team : "+_tossWonteam.getTeamName()),
-////
-////              SizedBox(height: _height * 0.05),
-////
-////              Text("Selected to Option for innings"),
-////              SizedBox(height: _height * 0.05),
-////              DropdownButton<String>(
-////                items: _inningsOptions.map((String dropDownSelectedIttem) {
-////                  return DropdownMenuItem<String>(
-////                    value: dropDownSelectedIttem,
-////                    child: Text(dropDownSelectedIttem),
-////                  );
-////                }).toList(),
-////
-////                onChanged: (String newValueSelected){
-////                  setState(() {
-////                    this._optionSelected = newValueSelected;
-////                  });
-////                },
-////                value: _optionSelected,
-////              ),
-
-
 
               Column(
                 children: <Widget>[
@@ -164,11 +138,6 @@ class _TossPage extends State<TossPage> {
 
               SilderButton("Slide to Start a match", _height * 0.09, _width * 0.8, context),
 
-//            SizedBox(height: _height * 0.05),
-//
-//            Text("Who won the Toss? "),
-//
-//            SizedBox(height: _height * 0.06),
             ],
           ),
         ),
@@ -189,10 +158,6 @@ class _TossPage extends State<TossPage> {
                 Color(0xFFd60000),
                 Color(0xFF6190E8),
                 Color(0xFF090979)]
-            //Color(0xFF020024),
-            //Color(0xFF090979),
-            // Color(0xFF42A5F5),
-            //Color(0xFF090979),],
           ),
           borderRadius: BorderRadius.circular(30)),
       alignment: Alignment.centerLeft,
@@ -209,7 +174,20 @@ class _TossPage extends State<TossPage> {
 
           match.setIsFirstInningsOver(false);
           match.setInning();
+          match.isLive = true;
           print(match.firstInning.toJson());
+          FutureBuilder(
+            future: DatabaseService().addMatch(match),
+            builder: (context, snapshot){
+              if(snapshot.data == null){
+                Loading();
+              }else if(snapshot.connectionState == ConnectionState.done){
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
+              }
+            },
+          );
+
+         // Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage_select(match: match)));
           Navigator.push(context, MaterialPageRoute(builder: (context) => StartInnings(match: match)));
         },
         label: Text(
@@ -240,7 +218,7 @@ class _TossPage extends State<TossPage> {
         // flex: 1,
         child: Card(
           color: currentSelectedLabel == listOfTeams[index]
-               ? Color(0xFF6190E8)
+              ? Color(0xFF6190E8)
               : null,
           shape: shape,
           child: Container(

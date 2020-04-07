@@ -5,10 +5,11 @@ import 'package:flutter_app/model/innings.dart';
 import 'package:flutter_app/model/team.dart';
 
 import 'appStaticBarTitles.dart';
+import 'currentPlayer.dart';
 
 class MatchGame {
 
-  Map<String, Team> teams = new Map();
+  Map<dynamic, Team> teams = new Map();
   String matchVenue;
   String matchBetween;
   int totalOvers;
@@ -18,32 +19,34 @@ class MatchGame {
   int totalScore;
   Inning firstInning;
   Inning secondInning;
-  Inning currentPlayers;
+  CurrentPlayIng currentPlayers;
+  bool isLive;
 
   MatchGame({this.matchVenue, this.matchBetween, this.teams, this.totalOvers, this.tossWonTeam, this.selectedInning, this.isFirstInningsOver
-    ,this.totalScore, this.firstInning, this.secondInning, this.currentPlayers});
+    ,this.totalScore, this.firstInning, this.secondInning, this.currentPlayers, this.isLive = true});
 
-  factory MatchGame.fromJson(Map<String, dynamic> json) {
+  factory MatchGame.fromJson(Map<dynamic, dynamic> json) {
     return MatchGame(
       matchBetween: json['matchBetween'],
-      matchVenue: json['match_Venue'],
+      matchVenue: json['matchVenue'],
 //      teams: (json['teams'] as Map<String, dynamic>)?.map(
 //            (k, e) => MapEntry(
 //            k, e == null ? null : Team.fromJson(e as Map<String, dynamic>)),
 //      ),
       totalOvers: json['totalOvers'],
       tossWonTeam: json['tossWonTeam'],
-      selectedInning : json['selectedInning'],
+      selectedInning : json['selectematchVenuedInning'],
       isFirstInningsOver : json['isFirstInningsOver'],
       totalScore : json['totalScore'],
-      firstInning : (json['firstInning'] != null) ? Inning.fromJson(json['firstInning']) : null,
-      secondInning: (json['secondInning'] != null) ? Inning.fromJson(json['secondInning']) : null,
-      currentPlayers: (json['currentPlayers'] != null) ? Inning.fromJson(json['currentPlayers']) : null,
+      firstInning : (json['firstInnings'] != null) ? Inning.fromJson(json['firstInnings']) : null,
+      secondInning: (json['secondInnings'] != null) ? Inning.fromJson(json['secondInnings']) : null,
+      currentPlayers: (json['currentPlayers'] != null) ? CurrentPlayIng.fromJson(json['currentPlayers']) : null,
+      isLive: (json['isLive'])
     );
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     data['matchVenue'] = this.matchVenue;
     data['matchBetween'] = this.matchBetween;
     data['totalOvers'] = this.totalOvers;
@@ -63,6 +66,7 @@ class MatchGame {
     if(this.currentPlayers != null){
       data['currentPlayers'] = this.currentPlayers.toJson();
     }
+    data['isLive'] = this.isLive;
     return data;
   }
 

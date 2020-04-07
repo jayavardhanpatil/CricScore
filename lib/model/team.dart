@@ -13,14 +13,14 @@ class Team {
 
   Team({this.teamName, this.teamCity, this.players});
 
-  factory Team.fromJson(Map<String, dynamic> json) {
+  factory Team.fromJson(Map<dynamic, dynamic> json) {
     return Team(
       teamCity: json['teamCity'],
       teamName: json['teamName'],
 
-      players: (json['players'] as Map<String, dynamic>)?.map(
+      players: (json['players'] as Map<dynamic, dynamic>)?.map(
             (k, e) => MapEntry(
-            k, e == null ? null : Player.fromJson(e as Map<String, dynamic>)),
+            k, e == null ? null : Player.fromJson(e as Map<dynamic, dynamic>)),
       ),
 
       //players: json['players'] != null ? (json['players'] as List).map((i) => Player.fromJson(i)).toList() : null,

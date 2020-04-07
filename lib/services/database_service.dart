@@ -3,17 +3,17 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_app/model/innings.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/model/team.dart';
 import 'package:flutter_app/model/user.dart';
 import 'package:flutter_app/services/auth_service.dart';
-import 'package:intl/intl.dart';
 
 class DatabaseService {
 
   final String uid;
+
+  final StreamController<MatchGame> matchStreamController = StreamController<MatchGame>();
 
   DatabaseService({this.uid});
 
@@ -135,7 +135,6 @@ class DatabaseService {
 
   }
 
-
   Future addMatch(MatchGame match) async{
     print("Match Title : "+match.getMatchTitle());
     return await _fireBaseRTreference.child("matches").child(match.getMatchVenue()).child(match.getMatchTitle()).set(match.toJson())
@@ -166,7 +165,6 @@ class DatabaseService {
     }
   }
 
-
   addInningsPlayers(MatchGame match, Map<String, Player> player, String inningType, String playingType) async{
     //print(match.toJson());
     player.forEach((key, value) async {
@@ -177,14 +175,32 @@ class DatabaseService {
     });
   }
   
-  Future updateScoreOnBall(MatchGame matchGame) async{
+  Future updateCurrentPlayer(MatchGame matchGame) async{
     return await _fireBaseRTreference.child("matches/"+matchGame.getMatchVenue()+"/").child(matchGame.getMatchTitle()).child("currentPlayers").set(matchGame.currentPlayers.toJson()).then((value) => (){
     print("Currentt userd detail Updated");
     }).catchError((e) {
       print("error : failed to update current players"+e.toString());
     });
-        
   }
+
+  Future<List<MatchGame>> getListOfMatches(String city) async{
+    List<MatchGame> listOfMatches = new List();
+    return await _fireBaseRTreference.child("matches").child(city).limitToFirst(4).once().then((value) {
+      value.value.forEach((k, v) {
+        MatchGame matchGame = MatchGame.fromJson(v);
+        if(matchGame.isLive)
+        listOfMatches.insert(0, matchGame);
+        else
+          listOfMatches.add(matchGame);
+      });
+      return listOfMatches;
+    }).catchError((e){
+      print("error in fetching match data" + e.toString());
+      return listOfMatches;
+    });
+  }
+
+
 
 //  addMatchDetail(MatchGame match) async{
 //    print(match.toJson());
@@ -194,4 +210,13 @@ class DatabaseService {
 //    });
 //  }
 
+
+   Stream<MatchGame> gameStreamData(String matchVenue, String matchTitle) {
+    return _fireBaseRTreference.child("matches").child(matchVenue).child(matchTitle).onValue.map(_mapTOMatchGame);
+  }
+
+  MatchGame _mapTOMatchGame(dynamic gameData){
+    MatchGame game = MatchGame.fromJson(gameData.snapshot.value);
+    return game;
+  }
 }

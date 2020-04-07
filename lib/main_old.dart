@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/views/directSelect.dart';
 
 void main() => runApp(MyApp());
 
@@ -98,6 +99,14 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+
+            RaisedButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage_select()));
+              },
+              child: Text("Press me"),
+            )
+
           ],
         ),
       ),
