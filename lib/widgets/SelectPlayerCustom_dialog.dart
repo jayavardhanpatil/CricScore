@@ -8,8 +8,9 @@ import 'package:flutter_app/widgets/gradient.dart';
 class selectPlayerDialog extends StatefulWidget {
 
   List<Player> playerList;
+  String playerType;
 
-  selectPlayerDialog({Key key, @required this.playerList}) : super (key: key);
+  selectPlayerDialog({Key key, @required this.playerList, @required this.playerType}) : super (key: key);
 
   _selectPlayerDialog createState() => _selectPlayerDialog(playerList: playerList);
 }
@@ -17,8 +18,9 @@ class selectPlayerDialog extends StatefulWidget {
 class _selectPlayerDialog extends State<selectPlayerDialog>{
   int selectedIndex1 = 0;
   List<Player> playerList;
+  String playerType;
 
-  _selectPlayerDialog({this.playerList});
+  _selectPlayerDialog({this.playerList, this.playerType});
 
 
   List<Widget> _buildItems1() {
@@ -54,7 +56,7 @@ class _selectPlayerDialog extends State<selectPlayerDialog>{
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: Text(
-              "Select next batsman", textAlign: TextAlign.center,
+              "Select next "+playerType, textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w600, fontSize: 20),
             ),

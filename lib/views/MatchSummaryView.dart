@@ -10,6 +10,7 @@ import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 import 'package:flutter_app/widgets/loader.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MatchSummaryList extends StatefulWidget{
   _MatchSummaryList createState() => _MatchSummaryList();
@@ -21,6 +22,7 @@ class _MatchSummaryList extends State<MatchSummaryList> {
   String usercity;
   Future matches;
   MatchGame game;
+  bool loading = true;
   List<MatchGame> _matches = new List();
 
   @override
@@ -41,7 +43,7 @@ class _MatchSummaryList extends State<MatchSummaryList> {
           child: Column(
             //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              userListView(context),
+              matchListView(context),
 //              Container(
 //               child: userListView(context),
 //              )
@@ -59,7 +61,7 @@ class _MatchSummaryList extends State<MatchSummaryList> {
     return await DatabaseService().getListOfMatches(usercity);
   }
 
-  Widget userListView(BuildContext context){
+  Widget matchListView(BuildContext context){
     return FutureBuilder(
         future: matches,
         // ignore: missing_return
