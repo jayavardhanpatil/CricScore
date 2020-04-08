@@ -174,10 +174,10 @@ class DatabaseService {
       });
     });
   }
-  
+
   Future updateCurrentPlayer(MatchGame matchGame) async{
     return await _fireBaseRTreference.child("matches/"+matchGame.getMatchVenue()+"/").child(matchGame.getMatchTitle()).child("currentPlayers").set(matchGame.currentPlayers.toJson()).then((value) => (){
-    print("Currentt userd detail Updated");
+      print("Currentt userd detail Updated");
     }).catchError((e) {
       print("error : failed to update current players"+e.toString());
     });
@@ -213,9 +213,19 @@ class DatabaseService {
 //  }
 
 
-   Stream<MatchGame> gameStreamData(String matchVenue, String matchTitle) {
+  Stream<MatchGame> gameStreamData(String matchVenue, String matchTitle) {
     return _fireBaseRTreference.child("matches").child(matchVenue).child(matchTitle).onValue.map(_mapTOMatchGame);
   }
+
+
+  Future updatePlayer(MatchGame matchGame, Player player, String playerType, String innings) async{
+    return await _fireBaseRTreference.child("matches/"+matchGame.getMatchVenue()+"/").child(matchGame.getMatchTitle()).child(innings).child(playerType).child("players").child(player.playerUID).set(player).then((value) => (){
+      print("Player is updated");
+    }).catchError((e) {
+      print("error : failed to update the player details "+e.toString());
+    });
+  }
+
 
   MatchGame _mapTOMatchGame(dynamic gameData){
     MatchGame game = MatchGame.fromJson(gameData.snapshot.value);

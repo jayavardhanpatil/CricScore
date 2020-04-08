@@ -1,6 +1,5 @@
 
 import 'dart:core';
-
 import 'package:flutter_app/model/innings.dart';
 import 'package:flutter_app/model/team.dart';
 
@@ -21,9 +20,11 @@ class MatchGame {
   Inning secondInning;
   CurrentPlayIng currentPlayers;
   bool isLive;
+  String result;
+  int target;
 
   MatchGame({this.matchVenue, this.matchBetween, this.teams, this.totalOvers, this.tossWonTeam, this.selectedInning, this.isFirstInningsOver
-    ,this.totalScore, this.firstInning, this.secondInning, this.currentPlayers, this.isLive = true});
+    ,this.totalScore, this.firstInning, this.secondInning, this.currentPlayers, this.isLive = true, this.result, this.target});
 
   factory MatchGame.fromJson(Map<dynamic, dynamic> json) {
     return MatchGame(
@@ -41,7 +42,9 @@ class MatchGame {
       firstInning : (json['firstInnings'] != null) ? Inning.fromJson(json['firstInnings']) : null,
       secondInning: (json['secondInnings'] != null) ? Inning.fromJson(json['secondInnings']) : null,
       currentPlayers: (json['currentPlayers'] != null) ? CurrentPlayIng.fromJson(json['currentPlayers']) : null,
-      isLive: (json['isLive'])
+      isLive: (json['isLive']),
+        result : (json['result']),
+      target: (json['target']),
     );
   }
 
@@ -67,6 +70,9 @@ class MatchGame {
       data['currentPlayers'] = this.currentPlayers.toJson();
     }
     data['isLive'] = this.isLive;
+
+    data['result'] = this.result;
+    data['target'] = this.target;
     return data;
   }
 

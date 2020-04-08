@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/services/database_service.dart';
+import 'package:flutter_app/widgets/SelectPlayerCustom_dialog.dart';
 import 'package:flutter_app/widgets/ToastWidget.dart';
 import 'package:flutter_app/widgets/custom_dialog.dart';
 import 'package:flutter_app/widgets/gradient.dart';
@@ -32,16 +33,6 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
   int ballCouts;
 
   @override
-  initState(){
-
-    _currentBatttingPlayer.addAll(match.currentPlayers.battingTeamPlayer.values);
-    _currentBowlingPlayer.addAll(match.currentPlayers.bowlingTeamPlayer.values);
-
-    ballCouts = 0;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
 
     AppBar appBar = AppBar();
@@ -63,6 +54,8 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
       ),
       body: Container(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
               height: _height * 0.35,
@@ -88,7 +81,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
             ),
 
             Container(
-                height: _height * 0.13,
+                height: _height * 0.12,
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -125,7 +118,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                           Container(
                             child: Text(_currentBatttingPlayer[0].run.toString() + " ("+_currentBatttingPlayer[0].ballsFaced.toString()+")",
                                 style: TextStyle(
-                                  fontSize: 15
+                                    fontSize: 15
                                 )),
 
                           ),
@@ -182,7 +175,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
             ),
 
             Container(
-                height: _height * 0.15,
+                height: _height * 0.20,
                 decoration: BoxDecoration(
                     border: Border(
                         top: BorderSide(width: 1.0, color: Colors.black),
@@ -193,15 +186,16 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
+
                         Container(
                           child: CircleAvatar(
                             backgroundImage: ExactAssetImage(
                                 "lib/assets/images/cricket_ball.png"),
                             backgroundColor: Colors.orangeAccent,
-                            minRadius: 20,
-                            maxRadius: 20,
+                            minRadius: 15,
+                            maxRadius: 15,
                           ),
-                          margin: EdgeInsets.all(10),
+                          margin: EdgeInsets.all(8),
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -227,14 +221,15 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                     Row(
                       children: balls,
                     )
-
                   ],
                 )
             ),
 
+            SizedBox(height: 0.1,),
+
             Container(
                 width: _width,
-                height:  _height * 0.3,
+                //height:  _height * 0.3,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -312,6 +307,16 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
         ),
       ),
     );
+  }
+
+  @override
+  initState(){
+
+    _currentBatttingPlayer.addAll(match.currentPlayers.battingTeamPlayer.values);
+    _currentBowlingPlayer.addAll(match.currentPlayers.bowlingTeamPlayer.values);
+
+    ballCouts = 0;
+    super.initState();
   }
 
   List<Widget> buildBall(BuildContext context, String value){
@@ -405,8 +410,8 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
           //_currentBatttingPlayer.add(new Player(playerName: "fwsfwe", run: 0, ballsFaced:  0));
           ballCouts++;
           match.currentPlayers.wickets++;
+          nextBatsman(context);
         });
-
       }
       break;
       case "NB" :{
@@ -433,18 +438,18 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
 
     balls.add(
       Container(
-        width: 45,
-        height: 45,
+        width: 40,
+        height: 40,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(width: 1.0, color: Colors.black),
           color : color,
         ),
-        margin: EdgeInsets.only(left: 10),
+        margin: EdgeInsets.only(left: 5),
         child: Text(value.toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 20
+                fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 15
             )),
         padding: EdgeInsets.all(10.0),
       ),
@@ -456,7 +461,6 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
         match.currentPlayers.overs += 0.4;
         swapStrikers();
         _currentBowlingPlayer[0].overs += 0.4;
-
 //         showDialog(
 //            context: context,
 //            builder: (BuildContext context) => CustomDialog());
@@ -479,15 +483,146 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
         color: Colors.transparent,
         onPressed: (){
           setState(() {
-            //ballCouts++;
-            balls = buildBall(context, value);
-            DatabaseService().updateCurrentPlayer(match).then((value) => (){
-              showSuccessColoredToast("Data Synced");
-            });
-          });
+    //ballCouts++;
+              balls = buildBall(context, value);
+              });
+
+              bool isInningsOver = isInnignsOver();
+              bool isMatchOver = isInnignsOver();
+
+            updateCurrentScore();
         },
       ),
     );
+  }
+
+  bool isMatchOver(){
+    if(match.isFirstInningsOver){
+      if(match.currentPlayers.run > match.firstInning.run){
+        print("Second inning team won by "+(match.secondInning.battingteam.players.length - match.currentPlayers.wickets).toString() + " wickets");
+        match.result = "Second inning team won by "+(match.secondInning.battingteam.players.length - match.currentPlayers.wickets).toString() + " wickets";
+      }else if( match.currentPlayers.wickets == match.secondInning.battingteam.players.length-1){
+        print("First inning team won by "+(match.firstInning.run - match.currentPlayers.run).toString() + " runs");
+        match.result = "First inning team won by "+(match.firstInning.run - match.currentPlayers.run).toString() + " runs";
+      }
+    }
+  }
+
+  bool isInnignsOver(){
+    if(match.isFirstInningsOver) {
+      if (match.currentPlayers.overs == match.totalOvers || match.currentPlayers.wickets == match.secondInning.battingteam.players.length-1){
+        return true;
+      }
+    }else{
+      if (match.currentPlayers.overs == match.totalOvers || match.currentPlayers.wickets == match.firstInning.battingteam.players.length - 1){
+        match.isFirstInningsOver = true;
+        return true;
+      }
+    }
+  }
+
+  List<Player> yetToBatPlayers(List<Player> players){
+    List<Player> yetoBat = new List();
+    players.forEach((element) {
+      if(!element.isOut){
+        yetoBat.add(element);
+      }
+    });
+    return yetoBat;
+  }
+
+  void nextBatsman(BuildContext context){
+    if(match.currentPlayers.overs < match.totalOvers){
+
+      //pop up to select next bowler
+      List<Player> batsmans = new List();
+      if(match.isFirstInningsOver){
+        match.secondInning.battingteam.players.values.forEach((element) {
+          if(!element.isOut) {
+            batsmans.add(element);
+          }
+        });
+      }else{
+        match.firstInning.battingteam.players.values.forEach((element) {
+          if(!element.isOut) {
+            batsmans.add(element);
+          }
+        });
+      }
+
+      batsmans.remove(_currentBatttingPlayer[0]);
+      batsmans.remove(_currentBatttingPlayer[1]);
+
+     // PlayernextSelectedPlayer(context, bowlers, "Bowler");
+      getSelectedBatsmansPlayer(context, batsmans);
+
+//      if(selectedPlayer != null){
+//        setState(() {
+//          _currentBowlingPlayer[0] = selectedPlayer;
+//        });
+//        DatabaseService().updatePlayer(match, selectedPlayer, "bowling_team", "firstInnings").then((value) =>
+//            showSuccessColoredToast("User data updated"),
+//        );
+//      }
+    }
+  }
+
+
+  getSelectedBatsmansPlayer(BuildContext context, List<Player> batsmans) async{
+    if(batsmans.length > 0) {
+      Player selectedPlayer = await showDialog(context: context,
+          builder: (context) =>
+              selectPlayerDialog(playerList: batsmans, playerType: "Batsman"));
+      if (selectedPlayer != null) {
+        replaceStrikerWithNewBatsma(selectedPlayer);
+      }
+    }
+  }
+
+  void replaceStrikerWithNewBatsma(Player newBatsman){
+    int onStrikeIndex = (_currentBatttingPlayer[0].isOnStrike) ? 0 : 1;
+
+    _currentBatttingPlayer[onStrikeIndex].isOut = true;
+
+    if(match.isFirstInningsOver) {
+      DatabaseService().updatePlayer(
+          match, _currentBatttingPlayer[onStrikeIndex], "batting_team",
+          "secondInnings");
+    }else{
+      DatabaseService().updatePlayer(
+          match, _currentBatttingPlayer[onStrikeIndex], "batting_team",
+          "firstInnings");
+    }
+
+    //Now replace the batsman
+    setState(() {
+      newBatsman.isOnStrike = true;
+      _currentBatttingPlayer[onStrikeIndex] = newBatsman;
+
+    });
+
+    updateCurrentScore();
+  }
+
+  void updateCurrentScore() async{
+    await DatabaseService().updateCurrentPlayer(match).then((value) => (){
+      showSuccessColoredToast("Data Synced");
+    });
+  }
+
+  // ignore: missing_return
+  void PlayernextSelectedPlayer(BuildContext context, List<Player> players, String playerType) async{
+    showDialog(context: context,
+        builder: (context) => selectPlayerDialog(playerList: players, playerType: playerType)).then((value) =>
+        (){
+      if(playerType == "bowler") {
+        DatabaseService().updatePlayer(match, _currentBowlingPlayer[0], "bowling_team", "firstInnings").then((value) =>
+            showSuccessColoredToast("User data updated"));
+
+        setState(() {
+          _currentBowlingPlayer[0] = value;
+        });
+      }});
   }
 
   void swapStrikers(){

@@ -137,7 +137,7 @@ class _SelectTeam extends State<SelectTeam> {
 
                   //SilderButton("Slide to Start a match", _height * 0.09, _width * 0.8, context),
 
-                  RaisedButton(
+                  FlatButton(
                     onPressed: (){
                       print("after changin the value : "+ _firstTteamName.text);
                       String matchBetween = "";
@@ -173,10 +173,9 @@ class _SelectTeam extends State<SelectTeam> {
 //                        });
                     },
                     textColor: Colors.white,
-                    padding: const EdgeInsets.all(0.0),
                     child: Container(
                       decoration: getButtonGradientColor(BoxShape.rectangle),
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: const Text(
                           'Start Match',
                           style: TextStyle(fontSize: 20)
@@ -211,7 +210,7 @@ class _SelectTeam extends State<SelectTeam> {
         children: <Widget>[
           Container(
             decoration: getButtonGradientColor(BoxShape.rectangle),
-            child: RaisedButton.icon(
+            child: FlatButton.icon(
               padding: EdgeInsets.all(12),
 //              shape :RoundedRectangleBorder(
 //                borderRadius: new BorderRadius.circular(18.0),
@@ -289,6 +288,9 @@ class _SelectTeam extends State<SelectTeam> {
     return Container(
       width: width,
       child: TypeAheadFormField(
+        suggestionsBoxVerticalOffset: -100,
+        getImmediateSuggestions: true,
+        hideSuggestionsOnKeyboardHide: false,
         textFieldConfiguration: TextFieldConfiguration(
           controller: typedValue,
           decoration: inputDecoration(lable),

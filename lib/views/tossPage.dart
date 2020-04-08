@@ -174,8 +174,6 @@ class _TossPage extends State<TossPage> {
           print("Toss Won Team : "+match.tossWonTeam);
           print("Selected Innings "+match.selectedInning);
 
-          print(showDialog(context: context, builder: (context) => selectPlayerDialog(playerList: match.firstInning.battingteam.players.values.toList())).then((value) => print(value.playerName)));
-
           match.setIsFirstInningsOver(false);
           match.setInning();
           match.isLive = true;
@@ -192,7 +190,7 @@ class _TossPage extends State<TossPage> {
           );
 
           //Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage_select(match: match)));
-          //Navigator.push(context, MaterialPageRoute(builder: (context) => StartInnings(match: match)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => StartInnings(match: match)));
         },
         label: Text(
           text,

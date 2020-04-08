@@ -31,14 +31,23 @@ class _StartInnings extends State<StartInnings> {
 
   List<Player> battingPlayers = List();
   List<Player> bowlingPlayers = List();
-  Map<String, Player> batmans;
-  Map<String, Player> bowlers;
+  Map<String, Player> batmans = new Map();
+  Map<String, Player> bowlers = new Map();
 
 
   @override
   void initState() {
     buildDropdownMenuItemsForBatting();
     buildDropdownMenuItemsForBowling();
+    if(battingPlayers.length > 1){
+
+      batmans.putIfAbsent("striker", () => battingPlayers[0]);
+      batmans.putIfAbsent("nonstriker", () => battingPlayers[1]);
+    }
+    if(bowlingPlayers.length > 0){
+      bowlers.putIfAbsent("open_bowler", () => bowlingPlayers[0]);
+    }
+
     super.initState();
   }
 
@@ -114,9 +123,6 @@ class _StartInnings extends State<StartInnings> {
         .size
         .height;
 
-    batmans = new Map();
-    bowlers = new Map();
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Select Openers"),
@@ -189,11 +195,12 @@ class _StartInnings extends State<StartInnings> {
                                         values: battingPlayers,
                                         itemBuilder: (Player value) => getDropDownMenuItem(value),
                                         focusedItemDecoration: _getDslDecoration(),
-
+                                        defaultItemIndex: 0,
                                         onItemSelectedListener: (item, index, context) {
                                           batmans.update("nonstriker", (value) => item, ifAbsent: () => item);
                                           //Scaffold.of(context).showSnackBar(SnackBar(content: Text(item.playerName)));
-                                        }),
+                                        },
+                                        ),
                                     padding: EdgeInsets.only(left: 12))),
                             Padding(
                               padding: EdgeInsets.only(right: 8),
@@ -247,7 +254,7 @@ class _StartInnings extends State<StartInnings> {
 
                     SizedBox(height: _height * 0.1),
 
-                    RaisedButton(
+                    FlatButton(
                       onPressed: () {
 
                         if(batmans.length != 2){

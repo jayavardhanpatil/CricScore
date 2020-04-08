@@ -97,7 +97,7 @@ class _EditProfile extends State<EditProfile> {
 
               SizedBox(height: _height * 0.05,),
 
-              RaisedButton(
+              FlatButton(
                 onPressed: () {
 
                   print(_phoneNumber.text.toString());
@@ -166,7 +166,7 @@ class _EditProfile extends State<EditProfile> {
 
               SizedBox(height: _height * 0.04),
 
-              RaisedButton(
+              FlatButton(
                 onPressed: () {
                   setState(() {
                     profileBodyType = ProfileBodyEnum.edit;

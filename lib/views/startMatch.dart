@@ -89,7 +89,7 @@ class _StartMatch extends State<StartMatch>{
 
                         SizedBox(height: _height * 0.03),
 
-                        RaisedButton(
+                        FlatButton(
                           onPressed: () {
 
                             Navigator.push(context, MaterialPageRoute(builder: (context) => ViewSquad(team: team1)));
@@ -138,7 +138,7 @@ class _StartMatch extends State<StartMatch>{
 
                         SizedBox(height: _height * 0.03),
 
-                        RaisedButton(
+                        FlatButton(
                           onPressed: () {
 
                             Navigator.push(context, MaterialPageRoute(builder: (context) => ViewSquad(team: team2)));
@@ -194,7 +194,7 @@ class _StartMatch extends State<StartMatch>{
 
                       SizedBox(height: _height * 0.04),
 
-                      RaisedButton(
+                      FlatButton(
                         onPressed: () {
                           if(_oversController.text.isEmpty || int.parse(_oversController.text) == 0) {
                             showFailedColoredToast("Overs is mandatory field and should be greater than 0");
