@@ -9,8 +9,6 @@ class Loading extends StatelessWidget{
 
     return Center(
       child: Container(
-        height: 100,
-          width: 100,
           decoration: BoxDecoration(
             color: Colors.white,
           ),

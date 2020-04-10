@@ -1,24 +1,19 @@
-import 'package:flutter/material.dart';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_app/model/match.dart';
+import 'package:flutter_app/views/startInning.dart';
 
 class CustomDialog extends StatelessWidget {
   final primaryColor = const Color(0xFF75A2EA);
   final grayColor = const Color(0xFF939393);
 
-  final String title,
-      description,
-      primaryButtonText,
-      primaryButtonRoute,
-      secondaryButtonText,
-      secondaryButtonRoute;
+  MatchGame matchGame;
 
-  CustomDialog(
-      {@required this.title,
-      @required this.description,
-      @required this.primaryButtonText,
-      @required this.primaryButtonRoute,
-      this.secondaryButtonText,
-      this.secondaryButtonRoute});
+  String title, description1, description2, buttonText;
+
+
+  CustomDialog({this.matchGame, this.title, this.description1, this.description2, this.buttonText});
 
   static const double padding = 20.0;
 
@@ -28,101 +23,96 @@ class CustomDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(padding),
       ),
-      child: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(padding),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(padding),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 10.0,
-                    offset: const Offset(0.0, 10.0),
-                  ),
-                ]),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(height: 24.0),
-                AutoSizeText(
-                  title,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: primaryColor,
-                    fontSize: 25.0,
-                  ),
-                ),
-                SizedBox(height: 24.0),
-                AutoSizeText(
-                  description,
-                  maxLines: 4,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: grayColor,
-                    fontSize: 18.0,
-                  ),
-                ),
-                SizedBox(height: 24.0),
-                RaisedButton(
-                  color: primaryColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: AutoSizeText(
-                      primaryButtonText,
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w200,
-                        color: Colors.white,
-                      ),
+      child: Container(
+        height: 300,
+        width: 300,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(padding),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(padding),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 10.0,
+                      offset: const Offset(0.0, 10.0),
+                    ),
+                  ]),
+              child: Column(
+
+                mainAxisAlignment: MainAxisAlignment.center,
+
+                children: <Widget>[
+                  SizedBox(height: 24.0),
+                  AutoSizeText(
+                    title,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: primaryColor,
+                      fontSize: 25.0,
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context)
-                        .pushReplacementNamed(primaryButtonRoute);
-                  },
-                ),
-                SizedBox(height: 10.0),
-                showSecondaryButton(context),
-              ],
-            ),
-          )
-        ],
+                  SizedBox(height: 24.0),
+                  AutoSizeText(
+                    description1,
+                    maxLines: 4,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: grayColor,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  AutoSizeText(
+                    description2,
+                    maxLines: 4,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: grayColor,
+                      fontSize: 18.0,
+                    ),
+                  ),
+
+                  SizedBox(height: 30),
+
+                  RaisedButton(
+                    color: primaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      child: AutoSizeText(
+                        buttonText,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w200,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      if(matchGame.isLive) {
+                        Navigator.push(context, MaterialPageRoute(builder: (
+                            context) => StartInnings(match: matchGame)));
+                      }
+                      else{
+                        Navigator.of(context).pushReplacementNamed('/home');
+                      }
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
-  }
-
-
-
-
-
-
-  showSecondaryButton(BuildContext context) {
-    if (secondaryButtonRoute != null && secondaryButtonText != null ){
-      return FlatButton(
-        child: AutoSizeText(
-          secondaryButtonText,
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: 18,
-            color: primaryColor,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-          Navigator.of(context).pushReplacementNamed(secondaryButtonRoute);
-        },
-      );
-    } else {
-      return SizedBox(height: 10.0);
-    }
   }
 }

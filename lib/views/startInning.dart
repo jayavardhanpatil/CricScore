@@ -63,6 +63,7 @@ class _StartInnings extends State<StartInnings> {
       });
     }else{
       match.secondInning.battingteam.players.forEach((key, value) {
+        battingPlayers.add(value);
         items.add(DropdownMenuItem(
           value: value,
           child: Text(value.playerName),
@@ -85,6 +86,7 @@ class _StartInnings extends State<StartInnings> {
       });
     }else{
       match.secondInning.bowlingteam.players.forEach((key, value) {
+        bowlingPlayers.add(value);
         items.add(DropdownMenuItem(
           value: value,
           child: Text(value.playerName),
@@ -125,7 +127,7 @@ class _StartInnings extends State<StartInnings> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Openers"),
+        title: (match.isFirstInningsOver) ? Text(match.secondInning.battingteam.getTeamName() + " - Select Openers") : Text(match.firstInning.battingteam.getTeamName() + " - Select Openers"),
         flexibleSpace: getAppBarGradient(),
       ),
       body: DirectSelectContainer(
@@ -338,6 +340,7 @@ class _StartInnings extends State<StartInnings> {
 //                            },
 //                          );
 
+                          Navigator.pop(context);
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ScoreUpdateView(match: match,)));
                         }
                       },

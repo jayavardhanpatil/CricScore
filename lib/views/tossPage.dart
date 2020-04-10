@@ -190,6 +190,7 @@ class _TossPage extends State<TossPage> {
           );
 
           //Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage_select(match: match)));
+          Navigator.pop(context);
           Navigator.push(context, MaterialPageRoute(builder: (context) => StartInnings(match: match)));
         },
         label: Text(

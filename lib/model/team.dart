@@ -29,8 +29,8 @@ class Team {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['teamCity'] = this.teamCity;
-    data['teamName'] = this.teamName;
+    data['teamCity'] = this.teamCity.trim();
+    data['teamName'] = this.teamName.trim();
 
     if (this.players != null) {
       data['players'] = toMapJson();
@@ -46,7 +46,7 @@ class Team {
   }
 
   void setTeamName(String teamName){
-    this.teamName = teamName;
+    this.teamName = teamName.trim();
   }
 
   void setTeamCity(String teamCity){
@@ -58,7 +58,7 @@ class Team {
   }
 
   String getTeamName(){
-    return this.teamName;
+    return this.teamName.trim();
   }
 
   Map<String, Player> getTeamPlayers(){

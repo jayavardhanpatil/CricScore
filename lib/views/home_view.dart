@@ -61,12 +61,13 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     final tabs = [
-      Center(child: FlatButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSummaryList()));
-        },
-        child: Text("Press"),
-      )),
+      MatchSummaryList(),
+//      Center(child: FlatButton(
+//        onPressed: (){
+//          Navigator.push(context, MaterialPageRoute(builder: (context) => MatchSummaryList()));
+//        },
+//        child: Text("Press"),
+//      )),
       Center(child: Text('Profile')),
       //EditProfile()
     ];

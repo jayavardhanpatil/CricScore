@@ -1,16 +1,16 @@
 
 
 import 'dart:async';
-import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/database_service.dart';
+import 'package:flutter_app/views/selectTeam.dart';
 import 'package:flutter_app/widgets/gradient.dart';
 import 'package:flutter_app/widgets/loader.dart';
-import 'package:shimmer/shimmer.dart';
 
 class MatchSummaryList extends StatefulWidget{
   _MatchSummaryList createState() => _MatchSummaryList();
@@ -35,13 +35,12 @@ class _MatchSummaryList extends State<MatchSummaryList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Matches in your City"),
-      ),
+//      appBar: AppBar(
+//        title: Text("Matches in your City"),
+//      ),
       body: SingleChildScrollView(
         child : Container(
           child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               matchListView(context),
 //              Container(
@@ -83,6 +82,35 @@ class _MatchSummaryList extends State<MatchSummaryList> {
                     return getCardList(context, index);
                   }
               );
+            }else{
+             return Center(
+               child: Column(
+                 mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 RaisedButton(
+                     color: const Color(0xFF75A2EA),
+                     shape: RoundedRectangleBorder(
+                         borderRadius: BorderRadius.circular(30.0)),
+                     child: Padding(
+                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                       child: AutoSizeText(
+                         "Start New Match",
+                         maxLines: 1,
+                         style: TextStyle(
+                           fontSize: 18,
+                           fontWeight: FontWeight.w200,
+                           color: Colors.white,
+                         ),
+                       ),
+                     ),
+                     onPressed: () {
+                       Navigator.push(context,
+                           MaterialPageRoute(builder: (context) => SelectTeam()));
+                     }
+                 ),
+               ],
+               ),
+             );
             }
           }else{
             return Text("No data");

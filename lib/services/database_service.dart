@@ -168,7 +168,7 @@ class DatabaseService {
   addInningsPlayers(MatchGame match, Map<String, Player> player, String inningType, String playingType) async{
     //print(match.toJson());
     player.forEach((key, value) async {
-      return await _fireBaseRTreference.child("matches/"+match.getMatchVenue()+"/").child(match.getMatchTitle()).child(inningType).child(playingType).child(key).set(value.toJson())
+      return await _fireBaseRTreference.child("matches").child(match.getMatchVenue()).child(match.getMatchTitle()).child(inningType).child(playingType).child(key).set(value.toJson())
           .then((value) => print("Player details added to "+inningType + " inning")).catchError((e){
         print("error : "+e.toString());
       });
@@ -176,10 +176,13 @@ class DatabaseService {
   }
 
   Future updateCurrentPlayer(MatchGame matchGame) async{
-    return await _fireBaseRTreference.child("matches/"+matchGame.getMatchVenue()+"/").child(matchGame.getMatchTitle()).child("currentPlayers").set(matchGame.currentPlayers.toJson()).then((value) => (){
-      print("Currentt userd detail Updated");
-    }).catchError((e) {
-      print("error : failed to update current players"+e.toString());
+    return await _fireBaseRTreference.child("matches")
+        .child(matchGame.getMatchVenue())
+        .child(matchGame.getMatchTitle())
+        .child("currentPlayers")
+        .set(matchGame.currentPlayers.toJson()).then((value) =>
+        print("Player Current Updated")).catchError((e){
+      print("Error in updating user : "+e.toString());
     });
   }
 
@@ -218,15 +221,42 @@ class DatabaseService {
   }
 
 
+  syncScoreSummaryWithInnings(MatchGame matchGame){
+    String innings;
+    if(matchGame.isFirstInningsOver) {
+      innings = "secondInnings";
+
+      _fireBaseRTreference.child("matches").child(
+          matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).update({"isLive" : false, "result" : matchGame.result, "winningTeam" : matchGame.winningTeam});
+
+    }else{
+      innings = "firstInnings";
+
+      _fireBaseRTreference.child("matches").child(
+          matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).update({"isFirstInningsOver" : true});
+
+    }
+    _fireBaseRTreference.child("matches").child(
+        matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).child(
+        innings).update({"extra":matchGame.currentPlayers.extra, "wickets" : matchGame.currentPlayers.wickets, "overs":matchGame.currentPlayers.overs, "run":matchGame.currentPlayers.run});
+  }
+
   Future updatePlayer(MatchGame matchGame, Player player, String playerType, String innings) async{
-    return await _fireBaseRTreference.child("matches/"+matchGame.getMatchVenue()+"/").child(matchGame.getMatchTitle()).child(innings).child(playerType).child("players").child(player.playerUID).set(player).then((value) => (){
+    return await _fireBaseRTreference.child("matches")
+        .child(matchGame.getMatchVenue())
+        .child(matchGame.getMatchTitle())
+        .child(innings)
+        .child(playerType)
+        .child("players")
+        .child(player.playerUID)
+        .set(player.toJson())
+        .then((value) => (){
       print("Player is updated");
     }).catchError((e) {
       print("error : failed to update the player details "+e.toString());
     });
   }
-
-
+  
   MatchGame _mapTOMatchGame(dynamic gameData){
     MatchGame game = MatchGame.fromJson(gameData.snapshot.value);
     return game;

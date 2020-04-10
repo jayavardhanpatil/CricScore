@@ -1,7 +1,9 @@
 //ScoreUpdateView
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/currentPlayer.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/services/database_service.dart';
@@ -26,11 +28,13 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
 
   _ScoreUpdateView({this.match});
 
+  bool isInningsOver = false;
 
   List<Player> _currentBatttingPlayer = new List();
   List<Player> _currentBowlingPlayer = new List();
   List<Widget> balls = new List();
   int ballCouts;
+  bool isplayerReplaced = true;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +65,9 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
               height: _height * 0.35,
               width: _width,
               decoration: BoxDecoration(
-                border: Border.all(width: 1.0, color: Colors.black),
+                border: Border(
+                  bottom: BorderSide(width: 1.0, color: Colors.black),
+                ),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -73,15 +79,22 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                     fontSize: 20,
                   ),),
                   SizedBox(height: _height * 0.06,),
-                  Text(match.tossWonTeam + " won the toss and elected to "+match.selectedInning.toLowerCase() + " first",  textAlign: TextAlign.center, style: TextStyle(
-                    fontSize: 15,
-                  ),),
+
+                  AutoSizeText(
+                    match.tossWonTeam + " won the toss and elected to "+match.selectedInning.toLowerCase() + " first",
+                    maxLines: 4,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 18.0,
+                    ),
+                  ),
                 ],
               ),
             ),
 
             Container(
-                height: _height * 0.12,
+                height: _height * 0.14,
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -100,7 +113,6 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                                   maxRadius: 15,
                                 ),
                                 margin: EdgeInsets.all(10),
-
                               ),
                               Container(
                                 decoration: BoxDecoration(
@@ -113,7 +125,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
 
                             ],
                           ),
-                          //SizedBox(height: _height * 0.01),
+                          SizedBox(height: _height * 0.01),
 
                           Container(
                             child: Text(_currentBatttingPlayer[0].run.toString() + " ("+_currentBatttingPlayer[0].ballsFaced.toString()+")",
@@ -321,150 +333,178 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
 
   List<Widget> buildBall(BuildContext context, String value){
 
-    if(balls.length > 6){
-      setState(() {
-        balls.removeAt(0);
-      });
-    }
+    if(!isInningsOver) {
+      if (balls.length > 6) {
+        setState(() {
+          balls.removeAt(0);
+        });
+      }
 
-    Color color;
-    switch(value.toUpperCase()){
-      case "0" : {
-        color = Colors.transparent;
-        setState(() {
-          ballCouts++;
-          match.currentPlayers.overs += 0.1;
-          _currentBowlingPlayer[0].overs += 0.1;
-          updateScoreForStriker(0);
-        });
-      }
-      break;
-      case "1" : {
-        color = Colors.grey;
-        setState(() {
-          ballCouts++;
-          match.currentPlayers.overs += 0.1;
-          _currentBowlingPlayer[0].overs += 0.1;
-          match.currentPlayers.run += 1;
-          updateScoreForStriker(1);
-          swapStrikers();
-          _currentBowlingPlayer[0].runsGiven += 1;
-        });
-      }
-      break;
-      case "2" : {
-        color = Colors.blueGrey;
-        ballCouts++;
-        setState(() {
-          match.currentPlayers.run += 2;
-          match.currentPlayers.overs += 0.1;
-          _currentBowlingPlayer[0].overs += 0.1;
-          updateScoreForStriker(2);
-          _currentBowlingPlayer[0].runsGiven += 2;
-        });
-      }
-      break;
-      case "3" : {
-        color = Colors.black12;
-        setState(() {
-          ballCouts++;
-          match.currentPlayers.overs += 0.1;
-          match.currentPlayers.run += 3;
-          _currentBowlingPlayer[0].overs += 0.1;
-          updateScoreForStriker(3);
-          swapStrikers();
-          _currentBowlingPlayer[0].runsGiven += 3;
-        });
-      }
-      break;
-      case "4" : {
-        color = Colors.orangeAccent;
-        setState(() {
-          ballCouts++;
-          updateScoreForStriker(4);
-          match.currentPlayers.overs += 0.1;
-          _currentBowlingPlayer[0].overs += 0.1;
-          match.currentPlayers.run += 4;
-          _currentBowlingPlayer[0].runsGiven += 4;
-        });
-      }
-      break;
-      case "6" :{
-        color = Colors.lightGreen;
-        setState(() {
-          ballCouts++;
-          updateScoreForStriker(6);
-          match.currentPlayers.overs += 0.1;
-          _currentBowlingPlayer[0].overs += 0.1;
-          match.currentPlayers.run += 6;
-          _currentBowlingPlayer[0].runsGiven += 6;
-        });
-      }
-      break;
-      case "OUT" :{
-        color = Colors.redAccent;
-        setState(() {
-          _currentBowlingPlayer[0].wicket ++;
-          match.currentPlayers.overs += 0.1;
-          _currentBowlingPlayer[0].overs += 0.1;
-          //_currentBatttingPlayer.add(new Player(playerName: "fwsfwe", run: 0, ballsFaced:  0));
-          ballCouts++;
-          match.currentPlayers.wickets++;
-          nextBatsman(context);
-        });
-      }
-      break;
-      case "NB" :{
-        color = Colors.grey;
-        _currentBowlingPlayer[0].runsGiven ++;
-        match.currentPlayers.extra ++;
-        _currentBowlingPlayer[0].extra ++;
-      }
-      break;
-      case "WD" :{
-        color = Colors.black12;
-        _currentBowlingPlayer[0].runsGiven ++;
-        match.currentPlayers.extra ++;
-        _currentBowlingPlayer[0].extra ++;
-      }
-      break;
-      default :{
-        color = Colors.transparent;
+      Color color;
+      switch (value.toUpperCase()) {
+        case "0" :
+          {
+            color = Colors.transparent;
+            setState(() {
+              ballCouts++;
+              match.currentPlayers.overs += 0.1;
+              _currentBowlingPlayer[0].overs += 0.1;
+              updateScoreForStriker(0);
+            });
+          }
+          break;
+        case "1" :
+          {
+            color = Colors.grey;
+            setState(() {
+              ballCouts++;
+              match.currentPlayers.overs += 0.1;
+              _currentBowlingPlayer[0].overs += 0.1;
+              match.currentPlayers.run += 1;
+              updateScoreForStriker(1);
+              swapStrikers();
+              _currentBowlingPlayer[0].runsGiven += 1;
+            });
+          }
+          break;
+        case "2" :
+          {
+            color = Colors.blueGrey;
+            ballCouts++;
+            setState(() {
+              match.currentPlayers.run += 2;
+              match.currentPlayers.overs += 0.1;
+              _currentBowlingPlayer[0].overs += 0.1;
+              updateScoreForStriker(2);
+              _currentBowlingPlayer[0].runsGiven += 2;
+            });
+          }
+          break;
+        case "3" :
+          {
+            color = Colors.black12;
+            setState(() {
+              ballCouts++;
+              match.currentPlayers.overs += 0.1;
+              match.currentPlayers.run += 3;
+              _currentBowlingPlayer[0].overs += 0.1;
+              updateScoreForStriker(3);
+              swapStrikers();
+              _currentBowlingPlayer[0].runsGiven += 3;
+            });
+          }
+          break;
+        case "4" :
+          {
+            color = Colors.orangeAccent;
+            setState(() {
+              ballCouts++;
+              updateScoreForStriker(4);
+              match.currentPlayers.overs += 0.1;
+              _currentBowlingPlayer[0].overs += 0.1;
+              match.currentPlayers.run += 4;
+              _currentBowlingPlayer[0].runsGiven += 4;
+            });
+          }
+          break;
+        case "6" :
+          {
+            color = Colors.lightGreen;
+            setState(() {
+              ballCouts++;
+              updateScoreForStriker(6);
+              match.currentPlayers.overs += 0.1;
+              _currentBowlingPlayer[0].overs += 0.1;
+              match.currentPlayers.run += 6;
+              _currentBowlingPlayer[0].runsGiven += 6;
+            });
+          }
+          break;
+        case "OUT" :
+          {
+            color = Colors.redAccent;
+            setState(() {
+              _currentBowlingPlayer[0].wicket ++;
+              match.currentPlayers.overs += 0.1;
+              _currentBowlingPlayer[0].overs += 0.1;
+              //_currentBatttingPlayer.add(new Player(playerName: "fwsfwe", run: 0, ballsFaced:  0));
+              ballCouts++;
+              match.currentPlayers.wickets++;
+              Future.delayed(const Duration(seconds: 1), () {nextBatsman(context);});
+            });
+          }
+          break;
+        case "NB" :
+          {
+            color = Colors.grey;
+            _currentBowlingPlayer[0].runsGiven ++;
+            match.currentPlayers.extra ++;
+            _currentBowlingPlayer[0].extra ++;
+          }
+          break;
+        case "WD" :
+          {
+            color = Colors.black12;
+            _currentBowlingPlayer[0].runsGiven ++;
+            match.currentPlayers.extra ++;
+            _currentBowlingPlayer[0].extra ++;
+          }
+          break;
+        default :
+          {
+            color = Colors.transparent;
 //        _currentBowlingPlayer[0].runsGiven ++;
 //        _currentBowlingPlayer[0].extra ++;
+          }
+          break;
       }
-      break;
-    }
 
-    balls.add(
-      Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(width: 1.0, color: Colors.black),
-          color : color,
+      balls.add(
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(width: 1.0, color: Colors.black),
+            color: color,
+          ),
+          margin: EdgeInsets.only(left: 5),
+          child: Text(value.toUpperCase(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 15
+              )),
+          padding: EdgeInsets.all(10.0),
         ),
-        margin: EdgeInsets.only(left: 5),
-        child: Text(value.toUpperCase(),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 15
-            )),
-        padding: EdgeInsets.all(10.0),
-      ),
-    );
+      );
 
-    if(ballCouts >= 6){
-      setState(() {
-        ballCouts = 0;
-        match.currentPlayers.overs += 0.4;
-        swapStrikers();
-        _currentBowlingPlayer[0].overs += 0.4;
-//         showDialog(
-//            context: context,
-//            builder: (BuildContext context) => CustomDialog());
-      });
+      if (ballCouts >= 6) {
+        setState(() {
+          ballCouts = 0;
+          match.currentPlayers.overs += 0.4;
+          swapStrikers();
+          _currentBowlingPlayer[0].overs += 0.4;
+
+          if (match.isFirstInningsOver) {
+            match.secondInning.bowlingteam.players.update(
+                _currentBowlingPlayer[0].playerUID, (
+                value) => _currentBowlingPlayer[0]);
+          } else {
+            match.firstInning.bowlingteam.players.update(
+                _currentBowlingPlayer[0].playerUID, (
+                value) => _currentBowlingPlayer[0]);
+          }
+          Future.delayed(const Duration(seconds: 1), () {nextBowler(context);});
+        });
+      }
+    }else{
+      if(match.result != null || !match.isLive) {
+        matchSummaryData(context);
+      }else{
+        startNewInnings(context);
+      }
     }
     return balls;
   }
@@ -483,42 +523,142 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
         color: Colors.transparent,
         onPressed: (){
           setState(() {
-    //ballCouts++;
-              balls = buildBall(context, value);
-              });
+            //ballCouts++;
+            balls = buildBall(context, value);
+          });
 
-              bool isInningsOver = isInnignsOver();
-              bool isMatchOver = isInnignsOver();
+            if(match.isLive) {
+              if (isInnignsOver()) {
+                setState(() {
+                  isInningsOver = true;
+                });
+                syncCurrentScoreWithInnings();
 
-            updateCurrentScore();
+                if (!match.isFirstInningsOver) {
+                  match.isFirstInningsOver = true;
+                  match.target = match.currentPlayers.run + 1;
+                  SyncCurrentPlayersWithInnings("firstInnings");
+                  //Update the score of first Innings
+                  startNewInnings(context);
+                } else {
+                  if (isMatchOver()) {
+                    SyncCurrentPlayersWithInnings("secondInnings");
+                    matchSummaryData(context);
+                  }
+                }
+              } else {
+                if (isMatchOver()) {
+                  SyncCurrentPlayersWithInnings("secondInnings");
+                  syncCurrentScoreWithInnings();
+                  matchSummaryData(context);
+                }
+              }
+              //isMatchOver();
+              updateCurrentScore().then((value) => showSuccessColoredToast("Data Synced with server"));
+            }else{
+              matchSummaryData(context);
+            }
         },
       ),
     );
   }
 
+  Future SyncCurrentPlayersWithInnings(String inning){
+      DatabaseService().updatePlayer(
+          match, _currentBowlingPlayer[0], "bowling_team", inning);
+      DatabaseService().updatePlayer(
+          match, _currentBatttingPlayer[0], "batting_team", inning);
+      DatabaseService().updatePlayer(
+          match, _currentBatttingPlayer[1], "batting_team", inning);
+  }
+
+  syncCurrentScoreWithInnings(){
+    if(match.isLive) {
+      match.firstInning.run = match.currentPlayers.run;
+      match.firstInning.overs = match.currentPlayers.overs;
+      match.firstInning.wickets = match.currentPlayers.wickets;
+      match.firstInning.extra = match.currentPlayers.extra;
+      //match.currentPlayers = new CurrentPlayIng();
+    }else {
+      match.secondInning.run = match.currentPlayers.run;
+      match.secondInning.overs = match.currentPlayers.overs;
+      match.secondInning.wickets = match.currentPlayers.wickets;
+      match.secondInning.extra = match.currentPlayers.extra;
+
+    }
+
+      DatabaseService().syncScoreSummaryWithInnings(match);
+  }
+
+
+  void resetCurrentPlayers(){
+    //match.currentPlayers.battingTeamPlayer.clear();
+    match.currentPlayers.overs = 0.0;
+    match.currentPlayers.run = 0;
+    match.currentPlayers.wickets = 0;
+    match.currentPlayers.extra = 0;
+  }
+
+  matchSummaryData(BuildContext context) async{
+
+    await showDialog(context: context,
+        builder: (context) =>
+            CustomDialog(matchGame: match, title: "Congratulations", description1: "Team : "+match.winningTeam, description2: match.result, buttonText: "Finish Game",));
+
+  }
+
+  startNewInnings(BuildContext context) {
+    //Future.delayed(const Duration(seconds: 1), () {
+      showDialog(context: context,
+          builder: (context) =>
+              CustomDialog(matchGame: match,
+                title: "Start Second Innings",
+                description1: "target : " + match.target.toString(),
+                description2: match.secondInning.battingteam.getTeamName() +
+                    " :  Need " + match.target.toString() +
+                    " runs to win from " + match.totalOvers.toString() +
+                    " overs.",
+                buttonText: "Start Second Innings",));
+    //});
+  }
+
   bool isMatchOver(){
     if(match.isFirstInningsOver){
       if(match.currentPlayers.run > match.firstInning.run){
-        print("Second inning team won by "+(match.secondInning.battingteam.players.length - match.currentPlayers.wickets).toString() + " wickets");
-        match.result = "Second inning team won by "+(match.secondInning.battingteam.players.length - match.currentPlayers.wickets).toString() + " wickets";
+        match.winningTeam = match.secondInning.battingteam.getTeamName();
+        print(match.winningTeam + " won by "+(match.secondInning.battingteam.players.length - match.currentPlayers.wickets).toString() + " wickets");
+        match.result = match.winningTeam + " won by "+(match.secondInning.battingteam.players.length - match.currentPlayers.wickets).toString() + " wickets";
+        match.isLive = false;
+        return true;
       }else if( match.currentPlayers.wickets == match.secondInning.battingteam.players.length-1){
-        print("First inning team won by "+(match.firstInning.run - match.currentPlayers.run).toString() + " runs");
-        match.result = "First inning team won by "+(match.firstInning.run - match.currentPlayers.run).toString() + " runs";
+        match.winningTeam = match.firstInning.battingteam.getTeamName();
+        print(match.winningTeam + " team won by "+(match.firstInning.run - match.currentPlayers.run).toString() + " runs");
+        match.result = match.winningTeam + " team won by "+(match.firstInning.run - match.currentPlayers.run).toString() + " runs";
+        match.isLive = false;
+        return true;
       }
     }
+    return false;
   }
 
-  bool isInnignsOver(){
-    if(match.isFirstInningsOver) {
-      if (match.currentPlayers.overs == match.totalOvers || match.currentPlayers.wickets == match.secondInning.battingteam.players.length-1){
-        return true;
+  isInnignsOver() {
+    bool result = false;;
+    if (match.isFirstInningsOver) {
+      if (match.currentPlayers.overs.floor() >= match.totalOvers ||
+          match.currentPlayers.wickets ==
+              match.secondInning.battingteam.players.length - 1) {
+        print("Innings over");
+        result = true;
       }
-    }else{
-      if (match.currentPlayers.overs == match.totalOvers || match.currentPlayers.wickets == match.firstInning.battingteam.players.length - 1){
-        match.isFirstInningsOver = true;
-        return true;
+    } else {
+      if (match.currentPlayers.overs.floor() >= match.totalOvers ||
+          match.currentPlayers.wickets ==
+              match.firstInning.battingteam.players.length - 1) {
+        print("Innings over");
+        result = true;
       }
     }
+    return result;
   }
 
   List<Player> yetToBatPlayers(List<Player> players){
@@ -531,7 +671,48 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
     return yetoBat;
   }
 
-  void nextBatsman(BuildContext context){
+  void nextBowler(BuildContext context){
+    if(match.currentPlayers.overs < match.totalOvers){
+      List<Player> bowlers = new List();
+      if(match.isFirstInningsOver){
+        bowlers.addAll(match.secondInning.bowlingteam.players.values);
+      }else{
+        bowlers.addAll(match.firstInning.bowlingteam.players.values);
+      }
+
+      bowlers.remove(_currentBowlingPlayer[0]);
+
+      getSelectedPlayer(context, bowlers, "bowler").then((value) =>
+      {
+        if(value != null){
+          replaceBowler(value),
+        }
+      });
+    }
+  }
+
+  Future replaceBowler(Player player) {
+
+    if(match.isFirstInningsOver) {
+      DatabaseService().updatePlayer(
+          match, _currentBowlingPlayer[0], "bowling_team",
+          "secondInnings");
+    }else{
+      DatabaseService().updatePlayer(
+          match, _currentBowlingPlayer[0], "bowling_team",
+          "firstInnings");
+    }
+    setState(() {
+
+      match.currentPlayers.bowlingTeamPlayer.remove(_currentBowlingPlayer[0].playerUID);
+      _currentBowlingPlayer[0] = player;
+      match.currentPlayers.bowlingTeamPlayer.putIfAbsent(player.playerUID, () => _currentBowlingPlayer[0]);
+    });
+
+    updateCurrentScore().then((value) => showSuccessColoredToast("Data Synced with server"));
+  }
+
+  nextBatsman(BuildContext context){
     if(match.currentPlayers.overs < match.totalOvers){
 
       //pop up to select next bowler
@@ -553,8 +734,14 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
       batsmans.remove(_currentBatttingPlayer[0]);
       batsmans.remove(_currentBatttingPlayer[1]);
 
-     // PlayernextSelectedPlayer(context, bowlers, "Bowler");
-      getSelectedBatsmansPlayer(context, batsmans);
+      // PlayernextSelectedPlayer(context, bowlers, "Bowler");
+      getSelectedPlayer(context, batsmans, "batsman").then((value) =>
+      {
+        if(value != null){
+          replaceStrikerWithNewBatsma(value),
+        }
+      });
+
 
 //      if(selectedPlayer != null){
 //        setState(() {
@@ -567,15 +754,15 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
     }
   }
 
-
-  getSelectedBatsmansPlayer(BuildContext context, List<Player> batsmans) async{
-    if(batsmans.length > 0) {
-      Player selectedPlayer = await showDialog(context: context,
-          builder: (context) =>
-              selectPlayerDialog(playerList: batsmans, playerType: "Batsman"));
-      if (selectedPlayer != null) {
-        replaceStrikerWithNewBatsma(selectedPlayer);
-      }
+  Future<Player> getSelectedPlayer(BuildContext context, List<Player> plyersList, String playerType) async{
+    if(plyersList.length > 0) {
+      //Future.delayed(const Duration(seconds: 1), () async {
+        Player selectedPlayer = await showDialog(context: context,
+            builder: (context) =>
+                selectPlayerDialog(
+                    playerList: plyersList, playerType: playerType));
+        return selectedPlayer;
+      //});
     }
   }
 
@@ -596,18 +783,18 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
 
     //Now replace the batsman
     setState(() {
+      match.currentPlayers.battingTeamPlayer.remove(_currentBatttingPlayer[onStrikeIndex].playerUID);
       newBatsman.isOnStrike = true;
       _currentBatttingPlayer[onStrikeIndex] = newBatsman;
+      match.currentPlayers.battingTeamPlayer.putIfAbsent(newBatsman.playerUID, () => _currentBatttingPlayer[onStrikeIndex]);
 
     });
 
-    updateCurrentScore();
+    updateCurrentScore().then((value) => showSuccessColoredToast("Data Synced with server"));
   }
 
-  void updateCurrentScore() async{
-    await DatabaseService().updateCurrentPlayer(match).then((value) => (){
-      showSuccessColoredToast("Data Synced");
-    });
+  Future updateCurrentScore() async{
+    return await DatabaseService().updateCurrentPlayer(match);
   }
 
   // ignore: missing_return
