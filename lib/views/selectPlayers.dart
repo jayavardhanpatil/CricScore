@@ -2,13 +2,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/match.dart';
-import 'package:flutter_app/model/player.dart';
-import 'package:flutter_app/model/team.dart';
-import 'package:flutter_app/model/user.dart';
-import 'package:flutter_app/services/database_service.dart';
-import 'package:flutter_app/widgets/gradient.dart';
-import 'package:flutter_app/widgets/loader.dart';
+import 'package:CricScore/model/match.dart';
+import 'package:CricScore/model/player.dart';
+import 'package:CricScore/model/team.dart';
+import 'package:CricScore/model/user.dart';
+import 'package:CricScore/services/database_service.dart';
+import 'package:CricScore/widgets/gradient.dart';
+import 'package:CricScore/widgets/loader.dart';
 
 class PlayersList extends StatefulWidget {
 

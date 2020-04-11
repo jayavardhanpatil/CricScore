@@ -1,8 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/player.dart';
-import 'package:flutter_app/model/team.dart';
-import 'package:flutter_app/widgets/gradient.dart';
+import 'package:CricScore/model/player.dart';
+import 'package:CricScore/model/team.dart';
+import 'package:CricScore/widgets/gradient.dart';
 
 class ViewSquad extends StatefulWidget{
 
@@ -33,7 +34,15 @@ class _ViewSquad extends State<ViewSquad> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(team.getTeamName() + " Squad (" + team.players.length.toString() + ")"),
+        title: AutoSizeText(
+          team.getTeamName() + " Squad (" + team.players.length.toString() + ")",
+          maxLines: 1,
+          style: TextStyle(
+            fontWeight: FontWeight.w200,
+            color: Colors.white,
+            fontFamily: "Lemonada",
+          ),
+        ),
         flexibleSpace: getAppBarGradient(),
       ),
       body: ListView.builder(

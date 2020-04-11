@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/views/selectPlayers.dart';
+import 'package:CricScore/views/selectPlayers.dart';
 
 
 class FirstView extends StatelessWidget{

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_app/model/user.dart';
+import 'package:CricScore/model/user.dart';
 
 
 class AuthService {

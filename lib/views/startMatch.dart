@@ -5,13 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/model/match.dart';
-import 'package:flutter_app/model/team.dart';
-import 'package:flutter_app/views/tossPage.dart';
-import 'package:flutter_app/views/viewSquad.dart';
-import 'package:flutter_app/widgets/Search.dart';
-import 'package:flutter_app/widgets/ToastWidget.dart';
-import 'package:flutter_app/widgets/gradient.dart';
+import 'package:CricScore/model/match.dart';
+import 'package:CricScore/model/team.dart';
+import 'package:CricScore/views/tossPage.dart';
+import 'package:CricScore/views/viewSquad.dart';
+import 'package:CricScore/widgets/Search.dart';
+import 'package:CricScore/widgets/ToastWidget.dart';
+import 'package:CricScore/widgets/gradient.dart';
 
 class StartMatch extends StatefulWidget{
 
@@ -66,10 +66,9 @@ class _StartMatch extends State<StartMatch>{
       appBar: AppBar(
         title: AutoSizeText(
           "Start match",
-          maxLines: 4,
+          maxLines: 1,
           textAlign: TextAlign.start,
           style: TextStyle(
-            fontSize: 18.0,
             fontFamily: "Lemonada",
             color: Colors.white,
 

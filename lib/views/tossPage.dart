@@ -2,16 +2,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/appStaticBarTitles.dart';
-import 'package:flutter_app/model/match.dart';
-import 'package:flutter_app/model/team.dart';
-import 'package:flutter_app/services/CustomRadioButton.dart';
-import 'package:flutter_app/services/database_service.dart';
-import 'package:flutter_app/views/startInning.dart';
-import 'package:flutter_app/widgets/SelectPlayerCustom_dialog.dart';
-import 'package:flutter_app/widgets/dialoghelper.dart';
-import 'package:flutter_app/widgets/gradient.dart';
-import 'package:flutter_app/widgets/loader.dart';
+import 'package:CricScore/model/appStaticBarTitles.dart';
+import 'package:CricScore/model/match.dart';
+import 'package:CricScore/model/team.dart';
+import 'package:CricScore/services/CustomRadioButton.dart';
+import 'package:CricScore/services/database_service.dart';
+import 'package:CricScore/views/startInning.dart';
+import 'package:CricScore/widgets/SelectPlayerCustom_dialog.dart';
+import 'package:CricScore/widgets/dialoghelper.dart';
+import 'package:CricScore/widgets/gradient.dart';
+import 'package:CricScore/widgets/loader.dart';
 import 'package:slider_button/slider_button.dart';
 
 import 'directSelect.dart';
@@ -70,7 +70,6 @@ class _TossPage extends State<TossPage> {
           "Toss",
           maxLines: 1,
           style: TextStyle(
-            fontSize: 18,
             fontWeight: FontWeight.w200,
             color: Colors.white,
             fontFamily: "Lemonada",

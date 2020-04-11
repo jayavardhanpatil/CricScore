@@ -3,11 +3,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_app/model/match.dart';
-import 'package:flutter_app/model/player.dart';
-import 'package:flutter_app/model/team.dart';
-import 'package:flutter_app/model/user.dart';
-import 'package:flutter_app/services/auth_service.dart';
+import 'package:CricScore/model/match.dart';
+import 'package:CricScore/model/player.dart';
+import 'package:CricScore/model/team.dart';
+import 'package:CricScore/model/user.dart';
+import 'package:CricScore/services/auth_service.dart';
 
 class DatabaseService {
 

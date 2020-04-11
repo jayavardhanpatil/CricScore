@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/auth_service.dart';
-import 'package:flutter_app/views/MatchSummaryView.dart';
-import 'package:flutter_app/views/home_view.dart';
-import 'package:flutter_app/views/profile.dart';
-import 'package:flutter_app/views/signUpView.dart';
-import 'package:flutter_app/widgets/loader.dart';
+import 'package:CricScore/services/auth_service.dart';
+import 'package:CricScore/views/home_view.dart';
+import 'package:CricScore/views/profile.dart';
+import 'package:CricScore/views/signUpView.dart';
+import 'package:CricScore/widgets/loader.dart';
 import 'model/user.dart';
 import 'widgets/provider_widget.dart';
 
@@ -53,7 +52,9 @@ class HomeController extends StatelessWidget {
 //          }else{
 //            return SignUpView(authFormType: AuthFormType.signUp);
 //          }
-          return signedIn ? HomeView() : SignUpView(authFormType: AuthFormType.signUp);
+          return signedIn ?
+          AuthService.user.city == null ? EditProfile(profileBodyType: ProfileBodyEnum.edit, showAppBar: true,)
+              : HomeView() : SignUpView(authFormType: AuthFormType.signUp);
         }
         return Loading();
       },

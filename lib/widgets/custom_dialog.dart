@@ -1,8 +1,8 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/match.dart';
-import 'package:flutter_app/views/startInning.dart';
+import 'package:CricScore/model/match.dart';
+import 'package:CricScore/views/startInning.dart';
 
 class CustomDialog extends StatelessWidget {
   final primaryColor = const Color(0xFF75A2EA);

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_app/model/user.dart';
-import 'package:flutter_app/services/auth_service.dart';
-import 'package:flutter_app/widgets/loader.dart';
-import 'package:flutter_app/widgets/provider_widget.dart';
+import 'package:CricScore/model/user.dart';
+import 'package:CricScore/services/auth_service.dart';
+import 'package:CricScore/widgets/loader.dart';
+import 'package:CricScore/widgets/provider_widget.dart';
 
 
 // TODO move this to tone location

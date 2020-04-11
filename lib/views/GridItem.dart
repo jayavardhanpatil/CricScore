@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/user.dart';
+import 'package:CricScore/model/user.dart';
 
 
 class GridItem extends StatefulWidget {

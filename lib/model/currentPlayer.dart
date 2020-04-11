@@ -1,5 +1,5 @@
 
-import 'package:flutter_app/model/player.dart';
+import 'package:CricScore/model/player.dart';
 
 class CurrentPlayIng {
 

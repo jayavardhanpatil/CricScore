@@ -1,7 +1,7 @@
 
 
-import 'package:flutter_app/model/player.dart';
-import 'package:flutter_app/model/team.dart';
+import 'package:CricScore/model/player.dart';
+import 'package:CricScore/model/team.dart';
 
 class Inning{
 

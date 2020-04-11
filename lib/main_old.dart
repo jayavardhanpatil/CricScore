@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/views/directSelect.dart';
-import 'package:flutter_app/widgets/dialoghelper.dart';
+import 'package:CricScore/views/directSelect.dart';
+import 'package:CricScore/widgets/dialoghelper.dart';
 
 void main() => runApp(MyApp());
 

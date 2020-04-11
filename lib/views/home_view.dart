@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/appStaticBarTitles.dart';
-import 'package:flutter_app/services/auth_service.dart';
-import 'package:flutter_app/services/database_service.dart';
-import 'package:flutter_app/view/firstView.dart';
-import 'package:flutter_app/views/MatchSummaryView.dart';
-import 'package:flutter_app/views/profile.dart';
-import 'package:flutter_app/views/signUpView.dart';
-import 'package:flutter_app/views/selectTeam.dart';
-import 'package:flutter_app/widgets/gradient.dart';
-import 'package:flutter_app/widgets/loader.dart';
-import 'package:flutter_app/widgets/provider_widget.dart';
+import 'package:CricScore/model/appStaticBarTitles.dart';
+import 'package:CricScore/services/auth_service.dart';
+import 'package:CricScore/services/database_service.dart';
+import 'package:CricScore/view/firstView.dart';
+import 'package:CricScore/views/MatchSummaryView.dart';
+import 'package:CricScore/views/profile.dart';
+import 'package:CricScore/views/signUpView.dart';
+import 'package:CricScore/views/selectTeam.dart';
+import 'package:CricScore/widgets/gradient.dart';
+import 'package:CricScore/widgets/loader.dart';
+import 'package:CricScore/widgets/provider_widget.dart';
 
 
 
@@ -27,9 +27,8 @@ final grayColor = const Color(0xFF939393);
 
 class _HomeView extends State<HomeView> with TickerProviderStateMixin{
 
-  final List<MyTabs> _tabs = [new MyTabs(title: "Home",color: Colors.teal[200]),
-    new MyTabs(title: "Search",color: Colors.orange[200]),
-    new MyTabs(title: AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE,color: Colors.red[200])
+  final List<MyTabs> _tabs = [new MyTabs(title: "Matches in your city",color: Colors.teal[200]),
+    new MyTabs(title: "Profile",color: Colors.orange[200]),
   ];
 
   MyTabs _myHandler ;
@@ -57,7 +56,6 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
     await DatabaseService().reLoadUserRecord(AuthService.user.uid).then((value) => setState((){
       loading = false;
     }));
-
     return await DatabaseService().reloadCitiesList();
   }
 
@@ -71,15 +69,7 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
 //        },
 //        child: Text("Press"),
 //      )),
-      Center(child: AutoSizeText(
-        "Profile",
-        maxLines: 4,
-        textAlign: TextAlign.start,
-        style: TextStyle(
-            fontSize: 18.0,
-            fontFamily: "Lemonada"
-        ),
-      ),),
+      EditProfile(profileBodyType: ProfileBodyEnum.view, showAppBar: false,),
       //EditProfile()
     ];
 
@@ -103,15 +93,15 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
             Container(
               color: Color(0xFF6190E8),
               child: new UserAccountsDrawerHeader(
-                accountName:AutoSizeText(
-                  (AuthService.user.getName() == null) ? null : "${AuthService.user.getName()}",
+                accountName: ((AuthService.user.getName()) != null) ? AutoSizeText(
+                   "${AuthService.user.getName()}",
                   maxLines: 4,
                   textAlign: TextAlign.start,
                   style: TextStyle(
                       fontSize: 13.0,
                       fontFamily: "Lemonada"
                   ),
-                ),
+                ) : null,
 
                 accountEmail: AutoSizeText(
                   AuthService.user.getEmailId(),
@@ -143,7 +133,7 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
                 try {
                   Navigator.of(context).pop();
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EditProfile(profileBodyType: ProfileBodyEnum.view)));
+                      MaterialPageRoute(builder: (context) => EditProfile(profileBodyType: ProfileBodyEnum.view, showAppBar: true,)));
                 } catch (e) {
                   print(e);
                 }
@@ -207,22 +197,22 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
               icon: Icon(Icons.home),
               title: AutoSizeText(
                 "Home",
-                maxLines: 4,
+                maxLines: 1,
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 10.0,
                     fontFamily: "Lemonada"
                 ),
               ),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
+              icon: Icon(Icons.person),
               title: AutoSizeText(
                 "Profile",
-                maxLines: 4,
+                maxLines: 1,
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 12.0,
                     fontFamily: "Lemonada"
                 ),
               ),

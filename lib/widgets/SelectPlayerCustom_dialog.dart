@@ -6,8 +6,8 @@ import 'package:direct_select_flutter/direct_select_item.dart';
 import 'package:direct_select_flutter/direct_select_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/player.dart';
-import 'package:flutter_app/widgets/gradient.dart';
+import 'package:CricScore/model/player.dart';
+import 'package:CricScore/widgets/gradient.dart';
 
 class selectPlayerDialog extends StatefulWidget {
 

@@ -1,7 +1,7 @@
 
 import 'dart:core';
-import 'package:flutter_app/model/innings.dart';
-import 'package:flutter_app/model/team.dart';
+import 'package:CricScore/model/innings.dart';
+import 'package:CricScore/model/team.dart';
 
 import 'appStaticBarTitles.dart';
 import 'currentPlayer.dart';

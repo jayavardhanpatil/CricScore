@@ -1,4 +1,4 @@
-import 'package:flutter_app/services/auth_service.dart';
+import 'package:CricScore/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class Provider extends InheritedWidget {

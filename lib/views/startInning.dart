@@ -5,14 +5,14 @@ import 'package:direct_select_flutter/direct_select_item.dart';
 import 'package:direct_select_flutter/direct_select_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/currentPlayer.dart';
-import 'package:flutter_app/model/match.dart';
-import 'package:flutter_app/model/player.dart';
-import 'package:flutter_app/services/database_service.dart';
-import 'package:flutter_app/views/scoreUpdateView.dart';
-import 'package:flutter_app/widgets/ToastWidget.dart';
-import 'package:flutter_app/widgets/gradient.dart';
-import 'package:flutter_app/widgets/loader.dart';
+import 'package:CricScore/model/currentPlayer.dart';
+import 'package:CricScore/model/match.dart';
+import 'package:CricScore/model/player.dart';
+import 'package:CricScore/services/database_service.dart';
+import 'package:CricScore/views/scoreUpdateView.dart';
+import 'package:CricScore/widgets/ToastWidget.dart';
+import 'package:CricScore/widgets/gradient.dart';
+import 'package:CricScore/widgets/loader.dart';
 
 class StartInnings extends StatefulWidget{
 
@@ -311,7 +311,6 @@ class _StartInnings extends State<StartInnings> {
                           "Start Match",
                           maxLines: 1,
                           style: TextStyle(
-                            fontSize: 18,
                             fontWeight: FontWeight.w200,
                             color: Colors.white,
                             fontFamily: "Lemonada",
