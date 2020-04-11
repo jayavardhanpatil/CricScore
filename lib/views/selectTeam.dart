@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
@@ -14,7 +15,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 
 
-
 class SelectTeam extends StatefulWidget{
 
   _SelectTeam createState() => _SelectTeam();
@@ -22,6 +22,8 @@ class SelectTeam extends StatefulWidget{
 }
 
 class _SelectTeam extends State<SelectTeam> {
+
+  Color primaryColor = const Color(0xFF75A2EA);
 
   String previousvalueFirstTeam = "";
   String previousvalueSecondteam = "";
@@ -60,11 +62,17 @@ class _SelectTeam extends State<SelectTeam> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Team"),
+        title: AutoSizeText(
+          "Select teams",
+          maxLines: 1,
+          style: TextStyle(
+              fontSize: 18,
+              fontFamily: "Lemonada",
+          ),
+        ),
         flexibleSpace: getAppBarGradient(),
       ),
-      body: Center(
-            child: SingleChildScrollView(
+      body: SingleChildScrollView(
               
               padding: EdgeInsets.all(10),
               
@@ -73,13 +81,24 @@ class _SelectTeam extends State<SelectTeam> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
 
-                  Text("Select teams" , style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, fontSize: 25)),
-//                  SizedBox(height: _height * 0.01),
-//
-//                  typeAhed(_venueCity, _venuetypeAheadController, _width * 0.5, "Match venue"),
+                  AutoSizeText(
+                    "Select teams",
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Lemonada",
+                    ),
+                  ),
 
-                  SizedBox(height: _height * 0.05),
+//                  Text("Select teams" , style: TextStyle(
+//                      color: Colors.black, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, fontSize: 25)),
+////                  SizedBox(height: _height * 0.01),
+////
+////                  typeAhed(_venueCity, _venuetypeAheadController, _width * 0.5, "Match venue"),
+
+                  SizedBox(height: _height * 0.01),
 
                   TextField(
                     //validator: Validator.validate,
@@ -88,6 +107,7 @@ class _SelectTeam extends State<SelectTeam> {
                       onTap: (){
                         previousvalueFirstTeam = _firstTteamName.text;
                       },
+                    style: TextStyle(fontFamily: "Lemonada",),
                     ),
 
                   SizedBox(height: _height * 0.01),
@@ -105,11 +125,11 @@ class _SelectTeam extends State<SelectTeam> {
                   //rowWithCityAndPlayer(__typefirstAheadController, _firstTeamCity, _width * 0.5, _firstTteamName, "Team A City"),
 
 
-                  SizedBox(height: _height * 0.07),
+                  SizedBox(height: _height * 0.05),
 
                   rowWithText("VS"),
 
-                  SizedBox(height: _height * 0.06),
+                  SizedBox(height: _height * 0.04),
 
                   TextFormField(
                     validator: Validator.validate,
@@ -118,6 +138,7 @@ class _SelectTeam extends State<SelectTeam> {
                     onTap: (){
                       previousvalueSecondteam = _secondTteamName.text;
                     },
+                    style: TextStyle(fontFamily: "Lemonada",),
 
                   ),
 
@@ -137,8 +158,25 @@ class _SelectTeam extends State<SelectTeam> {
 
                   //SilderButton("Slide to Start a match", _height * 0.09, _width * 0.8, context),
 
-                  FlatButton(
-                    onPressed: (){
+
+                  RaisedButton(
+                    color: primaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      child: AutoSizeText(
+                        "Start Match",
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w200,
+                          color: Colors.white,
+                          fontFamily: "Lemonada",
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
                       print("after changin the value : "+ _firstTteamName.text);
                       String matchBetween = "";
                       match.teams.forEach((key, value) {
@@ -147,12 +185,12 @@ class _SelectTeam extends State<SelectTeam> {
                       match.setMatchTitle(matchBetween.substring(0, matchBetween.length-3) + " - " + todaysDate);
                       print("Match Between "+ match.getMatchTitle());
                       match.teams.forEach((key, value) {
-                          print("Team Name : "+key);
-                          //print("Team City : "+value.getTeamCity());
+                        print("Team Name : "+key);
+                        //print("Team City : "+value.getTeamCity());
 //                          for(int i=0;i<value.getTeamPlayers().length;i++){
 //                            print("Team Player : "+value.players[i].playerName);
 //                          }playerName
-                        });
+                      });
 
                       match.teams.forEach((key, value) {
                         DatabaseService().addTeams(value);
@@ -160,31 +198,57 @@ class _SelectTeam extends State<SelectTeam> {
 
                       Navigator.pop(context);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => StartMatch(match: match)));
-
-                      //DatabaseService().addMatchDetails(match);
-
-//                        match.teams.forEach((key, value) {
-//                          DatabaseService().addMatchDetails(match);
-//                          print("Team Name : "+value.getTeamName());
-//                          print("Team City : "+value.getTeamCity());
-//                          for(int i=0;i<value.getTeamPlayers().length;i++){
-//                            print("Team Player : "+value.getTeamPlayers()[i].getName());
-//                          }
-//                        });
                     },
-                    textColor: Colors.white,
-                    child: Container(
-                      decoration: getButtonGradientColor(BoxShape.rectangle),
-                      padding: const EdgeInsets.all(20.0),
-                      child: const Text(
-                          'Start Match',
-                          style: TextStyle(fontSize: 20)
-                      ),
-                    ),
                   ),
+
+
+//                  FlatButton(
+//                    onPressed: (){
+//                      print("after changin the value : "+ _firstTteamName.text);
+//                      String matchBetween = "";
+//                      match.teams.forEach((key, value) {
+//                        matchBetween = matchBetween + key + " - ";
+//                      });
+//                      match.setMatchTitle(matchBetween.substring(0, matchBetween.length-3) + " - " + todaysDate);
+//                      print("Match Between "+ match.getMatchTitle());
+//                      match.teams.forEach((key, value) {
+//                          print("Team Name : "+key);
+//                          //print("Team City : "+value.getTeamCity());
+////                          for(int i=0;i<value.getTeamPlayers().length;i++){
+////                            print("Team Player : "+value.players[i].playerName);
+////                          }playerName
+//                        });
+//
+//                      match.teams.forEach((key, value) {
+//                        DatabaseService().addTeams(value);
+//                      });
+//
+//                      Navigator.pop(context);
+//                      Navigator.push(context, MaterialPageRoute(builder: (context) => StartMatch(match: match)));
+//
+//                      //DatabaseService().addMatchDetails(match);
+//
+////                        match.teams.forEach((key, value) {
+////                          DatabaseService().addMatchDetails(match);
+////                          print("Team Name : "+value.getTeamName());
+////                          print("Team City : "+value.getTeamCity());
+////                          for(int i=0;i<value.getTeamPlayers().length;i++){
+////                            print("Team Player : "+value.getTeamPlayers()[i].getName());
+////                          }
+////                        });
+//                    },
+//                    textColor: Colors.white,
+//                    child: Container(
+//                      decoration: getButtonGradientColor(BoxShape.rectangle),
+//                      padding: const EdgeInsets.all(20.0),
+//                      child: const Text(
+//                          'Start Match',
+//                          style: TextStyle(fontSize: 20)
+//                      ),
+//                    ),
+//                  ),
                 ],
               ),
-            ),
       ),
 
     );
@@ -208,26 +272,57 @@ class _SelectTeam extends State<SelectTeam> {
       padding: EdgeInsets.only(left: 20, right: 10),
       child: Column(
         children: <Widget>[
-          Container(
-            decoration: getButtonGradientColor(BoxShape.rectangle),
-            child: FlatButton.icon(
-              padding: EdgeInsets.all(12),
-//              shape :RoundedRectangleBorder(
-//                borderRadius: new BorderRadius.circular(18.0),
-//              ),
-              color: Colors.transparent,
-              onPressed: (){
-                print("current Team Name : "+currentTeamName);
-                print("Previous Team name : "+previousTeamName);
+
+            RaisedButton.icon(
+              color: primaryColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0)),
+
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+              label: AutoSizeText(
+                  "Players",
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w200,
+                    color: Colors.white,
+                    fontFamily: "Lemonada",
+                  ),
+                ),
+              onPressed: () {
+                print("current Team Name : " + currentTeamName);
+                print("Previous Team name : " + previousTeamName);
 
                 selectPlayers(currentTeamName, previousTeamName, teamCity);
               },
               icon: Icon(Icons.add, color: Colors.white,),
-              label: Text("Players", style: TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
-              ),
+//              label: Text("Players", style: TextStyle(
+//                  color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
+//              ),
             ),
-          ),
+
+
+
+
+
+//            decoration: getButtonGradientColor(BoxShape.rectangle),
+//            child: FlatButton.icon(
+//              padding: EdgeInsets.all(12),
+////              shape :RoundedRectangleBorder(
+////                borderRadius: new BorderRadius.circular(18.0),
+////              ),
+//              color: Colors.transparent,
+//              onPressed: (){
+//                print("current Team Name : "+currentTeamName);
+//                print("Previous Team name : "+previousTeamName);
+//
+//                selectPlayers(currentTeamName, previousTeamName, teamCity);
+//              },
+//              icon: Icon(Icons.add, color: Colors.white,),
+//              label: Text("Players", style: TextStyle(
+//                  color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
+//              ),
+//            ),
         ],
       ),
     );
@@ -294,6 +389,7 @@ class _SelectTeam extends State<SelectTeam> {
         textFieldConfiguration: TextFieldConfiguration(
           controller: typedValue,
           decoration: inputDecoration(lable),
+          style: TextStyle(fontFamily: "Lemonada",),
         ),
         suggestionsCallback: (pattern) {
           // ignore: missing_return
@@ -303,7 +399,7 @@ class _SelectTeam extends State<SelectTeam> {
         },
         itemBuilder: (context, suggestion) {
           return ListTile(
-            title: Text(suggestion),
+            title: Text(suggestion, style: TextStyle(fontFamily: "Lemonada",),),
           );
         },
         transitionBuilder: (context, suggestionsBox, controller) {
@@ -329,9 +425,17 @@ class _SelectTeam extends State<SelectTeam> {
       ),
       Container(
             decoration: getButtonGradientColor(BoxShape.circle),
-          child: Text(text,style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
-             ),
+          child: AutoSizeText(
+            text,
+            maxLines: 4,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                fontSize: 18.0,
+                fontFamily: "Lemonada",
+              color: Colors.white,
+
+            ),
+          ),
           padding: EdgeInsets.all(20.0),
 
       ),

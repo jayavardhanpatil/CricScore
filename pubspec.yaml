@@ -62,18 +62,58 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-#  fonts:
-#    - family: Raleway
-#      fonts:
-#        - asset: fonts/Raleway-Regular.ttf
+  fonts:
+    - family: DansingScript
+      fonts:
+        - asset: fonts/DancingScript-VariableFont_wght.ttf
 #        - asset: fonts/Raleway-Italic.ttf
 #          style: italic
-#    - family: RobotoMono
-#      fonts:
-#        - asset: fonts/RobotoMono-Regular.ttf
-#        - asset: fonts/RobotoMono-Bold.ttf
-#          weight: 700
+    - family: ERGaramond italic
+      fonts:
+        - asset: fonts/EBGaramond-Italic-VariableFont_wght.ttf
+          style: italic
 
+    - family: ERGaramond
+      fonts:
+        - asset: fonts/EBGaramond-VariableFont_wght.ttf
+          weight: 700
+
+    - family: Lemonada
+      fonts:
+        - asset: fonts/Lemonada-VariableFont_wght.ttf
+  #        - asset: fonts/Raleway-Italic.ttf
+  #          style: italic
+
+    - family: Literata
+      fonts:
+        - asset: fonts/Literata-Italic-VariableFont_wght.ttf
+        - asset: fonts/Literata-VariableFont_wght.ttf
+
+    - family: Oswaldd
+      fonts:
+        - asset: fonts/Oswald-VariableFont_wght.ttf
+
+    - family: RobotoSlab
+      fonts:
+        - asset: fonts/RobotoSlab-VariableFont_wght.ttf
+
+    - family: YanoneKaffeesataz
+      fonts:
+        - asset: fonts/YanoneKaffeesatz-VariableFont_wght.ttf
+          weight: 700
+
+    - family: Bitter bold
+      fonts:
+        - asset: fonts/Bitter-Bold.ttf
+
+    - family: Bitter Italic
+      fonts:
+       - asset: fonts/Bitter-Italic.ttf
+         style: italic
+
+    - family: Bitter Regular
+      fonts:
+        - asset: fonts/Bitter-Regular.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

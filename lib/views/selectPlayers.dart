@@ -1,4 +1,5 @@
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/match.dart';
@@ -65,7 +66,17 @@ class PlayersList extends StatefulWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${team.getTeamName()} selected(" + "${selectedList.length}" + ")"),
+        title: AutoSizeText(
+          "${team.getTeamName()} selected(" + "${selectedList.length}" + ")",
+          maxLines: 1,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontFamily: "Lemonada",
+            color: Colors.white,
+
+          ),
+        ),
+
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.all(10),
@@ -149,13 +160,13 @@ class PlayersList extends StatefulWidget {
                     ),
                     title: Text(
                       _listOfPlayers[index].getName(), style: selectedList.containsKey(_listOfPlayers[index].uid) ? TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold
-                    ) : null,
+                        color: Colors.white, fontWeight: FontWeight.bold, fontFamily: "Lemonada",
+                    ) : TextStyle(fontFamily: "Lemonada",),
                     ),
                     subtitle: Text(
                       _listOfPlayers[index].getPhoneNumber().toString().substring(0, 2) + "****" + _listOfPlayers[index].getPhoneNumber().toString().substring(_listOfPlayers[index].getPhoneNumber().toString().length - 3), style: selectedList.containsKey(_listOfPlayers[index].uid) ? TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold
-                ) : null,
+                    color: Colors.white, fontWeight: FontWeight.bold, fontFamily: "Lemonada",
+                ) : TextStyle(fontFamily: "Lemonada",),
                     ),
                       onTap: (){
                         setState(() {

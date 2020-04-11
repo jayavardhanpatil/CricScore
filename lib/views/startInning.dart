@@ -1,4 +1,5 @@
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:direct_select_flutter/direct_select_container.dart';
 import 'package:direct_select_flutter/direct_select_item.dart';
 import 'package:direct_select_flutter/direct_select_list.dart';
@@ -34,7 +35,7 @@ class _StartInnings extends State<StartInnings> {
   Map<String, Player> batmans = new Map();
   Map<String, Player> bowlers = new Map();
 
-
+  Color primaryColor = const Color(0xFF75A2EA);
   @override
   void initState() {
     buildDropdownMenuItemsForBatting();
@@ -127,26 +128,49 @@ class _StartInnings extends State<StartInnings> {
 
     return Scaffold(
       appBar: AppBar(
-        title: (match.isFirstInningsOver) ? Text(match.secondInning.battingteam.getTeamName() + " - Select Openers") : Text(match.firstInning.battingteam.getTeamName() + " - Select Openers"),
+        title :AutoSizeText(
+          (match.isFirstInningsOver) ? match.secondInning.battingteam.getTeamName() + " - Select Openers" : match.firstInning.battingteam.getTeamName() + " - Select Openers",
+          maxLines: 1,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontFamily: "Lemonada",
+            color: Colors.white,
+
+          ),
+        ),
+
+
+       // (match.isFirstInningsOver) ? Text(match.secondInning.battingteam.getTeamName() + " - Select Openers") : Text(match.firstInning.battingteam.getTeamName() + " - Select Openers"),
         flexibleSpace: getAppBarGradient(),
       ),
       body: DirectSelectContainer(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             verticalDirection: VerticalDirection.down,
             children: <Widget>[
-              SizedBox(height: _height * 0.06),
+              SizedBox(height: _height * 0.04),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: <Widget>[
                     Container(
-                      alignment: AlignmentDirectional.centerStart,
-                      margin: EdgeInsets.only(left: 4),
-                      child: Text("Select Opener, Striker Batsman!", style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15)),
+//                      alignment: AlignmentDirectional.centerStart,
+//                      margin: EdgeInsets.only(left: 4),
+
+                      child : AutoSizeText(
+                        "Select Opener, Striker!",
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Lemonada",
+                        ),
+                      ),
+
+//                      child: Text("Select Opener, Striker Batsman!", style: TextStyle(
+//                          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15)),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -177,13 +201,24 @@ class _StartInnings extends State<StartInnings> {
                       ),
                     ),
 
-                    SizedBox(height: _height * 0.06),
+                    SizedBox(height: _height * 0.04),
 
                     Container(
-                      alignment: AlignmentDirectional.centerStart,
-                      margin: EdgeInsets.only(left: 4),
-                      child: Text("Select Non-Striker Batsman!", style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15)),
+
+                      child : AutoSizeText(
+                        "Select Non-Striker Batsman!",
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Lemonada",
+                        ),
+                      ),
+
+//                      alignment: AlignmentDirectional.centerStart,
+//                      margin: EdgeInsets.only(left: 4),
+//                      child: Text("Select Non-Striker Batsman!", style: TextStyle(
+//                          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15)),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -208,7 +243,7 @@ class _StartInnings extends State<StartInnings> {
                               padding: EdgeInsets.only(right: 8),
                               child: Icon(
                                 Icons.unfold_more,
-                                color: Color(0xFF6190E8),
+                                color: primaryColor,
                               ),
                             )
                           ],
@@ -217,13 +252,23 @@ class _StartInnings extends State<StartInnings> {
                     ),
 
 
-                    SizedBox(height: _height * 0.06),
+                    SizedBox(height: _height * 0.04),
 
                     Container(
-                      alignment: AlignmentDirectional.centerStart,
-                      margin: EdgeInsets.only(left: 4),
-                      child: Text("Select Opener Bowler!", style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15) ),
+                      child : AutoSizeText(
+                        "Select Opening Bowler!",
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Lemonada",
+                        ),
+                      ),
+
+//                      alignment: AlignmentDirectional.centerStart,
+//                      margin: EdgeInsets.only(left: 4),
+//                      child: Text("Select Opener Bowler!", style: TextStyle(
+//                          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15) ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -246,7 +291,7 @@ class _StartInnings extends State<StartInnings> {
                               padding: EdgeInsets.only(right: 8),
                               child: Icon(
                                 Icons.unfold_more,
-                                color: Color(0xFF6190E8),
+                                color: primaryColor,
                               ),
                             )
                           ],
@@ -254,11 +299,26 @@ class _StartInnings extends State<StartInnings> {
                       ),
                     ),
 
-                    SizedBox(height: _height * 0.1),
+                    SizedBox(height: _height * 0.05),
 
-                    FlatButton(
+                    RaisedButton(
+                      color: primaryColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: AutoSizeText(
+                          "Start Match",
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w200,
+                            color: Colors.white,
+                            fontFamily: "Lemonada",
+                          ),
+                        ),
+                      ),
                       onPressed: () {
-
                         if(batmans.length != 2){
                           showFailedColoredToast("Please select two Batsmans!");
                         }
@@ -344,19 +404,113 @@ class _StartInnings extends State<StartInnings> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ScoreUpdateView(match: match,)));
                         }
                       },
-                      textColor: Colors.white,
-                      padding: const EdgeInsets.all(0.0),
-                      child: Container(
-                        width: _width * 0.8,
-                        decoration: getButtonGradientColor(BoxShape.rectangle),
-                        padding: const EdgeInsets.all(10.0),
-                        child: const Text(
-                          'Start Match',
-                          style: TextStyle(fontSize: 20),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
                     ),
+
+
+
+
+//                    FlatButton(
+//                      onPressed: () {
+//
+//                        if(batmans.length != 2){
+//                          showFailedColoredToast("Please select two Batsmans!");
+//                        }
+//                        else if(bowlers.length != 1){
+//                          showFailedColoredToast("Please select One Bowler!");
+//                        }else {
+//                          Map<String, Player> batsmans = new Map();
+//                          batmans.forEach((key, value) {
+//                            value.run = 0;
+//                            value.ballsFaced = 0;
+//                            value.centuries = 0;
+//                            value.fifties = 0;
+//                            value.numberOfFours = 0;
+//                            value.numberOfsixes = 0;
+//                            if(key == "striker") {
+//                              value.playedPosition = 1;
+//                              value.isOnStrike = true;
+//                            }else{
+//                              value.playedPosition = 2;
+//                              value.isOnStrike = false;
+//                            }
+//                            batsmans.putIfAbsent(
+//                                value.playerUID, () => value);
+//                          });
+//
+//                          Map<String, Player> bowler = new Map();
+//                          bowlers.forEach((key, value) {
+//                            value.overs = 0;
+//                            value.extra = 0;
+//                            value.runsGiven = 0;
+//                            value.wicket = 0;
+//                            bowler.putIfAbsent(value.playerUID, () => value);
+//                          });
+//
+//
+//                          CurrentPlayIng currentInning = new CurrentPlayIng(
+//                              battingTeamPlayer : batsmans, bowlingTeamPlayer: bowler);
+//                          currentInning.run = 0;
+//                          currentInning.wickets = 0;
+//                          currentInning.extra = 0;
+//                          currentInning.overs = 0;
+//                          (match.isFirstInningsOver) ? currentInning.teamName = match.secondInning.battingteam.getTeamName() : currentInning.teamName = match.firstInning.battingteam.getTeamName();
+//                          match.currentPlayers = currentInning;
+//
+//
+//                          print(match.currentPlayers.toJson());
+//
+//                          addCurrentPlayer(context);
+//
+//                          //addMatchDetails(context);
+//
+////                              DatabaseService().addMatch(match);
+////
+////                          String playingType = (match.getisFirstInningsOver()) ? "second_inning" : "first_inning";
+////                          DatabaseService().addInningsPlayers(match, batsmans, playingType, "batting");
+////
+////                          DatabaseService().addInningsPlayers(match, bowler, playingType, "bowling");
+//
+//
+////                          FutureBuilder(
+////                            future: addPlayersToTheInnings(match.firstInning.battingteam.players, match.firstInning.bowlingteam.players, "first_inning"),
+////                            builder: (context, snapshot){
+////                              if(snapshot.data == null){
+////                                Loading();
+////                              }else if(snapshot.connectionState == ConnectionState.done){
+////                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
+////                              }
+////                            },
+////                          );
+////
+////                          FutureBuilder(
+////                            future: addPlayersToTheInnings(match.secondInning.battingteam.players, match.secondInning.bowlingteam.players, "second_inning"),
+////                            builder: (context, snapshot){
+////                              if(snapshot.data == null){
+////                                Loading();
+////                              }else if(snapshot.connectionState == ConnectionState.done){
+////                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("Match Details Added to the server")));
+////                              }
+////                            },
+////                          );
+//
+//                          Navigator.pop(context);
+//                          Navigator.push(context, MaterialPageRoute(builder: (context) => ScoreUpdateView(match: match,)));
+//                        }
+//                      },
+//                      textColor: Colors.white,
+//                      padding: const EdgeInsets.all(0.0),
+//                      child: Container(
+//                        width: _width * 0.8,
+//                        decoration: getButtonGradientColor(BoxShape.rectangle),
+//                        padding: const EdgeInsets.all(10.0),
+//                        child: const Text(
+//                          'Start Match',
+//                          style: TextStyle(fontSize: 20),
+//                          textAlign: TextAlign.center,
+//
+//                        ),
+//                      ),
+//                    ),
 
                   ],
                 ),

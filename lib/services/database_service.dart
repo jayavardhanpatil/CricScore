@@ -223,22 +223,32 @@ class DatabaseService {
 
   syncScoreSummaryWithInnings(MatchGame matchGame){
     String innings;
+
+
+
     if(matchGame.isFirstInningsOver) {
       innings = "secondInnings";
 
       _fireBaseRTreference.child("matches").child(
-          matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).update({"isLive" : false, "result" : matchGame.result, "winningTeam" : matchGame.winningTeam});
+          matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).child(
+          innings).update({"extra":matchGame.currentPlayers.extra, "wickets" : matchGame.currentPlayers.wickets, "overs":matchGame.currentPlayers.overs, "run":matchGame.currentPlayers.run});
 
+      _fireBaseRTreference.child("matches").child(
+          matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).update({"isLive" : false, "result" : matchGame.result, "winningTeam" : matchGame.winningTeam});
     }else{
       innings = "firstInnings";
 
       _fireBaseRTreference.child("matches").child(
-          matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).update({"isFirstInningsOver" : true});
+          matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).child(
+          innings).update({"extra":matchGame.currentPlayers.extra, "wickets" : matchGame.currentPlayers.wickets, "overs":matchGame.currentPlayers.overs, "run":matchGame.currentPlayers.run});
 
+      _fireBaseRTreference.child("matches").child(
+          matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).update({"isFirstInningsOver" : true, "target":matchGame.target});
     }
+
     _fireBaseRTreference.child("matches").child(
-        matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).child(
-        innings).update({"extra":matchGame.currentPlayers.extra, "wickets" : matchGame.currentPlayers.wickets, "overs":matchGame.currentPlayers.overs, "run":matchGame.currentPlayers.run});
+        matchGame.getMatchVenue()).child(matchGame.getMatchTitle()).child("currentPlayers").update({"run": 0, "overs":0, "extra" : 0, "wicket" : 0});
+
   }
 
   Future updatePlayer(MatchGame matchGame, Player player, String playerType, String innings) async{

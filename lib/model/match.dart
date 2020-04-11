@@ -23,9 +23,10 @@ class MatchGame {
   String result;
   int target;
   String winningTeam;
+  bool isSecondInnignsStarted;
 
   MatchGame({this.matchVenue, this.matchBetween, this.teams, this.totalOvers, this.tossWonTeam, this.selectedInning, this.isFirstInningsOver
-    ,this.totalScore, this.firstInning, this.secondInning, this.currentPlayers, this.isLive = true, this.result = "", this.target, this.winningTeam});
+    ,this.totalScore, this.firstInning, this.secondInning, this.currentPlayers, this.isLive = true, this.result = "", this.target = 0, this.winningTeam, this.isSecondInnignsStarted = false});
 
   factory MatchGame.fromJson(Map<dynamic, dynamic> json) {
     return MatchGame(
@@ -47,6 +48,7 @@ class MatchGame {
         result : (json['result']),
       target: (json['target']),
         winningTeam: (json['winningTeam']),
+        isSecondInnignsStarted: (json['isSecondInnignsStarted']),
     );
   }
 
@@ -76,6 +78,7 @@ class MatchGame {
     data['result'] = this.result;
     data['target'] = this.target;
     data['winningTeam'] = this.winningTeam;
+    data['isSecondInnignsStarted'] = this.isSecondInnignsStarted;
     return data;
   }
 

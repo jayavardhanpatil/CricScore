@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/appStaticBarTitles.dart';
 import 'package:flutter_app/services/auth_service.dart';
@@ -22,11 +23,13 @@ class HomeView extends StatefulWidget {
 
 }
 
+final grayColor = const Color(0xFF939393);
+
 class _HomeView extends State<HomeView> with TickerProviderStateMixin{
 
   final List<MyTabs> _tabs = [new MyTabs(title: "Home",color: Colors.teal[200]),
-                                new MyTabs(title: "Search",color: Colors.orange[200]),
-                              new MyTabs(title: AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE,color: Colors.red[200])
+    new MyTabs(title: "Search",color: Colors.orange[200]),
+    new MyTabs(title: AppBarsTitles.EDIT_PROFILE_APP_BAR_TITLE,color: Colors.red[200])
   ];
 
   MyTabs _myHandler ;
@@ -68,24 +71,57 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
 //        },
 //        child: Text("Press"),
 //      )),
-      Center(child: Text('Profile')),
+      Center(child: AutoSizeText(
+        "Profile",
+        maxLines: 4,
+        textAlign: TextAlign.start,
+        style: TextStyle(
+            fontSize: 18.0,
+            fontFamily: "Lemonada"
+        ),
+      ),),
       //EditProfile()
     ];
 
     return (loading) ? Loading() : Scaffold(
       appBar: new AppBar(
-        title: new Text(_myHandler.title),
+        title: AutoSizeText(
+          _myHandler.title,
+          maxLines: 1,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+              fontSize: 18.0,
+              fontFamily: "Lemonada"
+          ),
+        ),
         flexibleSpace: getAppBarGradient(),
       ),
-    drawer: new Drawer(
+      drawer: new Drawer(
         child: ListView(
           children: <Widget>[
 
             Container(
               color: Color(0xFF6190E8),
               child: new UserAccountsDrawerHeader(
-                accountName: (AuthService.user.getName() == null) ? null : new Text("${AuthService.user.getName()}"),
-                accountEmail: new Text(AuthService.user.getEmailId()),
+                accountName:AutoSizeText(
+                  (AuthService.user.getName() == null) ? null : "${AuthService.user.getName()}",
+                  maxLines: 4,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontSize: 13.0,
+                      fontFamily: "Lemonada"
+                  ),
+                ),
+
+                accountEmail: AutoSizeText(
+                  AuthService.user.getEmailId(),
+                  maxLines: 4,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontSize: 13.0,
+                      fontFamily: "Lemonada"
+                  ),
+                ),
                 currentAccountPicture : new CircleAvatar(
                   backgroundImage: new ExactAssetImage('lib/assets/images/default_profile_avatar.png'),
                   backgroundColor: Colors.white,
@@ -94,7 +130,15 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
             ),
 
             new ListTile(
-              title: new Text("Profile"),
+              title: AutoSizeText(
+                "Profile",
+                maxLines: 4,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontFamily: "Lemonada"
+                ),
+              ),
               onTap: () async{
                 try {
                   Navigator.of(context).pop();
@@ -107,7 +151,15 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
             ),
 
             new ListTile(
-              title: new Text("Start match"),
+              title: AutoSizeText(
+                "Start Match",
+                maxLines: 4,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontFamily: "Lemonada"
+                ),
+              ),
               onTap: () async{
                 try {
                   Navigator.of(context).pop();
@@ -120,7 +172,16 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
             ),
 
             new ListTile(
-              title: new Text("Sign Out"),
+              title: AutoSizeText(
+                "Sign Out",
+                maxLines: 4,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontFamily: "Lemonada"
+                ),
+              ),
+
               onTap: () async{
                 try {
                   AuthService auth = Provider.of(context).auth;
@@ -138,28 +199,44 @@ class _HomeView extends State<HomeView> with TickerProviderStateMixin{
       ),
       body : tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+          currentIndex: _currentIndex,
 
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('home'),
-          ),
-          BottomNavigationBarItem(
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: AutoSizeText(
+                "Home",
+                maxLines: 4,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontFamily: "Lemonada"
+                ),
+              ),
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.search),
-              title: Text('search'),
-          ),
+              title: AutoSizeText(
+                "Profile",
+                maxLines: 4,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontFamily: "Lemonada"
+                ),
+              ),
+            ),
 //          BottomNavigationBarItem(
 //              icon: Icon(Icons.person),
 //              title: Text('Profile'),
 //          ),
-        ],
-        onTap: (index){
-          setState(() {
-            _currentIndex = index; _myHandler= _tabs[_currentIndex];
-          });
-        }
+          ],
+          onTap: (index){
+            setState(() {
+              _currentIndex = index; _myHandler= _tabs[_currentIndex];
+            });
+          }
       ),
 
     );

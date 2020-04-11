@@ -47,10 +47,11 @@ class _ViewSquad extends State<ViewSquad> {
                 leading: CircleAvatar(
                   backgroundImage: ExactAssetImage(
                       "lib/assets/images/default_profile_avatar.png"),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xFF75A2EA),
                 ),
                 title: Text(
                   _players[index].playerName,
+                    style: TextStyle(fontFamily: "Lemonada",),
                 ),
 //                subtitle: Text(
 //                  team.players[index].playerUID,

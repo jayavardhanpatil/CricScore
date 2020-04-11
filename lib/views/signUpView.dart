@@ -95,24 +95,27 @@ class _SignUpViewState extends State<SignUpView> {
         color: primaryColor,
         height: _height,
         width: _width,
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: _height * 0.05),
-              showAlert(),
-              SizedBox(height: _height * 0.05),
-              buildHeaderText(),
-              SizedBox(height: _height * 0.05),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: buildInputs() + buildButtons(),
+        child: Center(
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: _height * 0.01),
+                showAlert(),
+                SizedBox(height: _height * 0.01),
+                buildHeaderText(),
+                SizedBox(height: _height * 0.01),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: buildInputs() + buildButtons(),
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -131,8 +134,9 @@ class _SignUpViewState extends State<SignUpView> {
       maxLines: 1,
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 35,
+        fontSize: 30,
         color: Colors.white,
+          fontFamily: "Lemonada"
       ),
     );
   }
@@ -184,7 +188,7 @@ class _SignUpViewState extends State<SignUpView> {
     textFields.add(
       TextFormField(
         validator: Validator.validate,
-        style: TextStyle(fontSize: 22.0),
+        style: TextStyle(fontSize: 18.0, fontFamily: "Lemonada"),
         decoration: buildSignUpInputDecoration("Email"),
         onChanged: (value) => _email = value,
       ),
@@ -193,7 +197,7 @@ class _SignUpViewState extends State<SignUpView> {
     textFields.add(
       TextFormField(
         validator: Validator.validate,
-        style: TextStyle(fontSize: 22.0),
+        style: TextStyle(fontSize: 18.0, fontFamily: "Lemonada"),
         decoration: buildSignUpInputDecoration("Password"),
         obscureText: true,
         onChanged: (value) => _password = value,
@@ -242,7 +246,7 @@ class _SignUpViewState extends State<SignUpView> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 _submitButtonText,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, fontFamily: "Lemonada"),
               ),
             ),
             onPressed: submit,
@@ -251,7 +255,7 @@ class _SignUpViewState extends State<SignUpView> {
       FlatButton(
         child: Text(
           _switchButtonText,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontFamily: "Lemonada"),
         ),
         onPressed: () {
           switchFormState(_newFormState);

@@ -3,7 +3,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/currentPlayer.dart';
 import 'package:flutter_app/model/match.dart';
 import 'package:flutter_app/model/player.dart';
 import 'package:flutter_app/services/database_service.dart';
@@ -53,7 +52,18 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(match.currentPlayers.teamName + " Batting Inning"),
+        title: AutoSizeText(
+          match.currentPlayers.teamName + " Batting",
+          maxLines: 1,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontFamily: "Lemonada",
+            color: Colors.white,
+
+          ),
+        ),
+
+        //Text(match.currentPlayers.teamName + " Batting"),
         flexibleSpace: getAppBarGradient(),
       ),
       body: Container(
@@ -73,20 +83,21 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(match.currentPlayers.run.toString() + "/" +match.currentPlayers.wickets.toString(), style: TextStyle(
-                    fontSize: 60,
+                    fontSize: 70 , fontFamily: "Oswaldd",
                   ),),
                   Text("overs : "+match.currentPlayers.overs.toStringAsFixed(1) ,style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 25, fontFamily: "Oswaldd",
                   ),),
-                  SizedBox(height: _height * 0.06,),
+                  SizedBox(height: _height * 0.02,),
 
                   AutoSizeText(
                     match.tossWonTeam + " won the toss and elected to "+match.selectedInning.toLowerCase() + " first",
-                    maxLines: 4,
+                    maxLines: 2,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 18.0,
+                        color: Colors.grey[600],
+                        fontSize: 16.0,
+                        fontFamily: "Lemonada"
                     ),
                   ),
                 ],
@@ -94,7 +105,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
             ),
 
             Container(
-                height: _height * 0.14,
+                height: _height * 0.12,
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -112,26 +123,49 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                                   minRadius: 15,
                                   maxRadius: 15,
                                 ),
-                                margin: EdgeInsets.all(10),
+                                margin: EdgeInsets.all(5),
                               ),
                               Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.rectangle,
                                 ),
-                                child : Text(_currentBatttingPlayer[0].playerName, textAlign: TextAlign.center,
+
+                                child : AutoSizeText(
+                                  _currentBatttingPlayer[0].playerName,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontWeight: (_currentBatttingPlayer[0].isOnStrike) ? FontWeight.bold : null , fontStyle: FontStyle.italic, fontSize: 15,
-                                  ),),),
+                                    fontFamily: "Lemonada",
+                                    fontWeight: (_currentBatttingPlayer[0].isOnStrike) ? FontWeight.bold : null,
+                                  ),
+                                ),
+                              ),
+
+//                                child : Text(_currentBatttingPlayer[0].playerName, textAlign: TextAlign.center,
+//                                  style: TextStyle(
+//                                    fontWeight: (_currentBatttingPlayer[0].isOnStrike) ? FontWeight.bold : null , fontStyle: FontStyle.italic, fontSize: 15,
+//                                  ),),),
 
                             ],
                           ),
-                          SizedBox(height: _height * 0.01),
 
                           Container(
-                            child: Text(_currentBatttingPlayer[0].run.toString() + " ("+_currentBatttingPlayer[0].ballsFaced.toString()+")",
-                                style: TextStyle(
-                                    fontSize: 15
-                                )),
+
+                            child : AutoSizeText(
+                              _currentBatttingPlayer[0].run.toString() + " ("+_currentBatttingPlayer[0].ballsFaced.toString()+")",
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: "Oswaldd",
+                                fontWeight: (_currentBatttingPlayer[0].isOnStrike) ? FontWeight.bold : null,
+                              ),
+                            ),
+
+//                            child: Text(_currentBatttingPlayer[0].run.toString() + " ("+_currentBatttingPlayer[0].ballsFaced.toString()+")",
+//                                style: TextStyle(
+//                                    fontSize: 15
+//                                )),
 
                           ),
 
@@ -155,28 +189,46 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                                   minRadius: 15,
                                   maxRadius: 15,
                                 ),
-                                margin: EdgeInsets.all(10),
+                                margin: EdgeInsets.all(5),
 
                               ),
                               Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.rectangle,
                                 ),
-                                child : Text(_currentBatttingPlayer[1].playerName, textAlign: TextAlign.center,
+
+                                child : AutoSizeText(
+                                  _currentBatttingPlayer[1].playerName,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontWeight: (_currentBatttingPlayer[1].isOnStrike) ? FontWeight.bold : null , fontStyle: FontStyle.italic, fontSize: 15,
-                                  ),),),
+
+                                    fontFamily: "Lemonada",
+                                    fontWeight: (_currentBatttingPlayer[1].isOnStrike) ? FontWeight.bold : null,
+                                  ),
+                                ),
+                              ),
+
+//                                child : Text(_currentBatttingPlayer[1].playerName, textAlign: TextAlign.center,
+//                                  style: TextStyle(
+//                                    fontWeight: (_currentBatttingPlayer[1].isOnStrike) ? FontWeight.bold : null , fontStyle: FontStyle.italic, fontSize: 15,
+//                                  ),),),
 
                             ],
                           ),
 
 
                           Container(
-                            child: Text(_currentBatttingPlayer[1].run.toString() + " ("+_currentBatttingPlayer[1].ballsFaced.toString()+")",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                )),
-
+                            child : AutoSizeText(
+                              _currentBatttingPlayer[1].run.toString() + " ("+_currentBatttingPlayer[1].ballsFaced.toString()+")",
+                              maxLines: 4,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: "Oswaldd",
+                                fontWeight: (_currentBatttingPlayer[1].isOnStrike) ? FontWeight.bold : null,
+                              ),
+                            ),
                           ),
                         ],
 
@@ -187,7 +239,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
             ),
 
             Container(
-                height: _height * 0.20,
+                height: _height * 0.15,
                 decoration: BoxDecoration(
                     border: Border(
                         top: BorderSide(width: 1.0, color: Colors.black),
@@ -200,44 +252,66 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                       children: <Widget>[
 
                         Container(
+                          alignment: Alignment.topRight,
                           child: CircleAvatar(
                             backgroundImage: ExactAssetImage(
                                 "lib/assets/images/cricket_ball.png"),
                             backgroundColor: Colors.orangeAccent,
-                            minRadius: 15,
-                            maxRadius: 15,
+                            minRadius: 10,
+                            maxRadius: 10,
                           ),
-                          margin: EdgeInsets.all(8),
+                          margin: EdgeInsets.all(10),
                         ),
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
                           ),
-                          child : Text(_currentBowlingPlayer[0].playerName,
+
+                          child : AutoSizeText(
+                            _currentBowlingPlayer[0].playerName,
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 15,
-                            ),),),
+                              fontFamily: "Lemonada",
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+//                          child : Text(_currentBowlingPlayer[0].playerName,
+//                            style: TextStyle(
+//                              fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 15,
+//                            ),),),
 
                         Container(
                           width: _width * 0.6,
-                          child: Text(_currentBowlingPlayer[0].overs.toStringAsFixed(1) + "-" + _currentBowlingPlayer[0].wicket.toString() + "-" + _currentBowlingPlayer[0].runsGiven.toString() + "-" + _currentBowlingPlayer[0].extra.toString(),
-                            textAlign: TextAlign.end,  style: TextStyle(
-                              fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 15,
-                            ), // has impact
+                          alignment: Alignment.topRight,
+                          child : AutoSizeText(
+                            _currentBowlingPlayer[0].overs.toStringAsFixed(1) + " - " + _currentBowlingPlayer[0].wicket.toString() + " - " + _currentBowlingPlayer[0].runsGiven.toString() + " - " + _currentBowlingPlayer[0].extra.toString(),
+                            maxLines: 4,
+                            //textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              fontFamily: "Oswaldd",
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+
+//                          child: Text(_currentBowlingPlayer[0].overs.toStringAsFixed(1) + "-" + _currentBowlingPlayer[0].wicket.toString() + "-" + _currentBowlingPlayer[0].runsGiven.toString() + "-" + _currentBowlingPlayer[0].extra.toString(),
+//                            textAlign: TextAlign.end,  style: TextStyle(
+//                              fontWeight: FontWeight.bold , fontStyle: FontStyle.italic, fontSize: 15,
+//                            ), // has impact
+//                          ),
                         )
 
                       ],
                     ),
-
+                    SizedBox(height: _height * 0.008,),
                     Row(
                       children: balls,
                     )
                   ],
                 )
             ),
-
-            SizedBox(height: 0.1,),
 
             Container(
                 width: _width,
@@ -355,7 +429,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
           break;
         case "1" :
           {
-            color = Colors.grey;
+            color = Colors.black12;
             setState(() {
               ballCouts++;
               match.currentPlayers.overs += 0.1;
@@ -369,7 +443,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
           break;
         case "2" :
           {
-            color = Colors.blueGrey;
+            color = Colors.grey;
             ballCouts++;
             setState(() {
               match.currentPlayers.run += 2;
@@ -382,7 +456,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
           break;
         case "3" :
           {
-            color = Colors.black12;
+            color = Colors.blueGrey;
             setState(() {
               ballCouts++;
               match.currentPlayers.overs += 0.1;
@@ -422,7 +496,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
           break;
         case "OUT" :
           {
-            color = Colors.redAccent;
+            color = Colors.red;
             setState(() {
               _currentBowlingPlayer[0].wicket ++;
               match.currentPlayers.overs += 0.1;
@@ -430,7 +504,9 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
               //_currentBatttingPlayer.add(new Player(playerName: "fwsfwe", run: 0, ballsFaced:  0));
               ballCouts++;
               match.currentPlayers.wickets++;
-              Future.delayed(const Duration(seconds: 1), () {nextBatsman(context);});
+              if(match.currentPlayers.wickets < ((match.isFirstInningsOver) ? match.secondInning.battingteam.players.length-1 : match.firstInning.battingteam.players.length-1) &&
+              !isMatchOver() && !isInningsOver)
+              Future.delayed(const Duration(milliseconds: 100), () {nextBatsman(context);});
             });
           }
           break;
@@ -444,7 +520,7 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
           break;
         case "WD" :
           {
-            color = Colors.black12;
+            color = Colors.grey;
             _currentBowlingPlayer[0].runsGiven ++;
             match.currentPlayers.extra ++;
             _currentBowlingPlayer[0].extra ++;
@@ -468,13 +544,14 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
             border: Border.all(width: 1.0, color: Colors.black),
             color: color,
           ),
-          margin: EdgeInsets.only(left: 5),
+          margin: EdgeInsets.only(left: 10),
           child: Text(value.toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 15
+//                  fontStyle: FontStyle.italic,
+                  fontFamily: "Oswaldd",
+                  fontSize: 12
               )),
           padding: EdgeInsets.all(10.0),
         ),
@@ -496,12 +573,19 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
                 _currentBowlingPlayer[0].playerUID, (
                 value) => _currentBowlingPlayer[0]);
           }
-          Future.delayed(const Duration(seconds: 1), () {nextBowler(context);});
+
+          if(match.currentPlayers.overs < match.totalOvers && !isMatchOver()) {
+            Future.delayed(const Duration(milliseconds: 100), () {
+              nextBowler(context);
+            });
+          }
         });
       }
     }else{
-      if(match.result != null || !match.isLive) {
-        matchSummaryData(context);
+      if(match.result.isNotEmpty || !match.isLive) {
+        matchSummaryData(context).then((value) => (){
+          print("Match is finished");
+        });
       }else{
         startNewInnings(context);
       }
@@ -527,104 +611,107 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
             balls = buildBall(context, value);
           });
 
-            if(match.isLive) {
-              if (isInnignsOver()) {
-                setState(() {
-                  isInningsOver = true;
-                });
-                syncCurrentScoreWithInnings();
+          if(match.isLive) {
+            if (isInnignsOver()) {
+              setState(() {
+                isInningsOver = true;
+              });
+              syncCurrentScoreWithInnings();
 
-                if (!match.isFirstInningsOver) {
-                  match.isFirstInningsOver = true;
-                  match.target = match.currentPlayers.run + 1;
-                  SyncCurrentPlayersWithInnings("firstInnings");
-                  //Update the score of first Innings
-                  startNewInnings(context);
-                } else {
-                  if (isMatchOver()) {
-                    SyncCurrentPlayersWithInnings("secondInnings");
-                    matchSummaryData(context);
-                  }
-                }
+              if (!match.isFirstInningsOver) {
+                match.isFirstInningsOver = true;
+                //Update the score of first Innings
+                startNewInnings(context);
+                SyncCurrentPlayersWithInnings("firstInnings");
               } else {
                 if (isMatchOver()) {
-                  SyncCurrentPlayersWithInnings("secondInnings");
-                  syncCurrentScoreWithInnings();
                   matchSummaryData(context);
+                  SyncCurrentPlayersWithInnings("secondInnings");
                 }
               }
-              //isMatchOver();
-              updateCurrentScore().then((value) => showSuccessColoredToast("Data Synced with server"));
-            }else{
-              matchSummaryData(context);
+                match.currentPlayers.run = 0;
+                match.currentPlayers.wickets = 0;
+                match.currentPlayers.overs = 0;
+                match.currentPlayers.extra = 0;
+
+            } else {
+              if (isMatchOver()) {
+                syncCurrentScoreWithInnings();
+                matchSummaryData(context);
+                SyncCurrentPlayersWithInnings("secondInnings");
+              }
             }
+            //isMatchOver();
+            updateCurrentScore().then((value) => showSuccessColoredToast("Data Synced with server"));
+          }else{
+            matchSummaryData(context);
+          }
         },
       ),
     );
   }
 
   Future SyncCurrentPlayersWithInnings(String inning){
-      DatabaseService().updatePlayer(
-          match, _currentBowlingPlayer[0], "bowling_team", inning);
-      DatabaseService().updatePlayer(
-          match, _currentBatttingPlayer[0], "batting_team", inning);
-      DatabaseService().updatePlayer(
-          match, _currentBatttingPlayer[1], "batting_team", inning);
+    DatabaseService().updatePlayer(
+        match, _currentBowlingPlayer[0], "bowling_team", inning);
+    DatabaseService().updatePlayer(
+        match, _currentBatttingPlayer[0], "batting_team", inning);
+    DatabaseService().updatePlayer(
+        match, _currentBatttingPlayer[1], "batting_team", inning);
   }
 
   syncCurrentScoreWithInnings(){
-    if(match.isLive) {
+    if(match.isLive && !match.isFirstInningsOver) {
       match.firstInning.run = match.currentPlayers.run;
       match.firstInning.overs = match.currentPlayers.overs;
       match.firstInning.wickets = match.currentPlayers.wickets;
       match.firstInning.extra = match.currentPlayers.extra;
-      //match.currentPlayers = new CurrentPlayIng();
+      match.target = match.currentPlayers.run + 1;
+
     }else {
       match.secondInning.run = match.currentPlayers.run;
       match.secondInning.overs = match.currentPlayers.overs;
       match.secondInning.wickets = match.currentPlayers.wickets;
       match.secondInning.extra = match.currentPlayers.extra;
-
     }
-
-      DatabaseService().syncScoreSummaryWithInnings(match);
+    DatabaseService().syncScoreSummaryWithInnings(match);
   }
 
-
-  void resetCurrentPlayers(){
-    //match.currentPlayers.battingTeamPlayer.clear();
-    match.currentPlayers.overs = 0.0;
-    match.currentPlayers.run = 0;
-    match.currentPlayers.wickets = 0;
-    match.currentPlayers.extra = 0;
-  }
-
-  matchSummaryData(BuildContext context) async{
-
-    await showDialog(context: context,
+  Future matchSummaryData(BuildContext context) async{
+    return await showDialog(context: context,
         builder: (context) =>
-            CustomDialog(matchGame: match, title: "Congratulations", description1: "Team : "+match.winningTeam, description2: match.result, buttonText: "Finish Game",));
+            CustomDialog(matchGame: match, title: "Congratulations "+ match.winningTeam, description1: "", description2: match.result, buttonText: "Finish Game",));
 
   }
 
   startNewInnings(BuildContext context) {
     //Future.delayed(const Duration(seconds: 1), () {
-      showDialog(context: context,
-          builder: (context) =>
-              CustomDialog(matchGame: match,
-                title: "Start Second Innings",
-                description1: "target : " + match.target.toString(),
-                description2: match.secondInning.battingteam.getTeamName() +
-                    " :  Need " + match.target.toString() +
-                    " runs to win from " + match.totalOvers.toString() +
-                    " overs.",
-                buttonText: "Start Second Innings",));
+    showDialog(context: context,
+        builder: (context) =>
+            CustomDialog(matchGame: match,
+              title: "Start Second Innings",
+              description1: "target : " + match.target.toString(),
+              description2: match.secondInning.battingteam.getTeamName() +
+                  " :  Need " + match.target.toString() +
+                  " runs to win from " + match.totalOvers.toString() +
+                  " overs.",
+              buttonText: "Start Second Innings",));
     //});
   }
 
   bool isMatchOver(){
     if(match.isFirstInningsOver){
-      if(match.currentPlayers.run > match.firstInning.run){
+
+      if(match.currentPlayers.overs >= match.totalOvers){
+        if(match.currentPlayers.run < match.firstInning.run){
+          match.winningTeam = match.firstInning.battingteam.getTeamName();
+          print(match.winningTeam + " won by "+(match.firstInning.run - match.currentPlayers.run).toString() + " runs");
+          match.result = match.winningTeam + " won by "+(match.firstInning.run - match.currentPlayers.run).toString() + " runs";
+          match.isLive = false;
+          return true;
+        }
+      }
+      else if(match.currentPlayers.run > match.firstInning.run){
         match.winningTeam = match.secondInning.battingteam.getTeamName();
         print(match.winningTeam + " won by "+(match.secondInning.battingteam.players.length - match.currentPlayers.wickets).toString() + " wickets");
         match.result = match.winningTeam + " won by "+(match.secondInning.battingteam.players.length - match.currentPlayers.wickets).toString() + " wickets";
@@ -672,23 +759,24 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
   }
 
   void nextBowler(BuildContext context){
-    if(match.currentPlayers.overs < match.totalOvers){
-      List<Player> bowlers = new List();
-      if(match.isFirstInningsOver){
-        bowlers.addAll(match.secondInning.bowlingteam.players.values);
-      }else{
-        bowlers.addAll(match.firstInning.bowlingteam.players.values);
+      if (match.currentPlayers.overs < match.totalOvers) {
+        List<Player> bowlers = new List();
+        if (match.isFirstInningsOver) {
+          bowlers.addAll(match.secondInning.bowlingteam.players.values);
+        } else {
+          bowlers.addAll(match.firstInning.bowlingteam.players.values);
+        }
+
+        bowlers.remove(_currentBowlingPlayer[0]);
+
+        getSelectedPlayer(context, bowlers, "bowler").then((value) =>
+        {
+          if(value != null){
+            replaceBowler(value),
+          }
+        });
       }
 
-      bowlers.remove(_currentBowlingPlayer[0]);
-
-      getSelectedPlayer(context, bowlers, "bowler").then((value) =>
-      {
-        if(value != null){
-          replaceBowler(value),
-        }
-      });
-    }
   }
 
   Future replaceBowler(Player player) {
@@ -703,6 +791,8 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
           "firstInnings");
     }
     setState(() {
+
+      balls.clear();
 
       match.currentPlayers.bowlingTeamPlayer.remove(_currentBowlingPlayer[0].playerUID);
       _currentBowlingPlayer[0] = player;
@@ -757,11 +847,11 @@ class _ScoreUpdateView extends State<ScoreUpdateView> {
   Future<Player> getSelectedPlayer(BuildContext context, List<Player> plyersList, String playerType) async{
     if(plyersList.length > 0) {
       //Future.delayed(const Duration(seconds: 1), () async {
-        Player selectedPlayer = await showDialog(context: context,
-            builder: (context) =>
-                selectPlayerDialog(
-                    playerList: plyersList, playerType: playerType));
-        return selectedPlayer;
+      Player selectedPlayer = await showDialog(context: context,
+          builder: (context) =>
+              selectPlayerDialog(
+                  playerList: plyersList, playerType: playerType));
+      return selectedPlayer;
       //});
     }
   }

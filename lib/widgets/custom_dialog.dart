@@ -24,8 +24,7 @@ class CustomDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(padding),
       ),
       child: Container(
-        height: 300,
-        width: 300,
+        height: 350,
         child: Stack(
           children: <Widget>[
             Container(
@@ -46,38 +45,45 @@ class CustomDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
 
                 children: <Widget>[
-                  SizedBox(height: 24.0),
+                  SizedBox(height: 20.0),
                   AutoSizeText(
                     title,
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: primaryColor,
-                      fontSize: 25.0,
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "DansingScript"
                     ),
                   ),
-                  SizedBox(height: 24.0),
+                  SizedBox(height: 20.0),
+
+                  (description1.isNotEmpty) ?
                   AutoSizeText(
                     description1,
                     maxLines: 4,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: grayColor,
-                      fontSize: 18.0,
+                      fontSize: 15.0,
+                      fontFamily: "Lemonada"
                     ),
-                  ),
-                  SizedBox(height: 10.0),
+                  )
+                  : SizedBox(height: 10.0),
+
                   AutoSizeText(
                     description2,
                     maxLines: 4,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: grayColor,
-                      fontSize: 18.0,
+                      fontSize: 15.0,
+                      fontFamily: "Lemonada"
                     ),
                   ),
 
-                  SizedBox(height: 30),
+                  SizedBox(height: 20),
 
                   RaisedButton(
                     color: primaryColor,
@@ -92,6 +98,7 @@ class CustomDialog extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.w200,
                           color: Colors.white,
+                          fontFamily: "Lemonada"
                         ),
                       ),
                     ),

@@ -1,4 +1,5 @@
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/appStaticBarTitles.dart';
@@ -65,7 +66,16 @@ class _TossPage extends State<TossPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Toss"),
+        title: AutoSizeText(
+          "Toss",
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w200,
+            color: Colors.white,
+            fontFamily: "Lemonada",
+          ),
+        ),
         flexibleSpace: getAppBarGradient(),
       ),
 
@@ -76,31 +86,45 @@ class _TossPage extends State<TossPage> {
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: <Widget>[
-              Text("Who won the Toss? ", style: TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
-              SizedBox(height: _height * 0.02),
+
+              AutoSizeText(
+                "Who won the Toss?",
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Lemonada",
+                ),
+              ),
+
+
+//              Text("Who won the Toss? ", style: TextStyle(
+//                  color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
+//              SizedBox(height: _height * 0.02),
 
               Column(
                 children: <Widget>[
-
-                  CustomRadioButton(
-                    hight: _height * 0.1,
-                    enableShape: true,
-                    elevation: 10,
-                    customShape: (
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        )
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: CustomRadioButton(
+                      hight: _height * 0.06,
+                      enableShape: true,
+                      elevation: 10,
+                      customShape: (
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                          )
+                      ),
+                      buttonColor: Theme.of(context).canvasColor,
+                      buttonLables: listOfTeams,
+                      buttonValues: listOfTeams,
+                      radioButtonValue: (value) {
+                        _tossWonteam = match.teams[value];
+                        match.setWonTossTeam(value);
+                        print(_tossWonteam.getTeamName());
+                      },
+                      selectedColor: Color(0xFF6190E8),
                     ),
-                    buttonColor: Theme.of(context).canvasColor,
-                    buttonLables: listOfTeams,
-                    buttonValues: listOfTeams,
-                    radioButtonValue: (value) {
-                      _tossWonteam = match.teams[value];
-                      match.setWonTossTeam(value);
-                      print(_tossWonteam.getTeamName());
-                    },
-                    selectedColor: Color(0xFF6190E8),
                   ),
                 ],
               ),
@@ -108,30 +132,43 @@ class _TossPage extends State<TossPage> {
               SizedBox(height: _height * 0.05),
 
 
-              Text("Select the Innings! ", style: TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
-              SizedBox(height: _height * 0.02),
+              AutoSizeText(
+                "Select the Innings!",
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Lemonada",
+                ),
+              ),
+
+//              Text("Select the Innings! ", style: TextStyle(
+//                  color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
+              //SizedBox(height: _height * 0.02),
 
 
               Column(
                 children: <Widget>[
-                  CustomRadioButton(
-                    hight: _height * 0.1,
-                    enableShape: true,
-                    elevation: 10,
-                    customShape: (
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        )
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: CustomRadioButton(
+                      hight: _height * 0.06,
+                      enableShape: true,
+                      elevation: 10,
+                      customShape: (
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                          )
+                      ),
+                      buttonColor: Theme.of(context).canvasColor,
+                      buttonLables: [StaticString.BATTING_INNING, StaticString.BOWLING_INNING],
+                      buttonValues: [StaticString.BATTING_INNING, StaticString.BOWLING_INNING],
+                      radioButtonValue: (value) {
+                        match.setSelectedInnings(value);
+                        print(value);
+                      },
+                      selectedColor: Color(0xFF6190E8),
                     ),
-                    buttonColor: Theme.of(context).canvasColor,
-                    buttonLables: [StaticString.BATTING_INNING, StaticString.BOWLING_INNING],
-                    buttonValues: [StaticString.BATTING_INNING, StaticString.BOWLING_INNING],
-                    radioButtonValue: (value) {
-                      match.setSelectedInnings(value);
-                      print(value);
-                    },
-                    selectedColor: Color(0xFF6190E8),
                   ),
                 ],
               ),

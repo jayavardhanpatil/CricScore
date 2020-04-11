@@ -1,5 +1,6 @@
 
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:direct_select_flutter/direct_select_container.dart';
 import 'package:direct_select_flutter/direct_select_item.dart';
 import 'package:direct_select_flutter/direct_select_list.dart';
@@ -17,6 +18,9 @@ class selectPlayerDialog extends StatefulWidget {
 
   _selectPlayerDialog createState() => _selectPlayerDialog(playerList: playerList, playerType: playerType);
 }
+
+final primaryColor = const Color(0xFF75A2EA);
+final grayColor = const Color(0xFF939393);
 
 class _selectPlayerDialog extends State<selectPlayerDialog>{
   int selectedIndex1 = 0;
@@ -82,10 +86,14 @@ class _selectPlayerDialog extends State<selectPlayerDialog>{
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Select next "+ playerType, textAlign: TextAlign.center,
+              child: AutoSizeText(
+                "Select next "+ playerType,
+                maxLines: 1,
                 style: TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: 20),
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Lemonada",
+                ),
               ),
             ),
 
@@ -129,23 +137,46 @@ class _selectPlayerDialog extends State<selectPlayerDialog>{
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.all(10),
+
                   child: RaisedButton(
-                    onPressed: (){
-                      Navigator.pop(context, null);
-                    },
+                    color: grayColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0)),
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.all(0.0),
-                    child: Container(
-                      //decoration: getButtonGradientColor(RoundedRectangleBorder),
-                      padding: const EdgeInsets.all(10.0),
-                      child: const Text(
-                          'cancel',
-                          style: TextStyle(fontSize: 20)
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: AutoSizeText(
+                        "cancel",
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w200,
+                          color: Colors.white,
+                          fontFamily: "Lemonada",
+                        ),
                       ),
                     ),
+                    onPressed: () {
+                      Navigator.pop(context, null);
+                    },
                   ),
+
+//                  child: RaisedButton(
+//                    onPressed: (){
+//                      Navigator.pop(context, null);
+//                    },
+//                    shape: RoundedRectangleBorder(
+//                        borderRadius: BorderRadius.circular(30.0)),
+//                    textColor: Colors.white,
+//                    padding: const EdgeInsets.all(0.0),
+//                    child: Container(
+//                      //decoration: getButtonGradientColor(RoundedRectangleBorder),
+//                      padding: const EdgeInsets.all(10.0),
+//                      child: const Text(
+//                          'cancel',
+//                          style: TextStyle(fontSize: 20)
+//                      ),
+//                    ),
+//                  ),
                 ),
 
 
@@ -154,23 +185,47 @@ class _selectPlayerDialog extends State<selectPlayerDialog>{
 
                 Container(
                   margin: EdgeInsets.all(10),
+
                   child: RaisedButton(
-                    onPressed: (){
-                      Navigator.pop(context, selectedPlayer);
-                    },
+                    color: primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0)),
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.all(0.0),
-                    child: Container(
-                      decoration: getButtonGradientColor(BoxShape.rectangle),
-                      padding: const EdgeInsets.all(10.0),
-                      child: const Text(
-                          'Confirm',
-                          style: TextStyle(fontSize: 20)
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: AutoSizeText(
+                        "Confirm",
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w200,
+                          color: Colors.white,
+                          fontFamily: "Lemonada",
+                        ),
                       ),
                     ),
+                    onPressed: () {
+                      Navigator.pop(context, selectedPlayer);
+                    },
                   ),
+
+
+//                  child: RaisedButton(
+//                    onPressed: (){
+//                      Navigator.pop(context, selectedPlayer);
+//                    },
+//                    shape: RoundedRectangleBorder(
+//                        borderRadius: BorderRadius.circular(30.0)),
+//                    textColor: Colors.white,
+//                    padding: const EdgeInsets.all(0.0),
+//                    child: Container(
+//                      decoration: getButtonGradientColor(BoxShape.rectangle),
+//                      padding: const EdgeInsets.all(10.0),
+//                      child: const Text(
+//                          'Confirm',
+//                          style: TextStyle(fontSize: 20)
+//                      ),
+//                    ),
+//                  ),
                 )
 
               ],

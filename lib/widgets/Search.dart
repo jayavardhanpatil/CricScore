@@ -12,7 +12,8 @@ Widget typeAhed(TextEditingController typedValue,  TextEditingController valueCo
         controller: typedValue,
         decoration: InputDecoration(
           labelText: lable
-        )
+        ),
+        style: TextStyle(fontFamily: "Lemonada",)
       ),
       suggestionsCallback: (pattern) {
         // ignore: missing_return
@@ -22,7 +23,7 @@ Widget typeAhed(TextEditingController typedValue,  TextEditingController valueCo
       },
       itemBuilder: (context, suggestion) {
         return ListTile(
-          title: Text(suggestion),
+          title: Text(suggestion, style: TextStyle(fontFamily: "Lemonada",),),
         );
       },
       transitionBuilder: (context, suggestionsBox, controller) {
